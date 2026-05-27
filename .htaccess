@@ -1,0 +1,14 @@
+Options All -Indexes
+RewriteEngine On
+
+#  Acceso a módulos 
+RewriteCond %{REQUEST_URI} !^/Sistema-Salidas-v1\.0/Usuarios/salir$
+# Bloquear acceso a módulos protegidos
+RewriteRule ^(Usuarios|Permisos|Anotes|Estudiante)(/.*)?$ index.php?url=Errors/index [QSA,L]
+
+# No reescribir si es un directorio o archivo existente
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Redirigir todo a index.php
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]

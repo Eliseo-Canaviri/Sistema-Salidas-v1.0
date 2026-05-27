@@ -1,0 +1,120 @@
+/* Reset ligero */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Fondo de la página */
+body {
+  font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(180deg, #f4fbf9 0%, #eef7f5 100%);
+  color: #1f2933;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* CENTRAR TODO EN PANTALLA */
+.contenedor-general{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+/* TARJETA */
+.content{
+  max-width: 520px;
+  width: 100%;
+  background: #ffffff;
+  padding: 36px;
+  text-align: center;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(6, 22, 18, 0.08);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+  border: 1px solid rgba(14,98,81,0.06);
+}
+
+/* Elevación al pasar el ratón */
+.content:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(6,22,18,0.12);
+}
+
+/* BOTÓN VOLVER (link superior) */
+.pagina{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  color: #0E6251;
+  text-decoration: none;
+  margin-bottom: 14px;
+  font-weight: 600;
+  background: rgba(14,98,81,0.06);
+  padding: 8px 12px;
+  border-radius: 10px;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.pagina:hover{
+  background: rgba(14,98,81,0.12);
+  transform: translateY(-2px);
+}
+
+/* Icono dentro del link */
+.icon { color: #0E6251; }
+
+/* LINEA */
+hr{
+  height: 3px;
+  background: linear-gradient(90deg,#0E6251,#1AA37A);
+  border: none;
+  margin: 18px 0;
+  border-radius: 2px;
+}
+
+/* ETIQUETA PRINCIPAL */
+.tags{
+  display: inline-block;
+  padding: 10px 22px;
+  color: #fff;
+  background: linear-gradient(90deg,#0E6251,#1AA37A);
+  border-radius: 999px;
+  font-size: 20px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+/* MENSAJE */
+.parrafo{
+  font-size: 16px;
+  color: #475569;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* ACCIÓN PRINCIPAL */
+.accion{
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 22px;
+  background: #0E6251;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 700;
+  transition: background 160ms ease, transform 160ms ease;
+  box-shadow: 0 6px 18px rgba(14,98,81,0.12);
+}
+
+.accion:hover{
+  background: #0b4f43;
+  transform: translateY(-3px);
+}
+
+/* Responsive */
+@media (max-width: 420px){
+  .content { padding: 24px; }
+  .tags { font-size: 18px; padding: 8px 18px; }
+  .parrafo { font-size: 15px; }
+  .pagina { font-size: 15px; padding: 7px 10px; }
+}
