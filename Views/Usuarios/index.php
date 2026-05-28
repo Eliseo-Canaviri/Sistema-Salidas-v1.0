@@ -27,9 +27,13 @@
             <thead class="table-dark ">
               <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Correo</th>
-                <th scope="col">Usuario</th>
+                <th scope="col">CI</th>
+                <th scope="col">Nombres</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Celular</th>
+                <th scope="col">id_cargo</th>
+                <th scope="col">id_unidad</th>
+                <th scope="col">Clave</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Acciones</th>
               </tr>

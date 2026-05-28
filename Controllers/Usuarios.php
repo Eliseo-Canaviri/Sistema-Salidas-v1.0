@@ -77,8 +77,8 @@ class Usuarios extends Controller
             if ($data) {
 
                 $_SESSION['id_usuario'] = $data['id'];
-                $_SESSION['usuario'] = $data['usuario'];
-                $_SESSION['nombre'] = $data['nombre'];
+                $_SESSION['nombres'] = $data['nombres'];
+                $_SESSION['apellidos'] = $data['apellidos'];
                 $_SESSION['activo'] = true;
                 $msg = "ok";
                 // code...
@@ -97,27 +97,33 @@ class Usuarios extends Controller
     public function registrar()
     {
        
-        $nombre = $_POST['nombre'];
-        $correo = $_POST['correo'];
-        $usuario = $_POST['usuario'];
+        $ci = $_POST['ci'];
+        $nombres = $_POST['nombres'];
+        $apellidos = $_POST['apellidos'];
+        $celular = $_POST['celular'];
+        $id_cargo = $_POST['id_cargo'];
+        $id_unidad = $_POST['id_unidad'];
         $clave = $_POST['clave'];
         $confirmar = $_POST['confirmar'];
         $id = $_POST['id'];
         $hash = hash("SHA256", $clave);
 
 
-        if (empty($nombre) || empty($correo) || empty($usuario)) {
+        if (empty($ci) || empty($nombres) || empty($apellidos)) {
             $msg = array('msg' => 'Todos los campos son obligatorios ☻', 'icono' => 'warning');
 
 
         } else {
             if ($id == "") {
                 if ($clave != $confirmar) {
-
-
                     $msg = array('msg' => 'Las Contraseñas no conciden ☻', 'icono' => 'warning');
                 } else {
-                    $data = $this->model->registrarUsuario($nombre, $correo, $usuario, $hash);
+                     // Generar clave: inicial de nombre + inicial de apellido + CI
+                    $inicialNombre = strtoupper(substr(trim($nombres), 0, 1));
+                    $inicialApellido = strtoupper(substr(trim($apellidos), 0, 1));
+                    $claveTexto = $inicialNombre . $inicialApellido . $ci;
+                    $clave = hash("SHA256", $claveTexto);
+                    $data = $this->model->registrarUsuario($nombres, $apellidos, $celular, $id_cargo, $id_unidad, $clave, $clave);
                     if ($data == "ok") {
                         $msg = array('msg' => 'Usuario registrado con exito ☻', 'icono' => 'success');
                     } else if ($data == "existe") {
@@ -131,7 +137,7 @@ class Usuarios extends Controller
                 #code ..
 
             } else {
-                $data = $this->model->modificarUsuario($nombre, $correo, $usuario, $id);
+                $data = $this->model->modificarUsuario($nombres, $apellidos, $celular, $id_cargo, $id_unidad, $id);
                 if ($data == "modificado") {
 
                     $msg = array('msg' => 'Usuario modificado con exito ☻', 'icono' => 'success');
@@ -250,28 +256,53 @@ class Usuarios extends Controller
 
     }
 
-    function registrarPermisos()
-    {
-        $msg = '';
-        $id_user = $_POST['id_usuario'];
-        $eliminar = $this->model->eliminarPermisos($id_user);
-        if ($eliminar == 'ok') {
+  function registrarPermisos()
+{
+    $msg = '';
+    $id_user = $_POST['id_usuario'];
+
+    $eliminar = $this->model->eliminarPermisos($id_user);
+
+    if ($eliminar == 'ok') {
+
+        // Verificar si llegan permisos
+        if (isset($_POST['permisos']) && is_array($_POST['permisos'])) {
+
             foreach ($_POST['permisos'] as $id_permisos) {
                 $msg = $this->model->registrarPermisos($id_user, $id_permisos);
             }
+
             if ($msg == 'ok') {
-                $msg = array('msg' => ' Permisos Asignados ☻', 'icono' => 'success');
+                $msg = array(
+                    'msg' => 'Permisos Asignados ☻',
+                    'icono' => 'success'
+                );
 
             } else {
-                $msg = array('msg' => 'Error al asignar los  permisos  ', 'icono' => 'error');
-
+                $msg = array(
+                    'msg' => 'Error al asignar permisos',
+                    'icono' => 'error'
+                );
             }
 
         } else {
-            $msg = array('msg' => 'Error al Elimiar  los permisos anterios ', 'icono' => 'error');
+
+            $msg = array(
+                'msg' => 'Debe seleccionar al menos un permiso',
+                'icono' => 'warning'
+            );
         }
-        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+
+    } else {
+
+        $msg = array(
+            'msg' => 'Error al eliminar permisos anteriores',
+            'icono' => 'error'
+        );
     }
+
+    echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+}
    
 
 

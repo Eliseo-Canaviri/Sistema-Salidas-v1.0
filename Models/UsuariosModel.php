@@ -6,9 +6,9 @@ class UsuariosModel extends Query
     {
         parent::__construct();
     }
-    public function getUsuario(string $usuario, string $clave, int $estado)
+    public function getUsuario(string $ci, string $clave, int $estado)
     {
-        $sql = "SELECT * FROM usuarios WHERE usuario='$usuario' AND clave='$clave' AND estado=$estado ";
+        $sql = "SELECT * FROM usuarios WHERE ci='$ci' AND clave='$clave' AND estado=$estado ";
         $data = $this->select($sql);
         return $data;
     }
@@ -21,18 +21,21 @@ class UsuariosModel extends Query
         return $data;
     }
 
-    public function registrarUsuario(string $nombre, string $correo, string $usuario, string $clave)
+    public function registrarUsuario(int $ci,string $nombres, string $apellidos, string $celular, int $id_cargo, int $id_unidad, string $clave)
     {
-        $this->nombre = $nombre;
-        $this->correo = $correo;
-        $this->usuario = $usuario;
+        $this->ci = $ci;
+        $this->nombres = $nombres;
+        $this->apellidos = $apellidos;
+        $this->celular = $celular;
+        $this->id_cargo = $id_cargo;
+        $this->id_unidad = $id_unidad;
         $this->clave = $clave;
         //para verificar si existe usuario
-        $verificar = "SELECT *FROM usuarios WHERE usuario='$this->usuario'";
+        $verificar = "SELECT *FROM usuarios WHERE ci='$this->ci'";
         $existe = $this->select($verificar);
         if (empty($existe)) {
-            $sql = "INSERT INTO usuarios(nombre, correo, usuario, clave) VALUES (?,?,?,?)";
-            $datos = array($this->nombre, $this->correo, $this->usuario, $this->clave);///estos valores se lo vamos enviar a un metodo que vamos crear en el archivo Quiery.
+            $sql = "INSERT INTO usuarios(ci, nombres, apellidos, celular, id_cargo, id_unidad, clave) VALUES (?,?,?,?,?,?,?)";
+            $datos = array($this->ci, $this->nombres, $this->apellidos, $this->celular, $this->id_cargo, $this->id_unidad, $this->clave);///estos valores se lo vamos enviar a un metodo que vamos crear en el archivo Quiery.
             $data = $this->save($sql, $datos);
             if ($data == 1) {
                 $res = "ok";

@@ -60,9 +60,13 @@ tblUsuarios=$('#tblUsuarios').DataTable( {
     },
     columns: [ 
     { 'data':'id' },
-    { 'data':'nombre'},
-    { 'data':'correo'},
-    { 'data':'usuario'},
+    { 'data':'ci' },
+    { 'data':'nombres'},
+    { 'data':'apellidos'},
+    { 'data':'celular'},
+    { 'data':'id_cargo'},
+    { 'data':'id_unidad'},
+    { 'data':'clave'},
     { 'data':'estado'},
     { 'data':'acciones'}
     ],
