@@ -90,7 +90,15 @@
                 </span>
                 <span class="hide-menu">Permisos</span>
               </a>
-            </li>           
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="<?php echo base_url; ?>Salidas" aria-expanded="false">
+                <span>
+                  <iconify-icon icon="solar:walking-bold-duotone" class="fs-6"></iconify-icon>
+                </span>
+                <span class="hide-menu">Salidas</span>
+              </a>
+            </li>
           </ul>
 
         </nav>

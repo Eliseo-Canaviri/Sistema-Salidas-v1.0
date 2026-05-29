@@ -21,7 +21,7 @@ class UsuariosModel extends Query
         return $data;
     }
 
-    public function registrarUsuario(int $ci,string $nombres, string $apellidos, string $celular, int $id_cargo, int $id_unidad, string $clave)
+    public function registrarUsuario(int $ci,string $nombres, string $apellidos, int $celular, int $id_cargo, int $id_unidad, string $clave)
     {
         $this->ci = $ci;
         $this->nombres = $nombres;

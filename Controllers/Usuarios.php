@@ -103,11 +103,9 @@ class Usuarios extends Controller
         $celular = $_POST['celular'];
         $id_cargo = $_POST['id_cargo'];
         $id_unidad = $_POST['id_unidad'];
-        $clave = $_POST['clave'];
-        $confirmar = $_POST['confirmar'];
-        $id = $_POST['id'];
-        $hash = hash("SHA256", $clave);
 
+        $id = $_POST['id'];
+    
 
         if (empty($ci) || empty($nombres) || empty($apellidos)) {
             $msg = array('msg' => 'Todos los campos son obligatorios ☻', 'icono' => 'warning');
@@ -115,17 +113,16 @@ class Usuarios extends Controller
 
         } else {
             if ($id == "") {
-                if ($clave != $confirmar) {
-                    $msg = array('msg' => 'Las Contraseñas no conciden ☻', 'icono' => 'warning');
-                } else {
+            
                      // Generar clave: inicial de nombre + inicial de apellido + CI
                     $inicialNombre = strtoupper(substr(trim($nombres), 0, 1));
                     $inicialApellido = strtoupper(substr(trim($apellidos), 0, 1));
                     $claveTexto = $inicialNombre . $inicialApellido . $ci;
                     $clave = hash("SHA256", $claveTexto);
-                    $data = $this->model->registrarUsuario($nombres, $apellidos, $celular, $id_cargo, $id_unidad, $clave, $clave);
+                    $data = $this->model->registrarUsuario($ci,$nombres, $apellidos, $celular, $id_cargo, $id_unidad, $clave, $clave);
                     if ($data == "ok") {
-                        $msg = array('msg' => 'Usuario registrado con exito ☻', 'icono' => 'success');
+
+                               $msg = array('msg' => 'Usuario registrado con éxito. Clave generada: ' . $claveTexto . ' ☻', 'icono' => 'success');
                     } else if ($data == "existe") {
 
                         $msg = array('msg' => 'El usuario ya existe ☻', 'icono' => 'warning');
@@ -136,8 +133,8 @@ class Usuarios extends Controller
                 }
                 #code ..
 
-            } else {
-                $data = $this->model->modificarUsuario($nombres, $apellidos, $celular, $id_cargo, $id_unidad, $id);
+             else {
+                $data = $this->model->modificarUsuario($ci, $nombres, $apellidos, $celular, $id_cargo, $id_unidad, $id);
                 if ($data == "modificado") {
 
                     $msg = array('msg' => 'Usuario modificado con exito ☻', 'icono' => 'success');
@@ -147,10 +144,11 @@ class Usuarios extends Controller
                 }
             }
 
-        }
+   
         echo json_encode($msg, JSON_UNESCAPED_UNICODE); //enviando ala archivo funcion js
         die();
 
+    }
     }
 
     public function editar(int $id)

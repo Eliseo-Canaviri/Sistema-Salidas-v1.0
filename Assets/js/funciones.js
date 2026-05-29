@@ -1,4 +1,4 @@
-let tblUsuarios,tblestudiante,tblUsuariosInactivos ,tblIngreso ,tblEgresos,tblPermisos,tblAnotes ;
+let tblUsuarios,tblestudiante,tblUsuariosInactivos ,tblIngreso ,tblEgresos,tblPermisos,tblAnotes, tblSalidas ;
 document.addEventListener("DOMContentLoaded",function(){
 
 
@@ -66,7 +66,6 @@ tblUsuarios=$('#tblUsuarios').DataTable( {
     { 'data':'celular'},
     { 'data':'id_cargo'},
     { 'data':'id_unidad'},
-    { 'data':'clave'},
     { 'data':'estado'},
     { 'data':'acciones'}
     ],
@@ -174,6 +173,33 @@ tblAnotes=$('#tblAnotes').DataTable( {
 });
 //fin de tblAnotes
 
+tblSalidas=$('#tblSalidas').DataTable( {
+  ajax: {
+     url: base_url+"Salidas/listar",
+      dataSrc: ''
+  },
+  columns: [
+  { 'data':'id_salida' },
+  { 'data':'funcionario'},
+  { 'data':'actividad'},
+  { 'data':'lugar'},
+  { 'data':'transporte'},
+  { 'data':'fecha_salida'},
+  { 'data':'hora_salida'},
+  { 'data':'hora_llegada'},
+  { 'data':'acciones'}],
+  responsive: true,
+  bDestroy: true,
+  iDisplayLength: 10,
+  order: [
+      [0, "desc"]
+  ],language,buttons,
+  dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
+  "<'row'<'col-sm-12'tr>>" +
+  "<'row'<'col-sm-5'i><'col-sm-7'p>>"
+});
+//fin de tblSalidas
+
 
 
 
@@ -216,9 +242,9 @@ function frmCambiarPass(e) {
 
 
 function frmUsuario() {
-document.getElementById("title").innerHTML="Nuevo Usuario ♣♣♣";
+document.getElementById("title").innerHTML="Nuevo Usuario";
  document.getElementById("btnAccion").innerHTML="registrar";
-document.getElementById("claves").classList.remove("d-none"); //para mostrar compo de claves
+//document.getElementById("claves").classList.remove("d-none"); //para mostrar compo de claves
 document.getElementById("frmUsuario").reset();
 
     $("#nuevo_usuario").modal("show"); //esta mostrando modal de usuario
@@ -227,13 +253,14 @@ document.getElementById("frmUsuario").reset();
 
 function registrarUser(e) {
     e.preventDefault();
-
-    const nombre = document.getElementById("nombre");
-     const correo = document.getElementById("correo");
-    const usuario = document.getElementById("usuario");
+    
+    const ci = document.getElementById("ci");
+    const nombres = document.getElementById("nombres");
+    const apellidos = document.getElementById("apellidos");
+    const celular = document.getElementById("celular");
    
     
-    if (nombre.value == ""||correo.value==""||usuario.value=="" ) {
+    if (nombres.value == ""||apellidos.value==""||celular.value=="" ) {
            alertas('Todos los campos son obligatorio ☺', 'warning');
     }  else {
         const url = base_url + "Usuarios/registrar"; //estamos enviando ala controlador
@@ -243,7 +270,7 @@ function registrarUser(e) {
         http.send(new FormData(frm));
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-               //console.log(this.responseText);
+               console.log(this.responseText);
                 const res =JSON.parse(this.responseText);
                   
                    $("#nuevo_usuario").modal("hide"); //ocultar modal
@@ -740,6 +767,125 @@ function frmAnotes() {
 
 
 
+
+// ============================================================
+// MÓDULO SALIDAS
+// ============================================================
+
+function frmSalida() {
+  document.getElementById("title_salida").innerHTML = '<i class="fa-solid fa-person-walking-arrow-right me-2"></i> Nueva Salida';
+  document.getElementById("btnAccionSalida").innerHTML = '<i class="fas fa-save"></i> Registrar';
+  document.getElementById("frmSalida").reset();
+  document.getElementById("id_salida").value = "";
+  $("#modal_salida").modal("show");
+}
+
+function registrarSalida(e) {
+  e.preventDefault();
+  const id_funcionario = document.getElementById("id_funcionario").value;
+  const actividad      = document.getElementById("actividad").value;
+  const lugar          = document.getElementById("lugar").value;
+  const fecha_salida   = document.getElementById("fecha_salida").value;
+  const hora_salida    = document.getElementById("hora_salida").value;
+  const hora_llegada   = document.getElementById("hora_llegada").value;
+
+  if (id_funcionario==''||actividad==''||lugar==''||fecha_salida==''||hora_salida==''||hora_llegada=='') {
+    alertas('Todos los campos obligatorios deben llenarse ☺', 'warning');
+  } else {
+    const url = base_url + "Salidas/registrar";
+    const frm = document.getElementById("frmSalida");
+    const http = new XMLHttpRequest();
+    http.open("POST", url, true);
+    http.send(new FormData(frm));
+    http.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        const res = JSON.parse(this.responseText);
+        $("#modal_salida").modal("hide");
+        alertas(res.msg, res.icono);
+        tblSalidas.ajax.reload();
+      }
+    }
+  }
+}
+
+function btnEditarSalida(id) {
+  document.getElementById("title_salida").innerHTML = '<i class="fa-solid fa-pen-to-square me-2"></i> Editar Salida';
+  document.getElementById("btnAccionSalida").innerHTML = '<i class="fas fa-save"></i> Modificar';
+  const url = base_url + "Salidas/editar/" + id;
+  const http = new XMLHttpRequest();
+  http.open("GET", url, true);
+  http.send();
+  http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const res = JSON.parse(this.responseText);
+      document.getElementById("id_salida").value      = res.id_salida;
+      document.getElementById("id_funcionario").value = res.id_funcionario;
+      document.getElementById("actividad").value      = res.actividad;
+      document.getElementById("lugar").value          = res.lugar;
+      document.getElementById("transporte").value     = res.transporte;
+      document.getElementById("fecha_salida").value   = res.fecha_salida;
+      document.getElementById("hora_salida").value    = res.hora_salida;
+      document.getElementById("hora_llegada").value   = res.hora_llegada;
+      $("#modal_salida").modal("show");
+    }
+  }
+}
+
+function btnEliminarSalida(id) {
+  Swal.fire({
+    title: '¿Estás seguro de eliminar?',
+    text: "La salida pasará al estado inactivo.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: '¡Sí, eliminar!',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = base_url + "Salidas/eliminar/" + id;
+      const http = new XMLHttpRequest();
+      http.open("GET", url, true);
+      http.send();
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const res = JSON.parse(this.responseText);
+          tblSalidas.ajax.reload();
+          alertas(res.msg, res.icono);
+        }
+      }
+    }
+  })
+}
+
+function btnReactivarSalida(id) {
+  Swal.fire({
+    title: '¿Reactivar esta salida?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#28a745',
+    cancelButtonColor: '#d33',
+    confirmButtonText: '¡Sí, reactivar!',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = base_url + "Salidas/reingresar/" + id;
+      const http = new XMLHttpRequest();
+      http.open("GET", url, true);
+      http.send();
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const res = JSON.parse(this.responseText);
+          alertas(res.msg, res.icono);
+          setTimeout(() => { window.location.reload(); }, 2000);
+        }
+      }
+    }
+  })
+}
+// ============================================================
+// FIN MÓDULO SALIDAS
+// ============================================================
 
 function alertas(mensaje, icono) {
                     Swal.fire({
