@@ -46,7 +46,7 @@ class Salidas extends Controller
     public function registrar()
     {
         $id_salida      = $_POST['id_salida'];
-        $id_funcionario = $_POST['id_funcionario'];
+        $id_usuario     = $_SESSION['id_usuario'];
         $actividad      = $_POST['actividad'];
         $lugar          = $_POST['lugar'];
         $transporte     = $_POST['transporte'];
@@ -54,12 +54,12 @@ class Salidas extends Controller
         $hora_salida    = $_POST['hora_salida'];
         $hora_llegada   = $_POST['hora_llegada'];
 
-        if (empty($id_funcionario) || empty($actividad) || empty($lugar) || empty($fecha_salida) || empty($hora_salida) || empty($hora_llegada)) {
+        if (empty($id_usuario) || empty($actividad) || empty($lugar) || empty($fecha_salida) || empty($hora_salida) || empty($hora_llegada)) {
             $msg = array('msg' => 'Todos los campos obligatorios deben llenarse ☻', 'icono' => 'warning');
         } else {
             if ($id_salida == "") {
                 // Nuevo registro
-                $data = $this->model->registrarSalida($id_funcionario, $actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $hora_llegada);
+                $data = $this->model->registrarSalida($id_usuario, $actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $hora_llegada);
                 if ($data == "ok") {
                     $msg = array('msg' => 'Salida registrada con éxito ☻', 'icono' => 'success');
                 } else {
@@ -67,7 +67,7 @@ class Salidas extends Controller
                 }
             } else {
                 // Modificar registro existente
-                $data = $this->model->modificarSalida($id_funcionario, $actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $hora_llegada, $id_salida);
+                $data = $this->model->modificarSalida($id_usuario, $actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $hora_llegada, $id_salida);
                 if ($data == "modificado") {
                     $msg = array('msg' => 'Salida modificada con éxito ☻', 'icono' => 'success');
                 } else {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-05-2026 a las 04:49:00
+-- Tiempo de generación: 30-05-2026 a las 00:15:49
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -161,13 +161,13 @@ INSERT INTO `permisos` (`id_permiso`, `permiso`, `estado`) VALUES
 
 CREATE TABLE `salidas` (
   `id_salida` int(11) NOT NULL,
-  `id_funcionario` int(11) NOT NULL,
   `actividad` text NOT NULL,
   `lugar` varchar(255) NOT NULL,
   `transporte` varchar(100) DEFAULT NULL,
   `fecha_salida` date NOT NULL,
   `hora_salida` time NOT NULL,
   `hora_llegada` time NOT NULL,
+  `id_usuario` int(11) NOT NULL,
   `estado` int(11) DEFAULT 1,
   `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -176,8 +176,8 @@ CREATE TABLE `salidas` (
 -- Volcado de datos para la tabla `salidas`
 --
 
-INSERT INTO `salidas` (`id_salida`, `id_funcionario`, `actividad`, `lugar`, `transporte`, `fecha_salida`, `hora_salida`, `hora_llegada`, `estado`, `fecha_registro`) VALUES
-(1, 3, 'aaaaa', 'hhhhh', 'Otro', '2026-05-28', '02:52:00', '02:53:00', 1, '2026-05-29 02:48:25');
+INSERT INTO `salidas` (`id_salida`, `actividad`, `lugar`, `transporte`, `fecha_salida`, `hora_salida`, `hora_llegada`, `id_usuario`, `estado`, `fecha_registro`) VALUES
+(1, 'aaaaa', 'hhhhh', 'Otro', '2026-05-28', '02:52:00', '02:53:00', 1, 1, '2026-05-29 02:48:25');
 
 -- --------------------------------------------------------
 
@@ -203,7 +203,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `ci`, `nombres`, `apellidos`, `celular`, `id_cargo`, `id_unidad`, `clave`, `estado`, `fecha_creacion`) VALUES
-(1, 123, 'Eliseo Canaviri', 'j', 3234, 1, 1, '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1, '2026-05-28 03:46:16'),
+(1, 123, 'Eliseo', 'Canaviri Jachacata', 3234, 1, 1, '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1, '2026-05-28 03:46:16'),
 (2, 1011, 'Usuario', 'tre', 34534543, 1, 1, '04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb', 1, '2026-05-28 03:46:16'),
 (3, 777, 'Ana Maria', 'Condori', 564564, 2, 2, '9dd674e8420277375d319f626b128b376980b7a045a081a65116640811b2e055', 1, '2026-05-29 01:54:00'),
 (4, 8787, 'tttt', 'tttt', 43534534, 3, 1, '741966aa7cddc343ce41a444bc9b94bf5db87fc842643082165d8659c07b36ff', 1, '2026-05-29 02:05:32');

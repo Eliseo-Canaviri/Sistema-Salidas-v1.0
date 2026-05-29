@@ -9,13 +9,13 @@ class SalidasModel extends Query
     // Obtener todas las salidas activas o inactivas
     public function getSalidas(int $estado)
     {
-        $sql = "SELECT s.id_salida, s.id_funcionario, 
-                       CONCAT(u.nombres, ' ', u.apellidos) AS funcionario,
+        $sql = "SELECT s.id_salida, s.id_usuario, 
+                       CONCAT(u.nombres, ' ', u.apellidos) AS nombre_usuario,
                        s.actividad, s.lugar, s.transporte,
                        s.fecha_salida, s.hora_salida, s.hora_llegada,
                        s.estado, s.fecha_registro
                 FROM salidas s
-                INNER JOIN usuarios u ON s.id_funcionario = u.id
+                INNER JOIN usuarios u ON s.id_usuario = u.id
                 WHERE s.estado = $estado
                 ORDER BY s.id_salida DESC";
         $data = $this->selectAll($sql);
@@ -31,11 +31,11 @@ class SalidasModel extends Query
     }
 
     // Registrar nueva salida
-    public function registrarSalida(int $id_funcionario, string $actividad, string $lugar, string $transporte, string $fecha_salida, string $hora_salida, string $hora_llegada)
+    public function registrarSalida( string $actividad, string $lugar, string $transporte, string $fecha_salida, string $hora_salida, string $hora_llegada, int $id_usuario)
     {
-        $sql = "INSERT INTO salidas (id_funcionario, actividad, lugar, transporte, fecha_salida, hora_salida, hora_llegada) 
+        $sql = "INSERT INTO salidas ( actividad, lugar, transporte, fecha_salida, hora_salida, hora_llegada,id_usuario) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $datos = array($id_funcionario, $actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $hora_llegada);
+        $datos = array($actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $hora_llegada, $id_usuario);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             return "ok";
@@ -45,10 +45,10 @@ class SalidasModel extends Query
     }
 
     // Modificar una salida existente
-    public function modificarSalida(int $id_funcionario, string $actividad, string $lugar, string $transporte, string $fecha_salida, string $hora_salida, string $hora_llegada, int $id_salida)
+    public function modificarSalida(int $id_usuario, string $actividad, string $lugar, string $transporte, string $fecha_salida, string $hora_salida, string $hora_llegada, int $id_salida)
     {
-        $sql = "UPDATE salidas SET id_funcionario=?, actividad=?, lugar=?, transporte=?, fecha_salida=?, hora_salida=?, hora_llegada=? WHERE id_salida=?";
-        $datos = array($id_funcionario, $actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $hora_llegada, $id_salida);
+        $sql = "UPDATE salidas SET  actividad=?, lugar=?, transporte=?, fecha_salida=?, hora_salida=?, hora_llegada=?,id_usuario=? WHERE id_salida=?";
+        $datos = array( $actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $hora_llegada, $id_usuario, $id_salida);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             return "modificado";

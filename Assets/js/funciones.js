@@ -180,7 +180,7 @@ tblSalidas=$('#tblSalidas').DataTable( {
   },
   columns: [
   { 'data':'id_salida' },
-  { 'data':'funcionario'},
+  { 'data':'nombre_usuario'},
   { 'data':'actividad'},
   { 'data':'lugar'},
   { 'data':'transporte'},
@@ -782,14 +782,14 @@ function frmSalida() {
 
 function registrarSalida(e) {
   e.preventDefault();
-  const id_funcionario = document.getElementById("id_funcionario").value;
+  const id_usuario = document.getElementById("id_usuario").value;
   const actividad      = document.getElementById("actividad").value;
   const lugar          = document.getElementById("lugar").value;
   const fecha_salida   = document.getElementById("fecha_salida").value;
   const hora_salida    = document.getElementById("hora_salida").value;
   const hora_llegada   = document.getElementById("hora_llegada").value;
 
-  if (id_funcionario==''||actividad==''||lugar==''||fecha_salida==''||hora_salida==''||hora_llegada=='') {
+  if (id_usuario==''||actividad==''||lugar==''||fecha_salida==''||hora_salida==''||hora_llegada=='') {
     alertas('Todos los campos obligatorios deben llenarse ☺', 'warning');
   } else {
     const url = base_url + "Salidas/registrar";

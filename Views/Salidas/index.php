@@ -61,8 +61,14 @@
           <input type="hidden" id="id_salida" name="id_salida">
 
           <div class="row">
-
-            <!-- Funcionario -->
+            <!-- Hora de Llegada -->
+            <div class="col-md-4 mb-3">
+              <label for="nombres" class="form-label fw-bold">
+                <i class="fa-solid fa-clock me-1"></i> Nombres <span class="text-danger">*</span>
+              </label>
+              <input type="text" class="form-control" id="nombres" name="nombres" value="<?php echo $_SESSION['nombres'],' ',$_SESSION['apellidos'] ?>" required>
+            </div>
+            <!-- Funcionario
             <div class="col-md-12 mb-3">
               <label for="id_funcionario" class="form-label fw-bold">
                 <i class="fa-solid fa-user-tie me-1"></i> Funcionario <span class="text-danger">*</span>
@@ -75,7 +81,7 @@
                   </option>
                 <?php endforeach; ?>
               </select>
-            </div>
+            </div> -->
 
             <!-- Actividad -->
             <div class="col-md-12 mb-3">
