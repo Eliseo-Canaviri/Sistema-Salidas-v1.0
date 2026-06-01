@@ -37,8 +37,31 @@ class Salidas extends Controller
         }
 
         for ($i = 0; $i < count($data); $i++) {
-            $data[$i]['acciones'] = '<div class="d-flex gap-1"> <button class="btn btn-sm btn-primary px-3 py-2" type="button" onclick="btnEditarSalida(' . $data[$i]['id_salida'] . ');
-            " title="Editar"> <i class="fa-solid fa-pen-to-square fa-lg"></i> </button> <button class="btn btn-sm btn-danger px-3 py-2" type="button" onclick="btnEliminarSalida(' . $data[$i]['id_salida'] . ');" title="Eliminar"> <i class="fa-solid fa-trash fa-lg"></i> </button> </div>';
+            $data[$i]['acciones'] = '<div class="d-flex align-items-center gap-1">
+
+                        <button class="btn btn-sm btn-primary px-3 py-2"
+                            type="button"
+                            onclick="btnEditarSalida(' . $data[$i]['id_salida'] . ');"
+                            title="Editar">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+
+                        <button class="btn btn-sm btn-danger px-3 py-2"
+                            type="button"
+                            onclick="btnEliminarSalida(' . $data[$i]['id_salida'] . ');"
+                            title="Eliminar">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+
+                        <a class="btn btn-sm btn-warning px-3 py-2"
+                            href="' . base_url . 'Reportes/Pdf7/' . $data[$i]['id_salida'] . '"
+                            target="_blank"
+                            title="PDF">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </a>
+
+                    </div>'     ;
+
         }
 
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -48,7 +71,7 @@ class Salidas extends Controller
     // Registrar o modificar salida
     public function registrar()
     {
-   
+
         $id_salida = $_POST['id_salida'];
         $id_usuario = $_SESSION['id_usuario'];
         $actividad = $_POST['actividad'];
@@ -60,12 +83,12 @@ class Salidas extends Controller
         $fecha_llegada = $_POST['fecha_llegada'];
         $hora_llegada = $_POST['hora_llegada'];
 
-        if (empty($id_usuario) || empty($actividad) || empty($lugar) || empty($fecha_salida) || empty($hora_salida) ) {
+        if (empty($id_usuario) || empty($actividad) || empty($lugar) || empty($fecha_salida) || empty($hora_salida)) {
             $msg = array('msg' => 'Todos los campos obligatorios deben llenarse ☻', 'icono' => 'warning');
         } else {
             if ($id_salida == "") {
                 // Nuevo registro
-                $data = $this->model->registrarSalida($actividad, $lugar, $transporte, $fecha_salida, $hora_salida,$fecha_llegada, $hora_llegada, $id_chofer, $id_usuario);
+                $data = $this->model->registrarSalida($actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $fecha_llegada, $hora_llegada, $id_chofer, $id_usuario);
                 if ($data == "ok") {
                     $msg = array('msg' => 'Salida registrada con éxito ☻', 'icono' => 'success');
                 } else {

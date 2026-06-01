@@ -6,19 +6,17 @@
 </div>
 <div>
 
-    <button class="btn btn-primary mb-1 mx-4" type="button" onclick="frmCargos();">Nuevo <i
+<button class="btn btn-primary mb-1 mx-4" type="button" onclick="frmCargos();">Nuevo <i
             class="fa fa-user-plus"></i></button>
 
 </div>
-
-
 
 <!--  Header End -->
 <div class="container-fluid">
     <div class="card-body">
         <div class="card">
             <div class="card-body p-4">
-                <table class="table  table-hover" id="tblcargos">
+                <table class="table  table-hover" id="tblcargoss">
                     <thead class="table-dark ">
 
                         <tr>

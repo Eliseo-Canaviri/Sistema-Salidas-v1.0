@@ -131,10 +131,10 @@ class Reportes extends Controller
     }
 
 
-    public function pdf7()
+    public function pdf7($id_salida)
     {
         // 1. Obtener los datos del modelo
-        $data = $this->model->getSalidasPdf(8);
+        $data = $this->model->getSalidasPdf($id_salida);
         $salida = $data[0];
         $fecha_actual = date('d/m/Y');
 
