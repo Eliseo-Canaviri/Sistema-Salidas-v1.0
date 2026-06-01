@@ -18,11 +18,9 @@
 
 <!--  Header End -->
 <div class="container-fluid">
-
   <div class="card-body">
     <div class="card">
       <div class="card-body p-4">
-
         <table class="table  table-hover" id="tblUsuarios">
           <thead class="table-dark ">
             <tr>
@@ -78,13 +76,32 @@
 
             <!-- CI -->
             <div class="col-md-4 mb-3">
-              <label for="ci" class="form-label fw-bold">
-                C.I
+              <label for="ci" class="form-label fw-bold">C.I</label>
+
+              <input type="text" class="form-control" id="ci" name="ci" placeholder="Ej: 1234567" required>
+
+              <small class="text-muted">
+                Ejemplo con complemento: 123424234-1H
+              </small>
+            </div>
+            <!-- Nombres -->
+            <div class="col-md-4 mb-3">
+              <label for="nombres" class="form-label fw-bold">
+                Nombres
               </label>
 
-              <input type="number" class="form-control" id="ci" name="ci" placeholder="Ej: 1234567" required>
+              <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Ej: Juan" required>
             </div>
 
+            <!-- Apellidos -->
+            <div class="col-md-4 mb-3">
+              <label for="apellidos" class="form-label fw-bold">
+                Apellidos
+              </label>
+
+              <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Ej: Pérez Mamani"
+                required>
+            </div>
             <!-- Celular -->
             <div class="col-md-4 mb-3">
               <label for="celular" class="form-label fw-bold">
@@ -95,57 +112,44 @@
             </div>
 
             <!-- Cargo -->
-            <div class="col-md-4 mb-3">
-              <label for="id_cargo" class="form-label fw-bold">
-                Cargo
-              </label>
 
-              <select class="form-select" id="id_cargo" name="id_cargo" required>
-
-                <option value="">Seleccionar</option>
-                <option value="1">Contador</option>
-                <option value="2">Secretaria</option>
-                <option value="3">Técnico de Sistemas</option>
-
-              </select>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="id_cargo" class="form-label fw-bold">
+                  <i class="fa-brands fa-usps"></i> Cargo
+                </label>
+                <select id="id_cargo" name="id_cargo" class="form-select" required>
+                  <option value="" selected disabled>
+                    Seleccione una Cargo
+                  </option>
+                  <?php foreach ($data['cargos'] as $row) { ?>
+                    <option value="<?php echo $row['id_cargo']; ?>">
+                      <?php echo $row['nombre']; ?>
+                    </option>
+                  <?php } ?>
+                </select>
+              </div>
             </div>
 
-            <!-- Nombres -->
-            <div class="col-md-6 mb-3">
-              <label for="nombres" class="form-label fw-bold">
-                Nombres
-              </label>
-
-              <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Ej: Juan" required>
-            </div>
-
-            <!-- Apellidos -->
-            <div class="col-md-6 mb-3">
-              <label for="apellidos" class="form-label fw-bold">
-                Apellidos
-              </label>
-
-              <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Ej: Pérez Mamani"
-                required>
-            </div>
 
             <!-- Unidad -->
-            <div class="col-md-12 mb-3">
-              <label for="id_unidad" class="form-label fw-bold">
-                Unidad
-              </label>
-
-              <select class="form-select" id="id_unidad" name="id_unidad" required>
-
-                <option value="">Seleccionar</option>
-                <option value="1">Unidad Financiera</option>
-                <option value="2">Recursos Humanos</option>
-                <option value="3">Unidad de Sistemas</option>
-                <option value="4">Unidad Jurídica</option>
-
-              </select>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="id_unidad" class="form-label fw-bold">
+                  <i class="fas fa-building"></i> Unidad
+                </label>
+                <select id="id_unidad" name="id_unidad" class="form-select" required>
+                  <option value="" selected disabled>
+                    Seleccione una Unidad
+                  </option>
+                  <?php foreach ($data['unidades'] as $row) { ?>
+                    <option value="<?php echo $row['id_unidad']; ?>">
+                      <?php echo $row['nombre']; ?>
+                    </option>
+                  <?php } ?>
+                </select>
+              </div>
             </div>
-
           </div>
 
         </form>

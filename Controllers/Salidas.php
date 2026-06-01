@@ -16,6 +16,7 @@ class Salidas extends Controller
         $verificar = $this->model->verificarPermiso($id_user, 'salidas');
         if (!empty($verificar) || $id_user == 1) {
             $data['funcionarios'] = $this->model->getFuncionarios();
+            $data['choferes'] = $this->model->getChoferes();
             $this->views->getView($this, "index", $data);
         } else {
             header('Location:' . base_url . 'Errors/permisos');
@@ -25,17 +26,19 @@ class Salidas extends Controller
     // Listar salidas activas vía AJAX para DataTable
     public function listar()
     {
-        $data = $this->model->getSalidas(1);
+        $id_user = $_SESSION['id_usuario'];
+
+        // Administradores (ID 1 y 2)
+        if ($id_user == 1 || $id_user == 2) {
+            $data = $this->model->getSalidasadmin(1); // Todas las salidas
+
+        } else {
+            $data = $this->model->getSalidas($id_user, 1); // Solo sus salidas
+        }
 
         for ($i = 0; $i < count($data); $i++) {
-            $data[$i]['acciones'] = '<div class="d-flex gap-1">
-                <button class="btn btn-sm btn-primary" type="button" onclick="btnEditarSalida(' . $data[$i]['id_salida'] . ');" title="Editar">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button class="btn btn-sm btn-danger" type="button" onclick="btnEliminarSalida(' . $data[$i]['id_salida'] . ');" title="Eliminar">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>';
+            $data[$i]['acciones'] = '<div class="d-flex gap-1"> <button class="btn btn-sm btn-primary px-3 py-2" type="button" onclick="btnEditarSalida(' . $data[$i]['id_salida'] . ');
+            " title="Editar"> <i class="fa-solid fa-pen-to-square fa-lg"></i> </button> <button class="btn btn-sm btn-danger px-3 py-2" type="button" onclick="btnEliminarSalida(' . $data[$i]['id_salida'] . ');" title="Eliminar"> <i class="fa-solid fa-trash fa-lg"></i> </button> </div>';
         }
 
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -45,21 +48,24 @@ class Salidas extends Controller
     // Registrar o modificar salida
     public function registrar()
     {
-        $id_salida      = $_POST['id_salida'];
-        $id_usuario     = $_SESSION['id_usuario'];
-        $actividad      = $_POST['actividad'];
-        $lugar          = $_POST['lugar'];
-        $transporte     = $_POST['transporte'];
-        $fecha_salida   = $_POST['fecha_salida'];
-        $hora_salida    = $_POST['hora_salida'];
-        $hora_llegada   = $_POST['hora_llegada'];
+   
+        $id_salida = $_POST['id_salida'];
+        $id_usuario = $_SESSION['id_usuario'];
+        $actividad = $_POST['actividad'];
+        $lugar = $_POST['lugar'];
+        $id_chofer = $_POST['id_chofer']; // Si no se envía, asignar cadena vacía
+        $transporte = $_POST['transporte'];
+        $fecha_salida = $_POST['fecha_salida'];
+        $hora_salida = $_POST['hora_salida'];
+        $fecha_llegada = $_POST['fecha_llegada'];
+        $hora_llegada = $_POST['hora_llegada'];
 
-        if (empty($id_usuario) || empty($actividad) || empty($lugar) || empty($fecha_salida) || empty($hora_salida) || empty($hora_llegada)) {
+        if (empty($id_usuario) || empty($actividad) || empty($lugar) || empty($fecha_salida) || empty($hora_salida) ) {
             $msg = array('msg' => 'Todos los campos obligatorios deben llenarse ☻', 'icono' => 'warning');
         } else {
             if ($id_salida == "") {
                 // Nuevo registro
-                $data = $this->model->registrarSalida($id_usuario, $actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $hora_llegada);
+                $data = $this->model->registrarSalida($actividad, $lugar, $transporte, $fecha_salida, $hora_salida,$fecha_llegada, $hora_llegada, $id_chofer, $id_usuario);
                 if ($data == "ok") {
                     $msg = array('msg' => 'Salida registrada con éxito ☻', 'icono' => 'success');
                 } else {
@@ -67,7 +73,7 @@ class Salidas extends Controller
                 }
             } else {
                 // Modificar registro existente
-                $data = $this->model->modificarSalida($id_usuario, $actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $hora_llegada, $id_salida);
+                $data = $this->model->modificarSalida($actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $fecha_llegada, $hora_llegada, $id_chofer, $id_usuario, $id_salida);
                 if ($data == "modificado") {
                     $msg = array('msg' => 'Salida modificada con éxito ☻', 'icono' => 'success');
                 } else {
@@ -83,7 +89,7 @@ class Salidas extends Controller
     // Obtener datos de una salida para editar
     public function editar(int $id)
     {
-        $data = $this->model->getSalida($id);
+        $data = $this->model->getSalidaEditar($id);
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
@@ -113,15 +119,33 @@ class Salidas extends Controller
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
     }
-
+    function inactivoVista()
+    {
+        $this->views->getView($this, "inactivos");
+    }
     // Vista de salidas inactivas
     public function inactivos()
     {
-        if (empty($_SESSION['activo'])) {
-            header("location:" . base_url);
+        $id_user = $_SESSION['id_usuario'];
+
+        // Administradores (ID 1 y 2)
+        if ($id_user == 1 || $id_user == 2) {
+            $data = $this->model->getSalidasadmin(0); // Todas las salidas
+
+        } else {
+            $data = $this->model->getSalidas($id_user, 0); // Solo sus salidas
         }
-        $data['salidas'] = $this->model->getSalidas(0);
-        $this->views->getView($this, "inactivos", $data);
+
+        for ($i = 0; $i < count($data); $i++) {
+            $data[$i]['acciones'] = '<div class="d-flex gap-1">  </button> <button class="btn btn-sm btn-warning px-3 py-2" type="button" onclick="btnReactivarSalida(' . $data[$i]['id_salida'] . ');" title="Eliminar"> <i class="fa-solid fa-trash-arrow-up fa-lg"></i> </button> </div>';
+        }
+
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+
+
     }
+
+
+
 }
 ?>

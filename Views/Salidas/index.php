@@ -10,7 +10,7 @@
   <button class="btn btn-primary mb-3" type="button" onclick="frmSalida();">
     Nueva Salida <i class="fa-solid fa-plus"></i>
   </button>
-  <a class="btn btn-warning mb-3 mx-1" href="<?php echo base_url; ?>Salidas/inactivos">
+  <a class="btn btn-warning mb-3 mx-1" href="<?php echo base_url; ?>Salidas/inactivoVista">
     Inactivos <i class="fa-solid fa-ban"></i>
   </a>
 </div>
@@ -26,6 +26,7 @@
               <th scope="col">Funcionario</th>
               <th scope="col">Actividad</th>
               <th scope="col">Lugar</th>
+              <th scope="col">Id Chofer</th>
               <th scope="col">Transporte</th>
               <th scope="col">Fecha Salida</th>
               <th scope="col">Hora Salida</th>
@@ -66,25 +67,13 @@
               <label for="nombres" class="form-label fw-bold">
                 <i class="fa-solid fa-clock me-1"></i> Nombres <span class="text-danger">*</span>
               </label>
-              <input type="text" class="form-control" id="nombres" name="nombres" value="<?php echo $_SESSION['nombres'],' ',$_SESSION['apellidos'] ?>" required>
+              <input type="text" class="form-control" id="nombres" name="nombres"
+                value="<?php echo $_SESSION['nombres'], ' ', $_SESSION['apellidos'] ?>" disabled required>
             </div>
-            <!-- Funcionario
-            <div class="col-md-12 mb-3">
-              <label for="id_funcionario" class="form-label fw-bold">
-                <i class="fa-solid fa-user-tie me-1"></i> Funcionario <span class="text-danger">*</span>
-              </label>
-              <select class="form-select" id="id_funcionario" name="id_funcionario" required>
-                <option value="">-- Seleccionar Funcionario --</option>
-                <?php foreach ($data['funcionarios'] as $func): ?>
-                  <option value="<?php echo $func['id']; ?>">
-                    <?php echo $func['nombre_completo'] . ' (CI: ' . $func['ci'] . ')'; ?>
-                  </option>
-                <?php endforeach; ?>
-              </select>
-            </div> -->
+
 
             <!-- Actividad -->
-            <div class="col-md-12 mb-3">
+            <div class="col-md-8 mb-3">
               <label for="actividad" class="form-label fw-bold">
                 <i class="fa-solid fa-briefcase me-1"></i> Actividad / Motivo <span class="text-danger">*</span>
               </label>
@@ -93,49 +82,77 @@
             </div>
 
             <!-- Lugar -->
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
               <label for="lugar" class="form-label fw-bold">
                 <i class="fa-solid fa-location-dot me-1"></i> Lugar de Destino <span class="text-danger">*</span>
               </label>
-              <input type="text" class="form-control" id="lugar" name="lugar"
-                placeholder="Ej: Ministerio de Educación" required>
+              <textarea type="text" class="form-control" id="lugar" name="lugar"
+                placeholder="Ej: Ministerio de Educación" required></textarea>
             </div>
+            <!-- Cargo -->
 
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="id_chofer" class="form-label fw-bold">
+                  <i class="fa-brands fa-usps"></i> Chofer
+                </label>
+                <select id="id_chofer" name="id_chofer" class="form-select" required>
+                  <option value="" selected disabled>
+                    Seleccione un Chofer
+                  </option>
+                  <?php foreach ($data['choferes'] as $row) { ?>
+                    <option value="<?php echo $row['id_chofer']; ?>">
+                      <?php echo $row['nombres']; ?>
+
+                    </option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
             <!-- Transporte -->
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
               <label for="transporte" class="form-label fw-bold">
                 <i class="fa-solid fa-car me-1"></i> Medio de Transporte
               </label>
               <select class="form-select" id="transporte" name="transporte">
-                <option value="">-- Seleccionar --</option>
-                <option value="Vehículo Institucional">Vehículo Institucional</option>
-                <option value="Transporte Público">Transporte Público</option>
-                <option value="Vehículo Propio">Vehículo Propio</option>
-                <option value="A pie">A pie</option>
-                <option value="Otro">Otro</option>
+                <option value="Vehículo de la Alcaldía">🚐 Vehículo de la Alcaldía</option>
+                <option value="Transporte Público">🚌 Transporte Público</option>
+                <option value="Vehículo Propio">🚙 Vehículo Propio</option>
+                <option value="A pie">🚶 A pie</option>
+                <option value="Otro">📌 Otro</option>
               </select>
             </div>
 
             <!-- Fecha de Salida -->
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
               <label for="fecha_salida" class="form-label fw-bold">
                 <i class="fa-solid fa-calendar-days me-1"></i> Fecha de Salida <span class="text-danger">*</span>
               </label>
-              <input type="date" class="form-control" id="fecha_salida" name="fecha_salida" required>
+              <input type="date" class="form-control" id="fecha_salida" name="fecha_salida"
+                value="<?= date('Y-m-d'); ?>" required>
             </div>
 
             <!-- Hora de Salida -->
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
               <label for="hora_salida" class="form-label fw-bold">
                 <i class="fa-solid fa-clock me-1"></i> Hora de Salida <span class="text-danger">*</span>
               </label>
-              <input type="time" class="form-control" id="hora_salida" name="hora_salida" required>
+              <input type="time" class="form-control" id="hora_salida" name="hora_salida" value="<?= date('H:i'); ?>"
+                required>
+            </div>
+            <!-- Fecha de Llegada -->
+            <div class="col-md-3 mb-3">
+              <label for="fecha_llegada" class="form-label fw-bold">
+                <i class="fa-solid fa-calendar-days me-1"></i> Fecha de Llegada <span class="text-danger">*</span>
+              </label>
+              <input type="date" class="form-control" id="fecha_llegada" name="fecha_llegada"
+                value="<?= date('Y-m-d'); ?>" required>
             </div>
 
             <!-- Hora de Llegada -->
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
               <label for="hora_llegada" class="form-label fw-bold">
-                <i class="fa-solid fa-clock me-1"></i> Hora de Llegada <span class="text-danger">*</span>
+                <i class="fa-solid fa-clock me-1"></i> Hora de Llegada
               </label>
               <input type="time" class="form-control" id="hora_llegada" name="hora_llegada" required>
             </div>

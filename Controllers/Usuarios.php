@@ -17,13 +17,20 @@ class Usuarios extends Controller
         $id_user = $_SESSION['id_usuario'];
         $verificar = $this->model->verificarPermiso($id_user, 'usuarios');
         if (!empty($verificar) || $id_user == 1) {
-            $this->views->getView($this, "index");
+            $data['unidades'] = $this->model->getUnidades(1);
+            $data['cargos'] = $this->model->getCargos(1);
+            $this->views->getView($this, "index", $data);
         } else {
             header('Location:' . base_url . 'Errors/permisos');
         }
 
     }
-
+    function registrarse()
+    {
+        $data['unidades'] = $this->model->getUnidades(1);
+        $data['cargos'] = $this->model->getCargos(1);
+        $this->views->getView($this, "registro", $data);
+    }
     public function listar()
     {
         //vamos mandar por json a funciones.js
@@ -38,9 +45,9 @@ class Usuarios extends Controller
 
                     $data[$i]['estado'] = '<spam class="badge bg-success">Activo</spam';
                     $data[$i]['acciones'] = '<div>
-                          <a class ="btn btn-dark" href="' . base_url . 'Usuarios/permisos/' . $data[$i]['id'] . ' "><i class="fa-solid fa-key"></i></a>
-                <button class ="btn btn-primary" type="button"onclick="btnEditarUser(' . $data[$i]['id'] . ');"><i class="fa-solid fa-user-pen"></i></button>
-                <button class ="btn btn-danger" type="button"onclick="btnEliminarUser(' . $data[$i]['id'] . ');" ><i class="fa-solid fa-trash"></i></button>
+                          <a class ="btn btn-dark btn-sm" href="' . base_url . 'Usuarios/permisos/' . $data[$i]['id'] . ' "><i class="fa-solid fa-key"></i></a>
+                <button class ="btn btn-primary btn-sm" type="button"onclick="btnEditarUser(' . $data[$i]['id'] . ');"><i class="fa-solid fa-user-pen"></i></button>
+                <button class ="btn btn-danger btn-sm" type="button"onclick="btnEliminarUser(' . $data[$i]['id'] . ');" ><i class="fa-solid fa-trash"></i></button>
                 <div/>';
 
 
@@ -62,8 +69,7 @@ class Usuarios extends Controller
 
     public function validar()
     {
-        //print_r($_POST);
-        // die();
+
 
         if (empty($_POST['usuario']) || empty($_POST['clave'])) {
             $msg = "Los Campos estan Vaciones";
@@ -77,8 +83,12 @@ class Usuarios extends Controller
             if ($data) {
 
                 $_SESSION['id_usuario'] = $data['id'];
+                $_SESSION['ci'] = $data['ci'];
                 $_SESSION['nombres'] = $data['nombres'];
                 $_SESSION['apellidos'] = $data['apellidos'];
+                $_SESSION['celular'] = $data['celular'];
+                $_SESSION['id_cargo'] = $data['id_cargo'];
+                $_SESSION['id_unidad'] = $data['id_unidad'];
                 $_SESSION['activo'] = true;
                 $msg = "ok";
                 // code...
@@ -93,10 +103,85 @@ class Usuarios extends Controller
 
         // code...
     }
+    public function registroPrincipal()
+    {
+        //  print_r($_POST);
+        //  die();
+        $ci = $_POST['ci'];
+        $nombres = $_POST['nombres'];
+        $apellidos = $_POST['apellidos'];
+        $celular = $_POST['celular'];
+        $cargo = $_POST['cargo'];
+        $unidad = $_POST['unidad'];
+
+        $id = $_POST['id'];
+
+
+        if (empty($ci) || empty($nombres) || empty($apellidos)) {
+            $msg = array('msg' => 'Todos los campos son obligatorios ☻', 'icono' => 'warning');
+
+
+        } else {
+            if ($id == "") {
+
+                $data = $this->model->registrarCargo($cargo);
+                $data = $this->model->registrarUnidad($unidad);
+
+                $datac = $this->model->getMaxIdCargo();
+                foreach ($datac as $row) {
+                    $id_cargo = $row;
+                }
+                $datau = $this->model->getMaxIdUnidad();
+                foreach ($datau as $row) {
+                    $id_unidad = $row;
+                }
+
+
+                // Generar clave: inicial de nombre + inicial de apellido + CI
+                $inicialNombre = strtoupper(substr(trim($nombres), 0, 1));
+                $inicialApellido = strtoupper(substr(trim($apellidos), 0, 1));
+                $claveTexto = $inicialNombre . $inicialApellido . $ci;
+                $clave = hash("SHA256", $claveTexto);
+                $data = $this->model->registrarUsuario($ci, $nombres, $apellidos, $celular, $id_cargo, $id_unidad, $clave, $clave);
+                if ($data == "ok") {
+
+                    $msg = array(
+                        'msg' => '¡Usuario registrado con éxito!<br><br>' .
+                            '<b>Usuario:</b> ' . $ci . '<br>' .
+                            '<b>Contraseña:</b> ' . $claveTexto,
+                        'icono' => 'success'
+                    );
+                } else if ($data == "existe") {
+
+                    $msg = array('msg' => 'El Usuario ya Existe ☻', 'icono' => 'warning');
+                } else {
+
+                    $msg = array('msg' => 'Error al registrar al usuario ☻', 'icono' => 'error');
+                }
+            }
+            #code ..
+            else {
+                $data = $this->model->modificarUsuario($ci, $nombres, $apellidos, $celular, $id);
+                if ($data == "modificado") {
+
+                    $msg = array('msg' => 'Usuario modificado con exito ☻', 'icono' => 'success');
+                } else {
+
+                    $msg = array('msg' => 'Error al modificar al usuario ☻', 'icono' => 'error');
+                }
+            }
+
+
+            echo json_encode($msg, JSON_UNESCAPED_UNICODE); //enviando ala archivo funcion js
+            die();
+
+        }
+    }
 
     public function registrar()
     {
-       
+        //  print_r($_POST);
+        //    die();
         $ci = $_POST['ci'];
         $nombres = $_POST['nombres'];
         $apellidos = $_POST['apellidos'];
@@ -105,7 +190,7 @@ class Usuarios extends Controller
         $id_unidad = $_POST['id_unidad'];
 
         $id = $_POST['id'];
-    
+
 
         if (empty($ci) || empty($nombres) || empty($apellidos)) {
             $msg = array('msg' => 'Todos los campos son obligatorios ☻', 'icono' => 'warning');
@@ -113,27 +198,26 @@ class Usuarios extends Controller
 
         } else {
             if ($id == "") {
-            
-                     // Generar clave: inicial de nombre + inicial de apellido + CI
-                    $inicialNombre = strtoupper(substr(trim($nombres), 0, 1));
-                    $inicialApellido = strtoupper(substr(trim($apellidos), 0, 1));
-                    $claveTexto = $inicialNombre . $inicialApellido . $ci;
-                    $clave = hash("SHA256", $claveTexto);
-                    $data = $this->model->registrarUsuario($ci,$nombres, $apellidos, $celular, $id_cargo, $id_unidad, $clave, $clave);
-                    if ($data == "ok") {
 
-                               $msg = array('msg' => 'Usuario registrado con éxito. Clave generada: ' . $claveTexto . ' ☻', 'icono' => 'success');
-                    } else if ($data == "existe") {
+                // Generar clave: inicial de nombre + inicial de apellido + CI
+                $inicialNombre = strtoupper(substr(trim($nombres), 0, 1));
+                $inicialApellido = strtoupper(substr(trim($apellidos), 0, 1));
+                $claveTexto = $inicialNombre . $inicialApellido . $ci;
+                $clave = hash("SHA256", $claveTexto);
+                $data = $this->model->registrarUsuario($ci, $nombres, $apellidos, $celular, $id_cargo, $id_unidad, $clave, $clave);
+                if ($data == "ok") {
 
-                        $msg = array('msg' => 'El usuario ya existe ☻', 'icono' => 'warning');
-                    } else {
+                    $msg = array('msg' => 'Usuario registrado con éxito. Clave generada: ' . $claveTexto . ' ☻', 'icono' => 'success');
+                } else if ($data == "existe") {
 
-                        $msg = array('msg' => 'Error al registrar al usuario ☻', 'icono' => 'error');
-                    }
+                    $msg = array('msg' => 'El usuario ya existe ☻', 'icono' => 'warning');
+                } else {
+
+                    $msg = array('msg' => 'Error al registrar al usuario ☻', 'icono' => 'error');
                 }
-                #code ..
-
-             else {
+            }
+            #code ..
+            else {
                 $data = $this->model->modificarUsuario($ci, $nombres, $apellidos, $celular, $id_cargo, $id_unidad, $id);
                 if ($data == "modificado") {
 
@@ -144,11 +228,11 @@ class Usuarios extends Controller
                 }
             }
 
-   
-        echo json_encode($msg, JSON_UNESCAPED_UNICODE); //enviando ala archivo funcion js
-        die();
 
-    }
+            echo json_encode($msg, JSON_UNESCAPED_UNICODE); //enviando ala archivo funcion js
+            die();
+
+        }
     }
 
     public function editar(int $id)
@@ -254,58 +338,99 @@ class Usuarios extends Controller
 
     }
 
-  function registrarPermisos()
-{
-    $msg = '';
-    $id_user = $_POST['id_usuario'];
+    function registrarPermisos()
+    {
+        $msg = '';
+        $id_user = $_POST['id_usuario'];
 
-    $eliminar = $this->model->eliminarPermisos($id_user);
+        $eliminar = $this->model->eliminarPermisos($id_user);
 
-    if ($eliminar == 'ok') {
+        if ($eliminar == 'ok') {
 
-        // Verificar si llegan permisos
-        if (isset($_POST['permisos']) && is_array($_POST['permisos'])) {
+            // Verificar si llegan permisos
+            if (isset($_POST['permisos']) && is_array($_POST['permisos'])) {
 
-            foreach ($_POST['permisos'] as $id_permisos) {
-                $msg = $this->model->registrarPermisos($id_user, $id_permisos);
-            }
+                foreach ($_POST['permisos'] as $id_permisos) {
+                    $msg = $this->model->registrarPermisos($id_user, $id_permisos);
+                }
 
-            if ($msg == 'ok') {
-                $msg = array(
-                    'msg' => 'Permisos Asignados ☻',
-                    'icono' => 'success'
-                );
+                if ($msg == 'ok') {
+                    $msg = array(
+                        'msg' => 'Permisos Asignados ☻',
+                        'icono' => 'success'
+                    );
+
+                } else {
+                    $msg = array(
+                        'msg' => 'Error al asignar permisos',
+                        'icono' => 'error'
+                    );
+                }
 
             } else {
+
                 $msg = array(
-                    'msg' => 'Error al asignar permisos',
-                    'icono' => 'error'
+                    'msg' => 'Debe seleccionar al menos un permiso',
+                    'icono' => 'warning'
                 );
             }
 
         } else {
 
             $msg = array(
-                'msg' => 'Debe seleccionar al menos un permiso',
-                'icono' => 'warning'
+                'msg' => 'Error al eliminar permisos anteriores',
+                'icono' => 'error'
             );
         }
 
-    } else {
-
-        $msg = array(
-            'msg' => 'Error al eliminar permisos anteriores',
-            'icono' => 'error'
-        );
+        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
     }
 
-    echo json_encode($msg, JSON_UNESCAPED_UNICODE);
-}
-   
 
 
-   
+    function perfil()
+    {
+        // $this->views->getView($this, "perfil");
+        $id_user = $_SESSION['id_usuario'];
+       /// $data['unidades'] = $this->model->getUnidades(1);
+      //  $data['cargos'] = $this->model->getCargos(1);
+        $data['usuarios'] = $this->model->editarUserPerfil($id_user);
+        $this->views->getView($this, "perfil", $data);
+    }
+    public function actualizarDatosUsuario()
+    {
+        if (empty($_SESSION['activo'])) {
+            header("location: " . base_url);
+        }
 
+        //   print_r($_POST);
+        ///            die();
+
+        $ci = ($_POST['ci']);
+        $nombres = ($_POST['nombres']);
+        $apellidos = ($_POST['apellidos']);
+        $celular = ($_POST['celular']);
+        $id_cargo = ($_POST['perfil_cargo']);
+        $id_unidad = ($_POST['perfil_unidad']);
+
+        $id = $_SESSION['id_usuario'];
+
+        if ($id == "") {
+
+            $msg = array('msg' => 'Error al Modificar ☻', 'icono' => 'warning');
+
+        }
+        $data = $this->model->modificarUsuario($ci, $nombres, $apellidos, $celular, $id_cargo, $id_unidad, $id);
+        if ($data == "modificado") {
+
+            $msg = array('msg' => 'Usuario modificado con exito ☻', 'icono' => 'success');
+        } else {
+
+            $msg = array('msg' => 'Error al modificar al usuario ☻', 'icono' => 'error');
+        }
+        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+        die();
+    }
 
 
 

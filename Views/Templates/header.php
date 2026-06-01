@@ -13,7 +13,7 @@
   <link href="<?php echo base_url; ?>Assets/css/datatables.min.css" rel="stylesheet" crossorigin="anonymous" />
   <!-- Select2   css-->
   <link href="<?php echo base_url; ?>Assets/css/select2.min.css" rel="stylesheet" />
-
+  <link href="<?php echo base_url; ?>Assets/css/ojo.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -26,81 +26,126 @@
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
           <a href="<?php echo base_url; ?>Administracion/home" class="text-nowrap logo-img">
-            <img src="<?php echo base_url; ?>Assets/IMG/logos/logo-light.svg" alt="" />
+            <img src="<?php echo base_url; ?>Assets/IMG/logos/logos.png" alt="" />
           </a>
           <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
             <i class="ti ti-x fs-8"></i>
           </div>
         </div>
-        <!-- Sidebar navigation-->
+        <!-- Sidebar navigation -->
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
+
+            <!-- INICIO -->
             <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-6"></i>
-              <span class="hide-menu">Home</span>
+              <i class="ti ti-home nav-small-cap-icon fs-6"></i>
+              <span class="hide-menu">INICIO</span>
             </li>
+
             <li class="sidebar-item">
-              <a class="sidebar-link" href="<?php echo base_url; ?>Administracion/home" aria-expanded="false">
+              <a class="sidebar-link" href="<?php echo base_url; ?>Administracion/home">
                 <span>
                   <iconify-icon icon="solar:home-smile-bold-duotone" class="fs-6"></iconify-icon>
                 </span>
                 <span class="hide-menu">Dashboard</span>
               </a>
             </li>
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-6"></i>
-              <span class="hide-menu">UI COMPONENTS</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?php echo base_url; ?>Usuarios" aria-expanded="false">
-                <span>
-                  <iconify-icon icon="solar:layers-minimalistic-bold-duotone" class="fs-6"></iconify-icon>
-                </span>
-                <span class="hide-menu">Usuarios</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?php echo base_url; ?>Ingresos" aria-expanded="false">
-                <span>
-                  <iconify-icon icon="solar:danger-circle-bold-duotone" class="fs-6"></iconify-icon>
-                </span>
-                <span class="hide-menu">Ingresos</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?php echo base_url; ?>Egresos" aria-expanded="false">
-                <span>
-                  <iconify-icon icon="solar:bookmark-square-minimalistic-bold-duotone" class="fs-6"></iconify-icon>
-                </span>
-                <span class="hide-menu">Egresos</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?php echo base_url; ?>Anotes" aria-expanded="false">
-                <span>
-                  <iconify-icon icon="solar:bookmark-square-minimalistic-bold-duotone" class="fs-6"></iconify-icon>
-                </span>
-                <span class="hide-menu">Anotes</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?php echo base_url; ?>Permisos" aria-expanded="false">
-                <span>
-                  <iconify-icon icon="solar:bookmark-square-minimalistic-bold-duotone" class="fs-6"></iconify-icon>
-                </span>
-                <span class="hide-menu">Permisos</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?php echo base_url; ?>Salidas" aria-expanded="false">
-                <span>
-                  <iconify-icon icon="solar:walking-bold-duotone" class="fs-6"></iconify-icon>
-                </span>
-                <span class="hide-menu">Salidas</span>
-              </a>
-            </li>
-          </ul>
 
+            <!-- ADMINISTRACIÓN -->
+            <li class="nav-small-cap">
+              <i class="ti ti-settings nav-small-cap-icon fs-6"></i>
+              <span class="hide-menu">ADMINISTRACIÓN</span>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                <span>
+                  <iconify-icon icon="solar:users-group-rounded-bold-duotone" class="fs-6"></iconify-icon>
+                </span>
+                <span class="hide-menu">Gestión General</span>
+              </a>
+              <ul aria-expanded="false" class="collapse first-level">
+                <li class="sidebar-item">
+                  <a href="<?php echo base_url; ?>Usuarios" class="sidebar-link">
+                    <span class="hide-menu">Usuarios</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="<?php echo base_url; ?>Permisos" class="sidebar-link">
+                    <span class="hide-menu">Permisos</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="<?php echo base_url; ?>Cargos" class="sidebar-link">
+                    <span class="hide-menu">Cargos</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="<?php echo base_url; ?>Unidades" class="sidebar-link">
+                    <span class="hide-menu">Unidades</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+         
+
+   
+            <!-- TRANSPORTE -->
+            <li class="nav-small-cap">
+              <i class="ti ti-car nav-small-cap-icon fs-6"></i>
+              <span class="hide-menu">TRANSPORTE</span>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                <span>
+                  <iconify-icon icon="solar:bus-bold-duotone" class="fs-6"></iconify-icon>
+                </span>
+                <span class="hide-menu">Control Salida</span>
+              </a>
+              <ul aria-expanded="false" class="collapse first-level">
+                <li class="sidebar-item">
+                  <a href="<?php echo base_url; ?>Salidas" class="sidebar-link">
+                    <span class="hide-menu">Salidas</span>
+                  </a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="<?php echo base_url; ?>Choferes" class="sidebar-link">
+                    <span class="hide-menu">Choferes</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- REPORTES -->
+            <li class="nav-small-cap">
+              <i class="ti ti-chart-bar nav-small-cap-icon fs-6"></i>
+              <span class="hide-menu">REPORTES</span>
+            </li>
+         <li class="sidebar-item">
+              <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                <span>
+                  <iconify-icon icon="solar:transfer-horizontal-bold-duotone" class="fs-6"></iconify-icon>
+                </span>
+                <span class="hide-menu">Reportes</span>
+              </a>
+              <ul aria-expanded="false" class="collapse first-level">
+
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="<?php echo base_url; ?>Reportes">
+                    <span>
+                      <iconify-icon icon="solar:chart-square-bold-duotone" class="fs-6"></iconify-icon>
+                    </span>
+                    <span class="hide-menu">Reportes Por Fecha</span>
+                  </a>
+                </li>
+
+
+              </ul>
+            </li>
+
+          </ul>
         </nav>
         <!-- End Sidebar navigation -->
       </div>
@@ -128,31 +173,35 @@
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
 
-              <a href="#" target="_blank" class="btn btn-success"><span class="d-none d-md-block"><?php echo $_SESSION['nombres'] ?> </span>
-                <span class="d-block d-md-none">Free</span></a>
+              <a href="<?php echo base_url; ?>Usuarios/perfil" class="btn btn-success"><span
+                  class="d-none d-md-block"><?php echo $_SESSION['nombres'] ?> </span>
+                <span class="d-block d-md-none"><?php echo $_SESSION['nombres'] ?> </span></a>
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <img src="<?php echo base_url; ?>Assets/img/profile/user-1.jpg" alt="" width="35" height="35"
+                  <img src="<?php echo base_url; ?>Assets/img/dos.jpg" alt="" width="35" height="35"
                     class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
-                  
+
                   <div class="message-body">
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="<?php echo base_url; ?>Usuarios/perfil"
+                      class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3">My Profile</p>
+                      <p class="mb-0 fs-3">Mi Perfil</p>
                     </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="<?php echo base_url; ?>Usuarios/cuenta"
+                      class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-mail fs-6"></i>
-                      <p class="mb-0 fs-3">My Account</p>
+                      <p class="mb-0 fs-3">Mi Cuenta</p>
                     </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="<?php echo base_url; ?>Usuarios/tareas"
+                      class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-list-check fs-6"></i>
-                      <p class="mb-0 fs-3">My Task</p>
+                      <p class="mb-0 fs-3">Mis Tareas</p>
                     </a>
                     <a href="<?php echo base_url; ?>Usuarios/salir"
-                      class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                      class="btn btn-outline-primary mx-3 mt-2 d-block">Salir</a>
                   </div>
                 </div>
               </li>
@@ -160,6 +209,9 @@
           </div>
         </nav>
       </header>
+      <?php
+      date_default_timezone_set('America/La_Paz');
+      ?>
       <!--  Header End -->
       <div class="container-fluid">
         <div class="row">

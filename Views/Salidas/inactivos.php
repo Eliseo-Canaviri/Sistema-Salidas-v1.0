@@ -31,30 +31,7 @@
             </tr>
           </thead>
           <tbody>
-            <?php if (!empty($data['salidas'])): ?>
-              <?php foreach ($data['salidas'] as $s): ?>
-                <tr>
-                  <td><?php echo $s['id_salida']; ?></td>
-                  <td><?php echo htmlspecialchars($s['funcionario']); ?></td>
-                  <td><?php echo htmlspecialchars($s['actividad']); ?></td>
-                  <td><?php echo htmlspecialchars($s['lugar']); ?></td>
-                  <td><?php echo $s['transporte'] ? htmlspecialchars($s['transporte']) : '<span class="text-muted">—</span>'; ?></td>
-                  <td><?php echo $s['fecha_salida']; ?></td>
-                  <td><?php echo $s['hora_salida']; ?></td>
-                  <td><?php echo $s['hora_llegada']; ?></td>
-                  <td>
-                    <button class="btn btn-sm btn-success" type="button"
-                      onclick="btnReactivarSalida(<?php echo $s['id_salida']; ?>);" title="Reactivar">
-                      <i class="fa-solid fa-rotate-left"></i> Reactivar
-                    </button>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            <?php else: ?>
-              <tr>
-                <td colspan="9" class="text-center text-muted">No hay salidas inactivas.</td>
-              </tr>
-            <?php endif; ?>
+
           </tbody>
         </table>
       </div>

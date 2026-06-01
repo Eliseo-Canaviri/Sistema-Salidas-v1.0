@@ -22,6 +22,7 @@
       <h1 id="titulo-pagina" class="tags">Página no Encontrada</h1>
 
       <p class="parrafo">La página que buscas no existe o fue movida. Si crees que esto es un error, ponte en contacto con el administrador.</p>
+        <p class="parrafo">Para más información, contáctanos: <a href="https://wa.me/+59173887901" target="_blank">WhatsApp</a></p>
 
     </main>
   </div>

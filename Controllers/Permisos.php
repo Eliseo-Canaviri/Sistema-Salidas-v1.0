@@ -74,7 +74,7 @@ class Permisos extends Controller
                 }
 
             } else {
-                $data = $this->model->modificarEstudiante($ci, $nombre, $id);
+                $data = $this->model->modificarEstudiante($permiso, $id_permiso);
                 if ($data == "modificado") {
                     $msg = array('msg' => 'Estudiante modificado con exito ☻', 'icono' => 'success');
                 } else {
