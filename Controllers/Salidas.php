@@ -54,6 +54,7 @@ class Salidas extends Controller
     public function registrar()
     {
 
+
         $id_salida = $_POST['id_salida'];
         $id_usuario = $_SESSION['id_usuario'];
         $actividad = $_POST['actividad'];

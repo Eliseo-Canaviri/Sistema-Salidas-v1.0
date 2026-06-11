@@ -1,5 +1,5 @@
 <?php
-const base_url = "http://localhost/Sistema-Salidas-v1.0/";
+const base_url = "http://192.168.1.104/Sistema-Salidas-v1.0/";
 const host = "localhost";
 const user = "root";
 const pass = "";
