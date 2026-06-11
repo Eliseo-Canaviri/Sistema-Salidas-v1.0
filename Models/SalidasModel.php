@@ -104,7 +104,7 @@ class SalidasModel extends Query
         return $data;
     }
 
-  function MaxIdSalida()
+    function MaxIdSalida()
     {
         $sql = "SELECT MAX(id_salida) AS id_salida FROM salidas";
         $data = $this->select($sql);
