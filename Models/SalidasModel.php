@@ -38,10 +38,10 @@ class SalidasModel extends Query
         $data = $this->selectAll($sql);
         return $data;
     }
-    public function getChoferes()
+    public function getUsuarios()
     {
         $sql = "SELECT *         
-            FROM choferes 
+            FROM usuarios 
             WHERE estado = 1";
         $data = $this->selectAll($sql);
         return $data;
@@ -103,6 +103,15 @@ class SalidasModel extends Query
         $data = $this->selectAll($sql);
         return $data;
     }
+
+  function MaxIdSalida()
+    {
+        $sql = "SELECT MAX(id_salida) AS id_salida FROM salidas";
+        $data = $this->select($sql);
+        return $data;
+    }
+
+
 
     // Verificar permisos (reutilizamos el mismo método que en UsuariosModel)
     function verificarPermiso(int $id_user, string $nombre)

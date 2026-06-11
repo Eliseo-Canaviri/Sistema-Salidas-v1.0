@@ -7,7 +7,6 @@ let tblUsuarios,
   tblAnotes,
   tblSalidas;
 document.addEventListener("DOMContentLoaded", function () {
-  
   $(document).on("click", ".ver-mas", function (e) {
     e.preventDefault();
 
@@ -22,11 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-
-
-
-
-//inicio de perfil
+  //inicio de perfil
   $("#perfil_cargo").select2({
     width: "100%",
     placeholder: "Seleccione un Cargo",
@@ -985,7 +980,7 @@ function registrarSalida(e) {
     actividad == "" ||
     lugar == "" ||
     fecha_salida == "" ||
-    hora_salida == "" 
+    hora_salida == ""
   ) {
     alertas("Todos los campos obligatorios deben llenarse ☺", "warning");
   } else {
@@ -996,11 +991,43 @@ function registrarSalida(e) {
     http.send(new FormData(frm));
     http.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        console.log(this.responseText);
+       console.log(this.responseText);
         const res = JSON.parse(this.responseText);
-        $("#modal_salida").modal("hide");
+        console.log("Respuesta del servidor:", res);
+        // Mostrar alerta
         alertas(res.msg, res.icono);
-        tblSalidas.ajax.reload();
+
+        // Resetear formulario
+
+        // Validar si la respuesta fue exitosa
+        if ((res.icono = "success")) {
+          // Verificar que existe id_salida antes de generar PDF
+          if (res.id_salida) {
+            console.log("ID de salida generado:", res.id_salida);
+        //    tblsalida.ajax.reload();
+            const ruta =
+              base_url + "Reportes/pdf7/" + res.id_salida;
+            frm.reset();
+            // Abrir PDF en nueva pestaña
+            // Cerrar modal
+            $("#nuevo_salida").modal("hide");
+            setTimeout(() => {
+              window.open(ruta, "_blank");
+            }, 3000); // Pequeño delay para mejor UX
+          } else {
+            console.warn("No se recibió id_salida en la respuesta");
+          }
+        } else {
+          console.warn("La operación no fue exitosa:", res.msg);
+        }
+
+        // Cerrar modal (solo si fue exitoso)
+        if (res.estado === "exito" || res.success) {
+          setTimeout(() => {
+            $("#nuevo_salida").modal("hide");
+          }, 300);
+        }
+      
       }
     };
   }

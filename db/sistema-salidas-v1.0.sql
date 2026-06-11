@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-06-2026 a las 04:21:30
+-- Tiempo de generación: 11-06-2026 a las 05:07:49
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -233,14 +233,22 @@ CREATE TABLE `salidas` (
 --
 
 INSERT INTO `salidas` (`id_salida`, `actividad`, `lugar`, `transporte`, `fecha_salida`, `hora_salida`, `fecha_llegada`, `hora_llegada`, `id_chofer`, `id_usuario`, `estado`, `fecha_registro`) VALUES
-(1, 'Para que la tabla tenga un aspecto más moderno y profesional en TCPDF, puedes usar colores suaves, bordes más finos, encabezados altos y un estilo tipo \"dashboard\".', 'hhhhh', 'Otro', '2026-05-28', '02:52:00', '0000-00-00', '02:53:00', 1, 1, 1, '2026-05-29 02:48:25'),
-(2, 'ggggg', 'kkkk', 'Vehículo Institucional', '2026-05-29', '02:21:00', '0000-00-00', '01:21:00', 2, 1, 0, '2026-05-30 01:21:19'),
-(3, 'kkkkk', 'lllll', 'Vehículo Institucional', '2026-06-05', '02:27:00', '0000-00-00', '03:27:00', 1, 3, 0, '2026-05-30 01:27:31'),
-(4, 'nnnnnnn', 'dgdfgd', 'A pie', '2026-05-29', '03:06:00', '0000-00-00', '03:06:00', 2, 3, 1, '2026-05-30 02:06:56'),
-(5, 'reterter', 'etwerwerwe', 'Transporte Público', '2026-05-30', '14:39:00', '0000-00-00', '14:40:00', 1, 5, 1, '2026-05-30 18:34:09'),
-(6, 'ewrwerwer', 'ewrwerew', 'Transporte Público', '2026-05-09', '17:51:00', '0000-00-00', '18:50:00', 3, 1, 1, '2026-05-31 19:52:07'),
-(7, 'Reunio', 'Khari', 'Vehículo Institucional', '2026-05-31', '17:09:00', '2026-05-31', '15:00:00', 2, 1, 1, '2026-05-31 21:11:53'),
-(8, 'fsdfsd', 'sdfsdf', 'Otro', '2026-05-31', '19:00:00', '2026-05-31', '00:00:00', 6, 1, 1, '2026-05-31 23:05:57');
+(1, 'Para que la tabla tenga un aspecto más moderno y profesional en TCPDF, puedes usar colores suaves, bordes más finos, encabezados altos y un estilo tipo \"dashboard\".', 'hhhhh', 'Otro', '2026-05-28', '02:52:00', '0000-00-00', '02:53:00', 0, 1, 1, '2026-05-29 02:48:25'),
+(2, 'ggggg', 'kkkk', 'Vehículo Institucional', '2026-05-29', '02:21:00', '0000-00-00', '01:21:00', 0, 1, 0, '2026-05-30 01:21:19'),
+(3, 'kkkkk', 'lllll', 'Vehículo Institucional', '2026-06-05', '02:27:00', '0000-00-00', '03:27:00', 0, 3, 0, '2026-05-30 01:27:31'),
+(4, 'nnnnnnn', 'dgdfgd', 'A pie', '2026-05-29', '03:06:00', '0000-00-00', '03:06:00', 0, 3, 1, '2026-05-30 02:06:56'),
+(5, 'reterter', 'etwerwerwe', 'Transporte Público', '2026-05-30', '14:39:00', '0000-00-00', '14:40:00', 0, 5, 1, '2026-05-30 18:34:09'),
+(6, 'ewrwerwer', 'ewrwerew', 'Transporte Público', '2026-05-09', '17:51:00', '0000-00-00', '18:50:00', 0, 1, 1, '2026-05-31 19:52:07'),
+(7, 'Reunio', 'Khari', 'Vehículo Institucional', '2026-05-31', '17:09:00', '2026-05-31', '15:00:00', 0, 1, 1, '2026-05-31 21:11:53'),
+(8, 'fsdfsd', 'sdfsdf', 'Otro', '2026-05-31', '19:00:00', '2026-05-31', '00:00:00', 0, 1, 1, '2026-05-31 23:05:57'),
+(9, 'Las plantas son seres vivos pertenecientes al reino vegetal que producen su propio alimento mediante la fotosíntesis. Son fundamentales para el planeta ya que purifican el aire, generan el oxígeno que respiramos y sirven de base para la alimentación de múltiples seres vivos.', 'Distrito Jilawi Comunidad Vacuyo', 'Vehículo de la Alcaldía', '2026-06-06', '21:27:00', '2026-06-08', '19:28:00', 0, 1, 1, '2026-06-07 01:28:28'),
+(10, 'Revisión de los tamques', 'Koya Alta', 'Vehículo de la Alcaldía', '2026-06-10', '21:25:00', '2026-06-10', '01:13:00', 0, 1, 1, '2026-06-11 02:13:19'),
+(11, 'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr', 'jjjjjjjjjjjjjjjjjjjj', 'Transporte Público', '2026-06-10', '22:39:00', '2026-06-10', '00:00:00', 0, 1, 1, '2026-06-11 02:40:19'),
+(12, 'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr', 'jjjjjjjjjjjjjjjjjjjj', 'Transporte Público', '2026-06-10', '22:39:00', '2026-06-10', '00:00:00', 0, 1, 1, '2026-06-11 02:41:05'),
+(13, 'dfdfdfdfdfd', 'rererere', 'Vehículo de la Alcaldía', '2026-06-10', '22:41:00', '2026-06-10', '00:00:00', 0, 1, 1, '2026-06-11 02:41:38'),
+(14, 'rrrrrrrrrrrrrrrrrrrrrrrr', 'yyyyyyyyyyyyyy', 'Vehículo de la Alcaldía', '2026-06-10', '22:46:00', '2026-06-10', '00:00:00', 0, 1, 1, '2026-06-11 02:46:27'),
+(15, 'sssssssssssssssssssssss', 'nnnnnnnnnnnnnnnn', 'Vehículo de la Alcaldía', '2026-06-10', '22:47:00', '2026-06-10', '00:00:00', 1, 1, 1, '2026-06-11 02:47:35'),
+(16, 'jjjjjjjjjjjj', 'yyyy', 'Vehículo de la Alcaldía', '2026-06-10', '23:00:00', '2026-06-10', '00:00:00', 4, 1, 1, '2026-06-11 03:00:15');
 
 -- --------------------------------------------------------
 
@@ -451,7 +459,7 @@ ALTER TABLE `permisos`
 -- AUTO_INCREMENT de la tabla `salidas`
 --
 ALTER TABLE `salidas`
-  MODIFY `id_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `unidades`

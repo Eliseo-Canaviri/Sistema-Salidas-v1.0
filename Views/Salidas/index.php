@@ -63,22 +63,12 @@
 
           <div class="row">
             <!-- Hora de Llegada -->
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
               <label for="nombres" class="form-label fw-bold">
                 <i class="fa-solid fa-clock me-1"></i> Nombres <span class="text-danger">*</span>
               </label>
               <input type="text" class="form-control" id="nombres" name="nombres"
                 value="<?php echo $_SESSION['nombres'], ' ', $_SESSION['apellidos'] ?>" disabled required>
-            </div>
-
-
-            <!-- Actividad -->
-            <div class="col-md-8 mb-3">
-              <label for="actividad" class="form-label fw-bold">
-                <i class="fa-solid fa-briefcase me-1"></i> Actividad / Motivo <span class="text-danger">*</span>
-              </label>
-              <textarea class="form-control" id="actividad" name="actividad" rows="2"
-                placeholder="Ej: Reunión de coordinación técnica..." required></textarea>
             </div>
 
             <!-- Lugar -->
@@ -87,11 +77,18 @@
                 <i class="fa-solid fa-location-dot me-1"></i> Lugar de Destino <span class="text-danger">*</span>
               </label>
               <textarea type="text" class="form-control" id="lugar" name="lugar"
-                placeholder="Ej: Ministerio de Educación" required></textarea>
+                placeholder="Ej: Distrito Jilawi Comunidad Koya Alta" required></textarea>
+            </div>
+            <!-- Actividad -->
+            <div class="col-md-5 mb-3">
+              <label for="actividad" class="form-label fw-bold">
+                <i class="fa-solid fa-briefcase me-1"></i> Actividad / Motivo <span class="text-danger">*</span>
+              </label>
+              <textarea class="form-control" id="actividad" name="actividad" rows="2"
+                placeholder="Ej: Realizar la inspección técnica del proyecto." required></textarea>
             </div>
             <!-- Cargo -->
-
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="form-group">
                 <label for="id_chofer" class="form-label fw-bold">
                   <i class="fa-brands fa-usps"></i> Chofer
@@ -100,9 +97,9 @@
                   <option value="" selected disabled>
                     Seleccione un Chofer
                   </option>
-                  <?php foreach ($data['choferes'] as $row) { ?>
-                    <option value="<?php echo $row['id_chofer']; ?>">
-                      <?php echo $row['nombres']; ?>
+                  <?php foreach ($data['usuarios'] as $row) { ?>
+                    <option value="<?php echo $row['id']; ?>">
+                      <?php echo $row['nombres'].' '.$row['apellidos']; ?>
 
                     </option>
                   <?php } ?>
@@ -110,7 +107,7 @@
               </div>
             </div>
             <!-- Transporte -->
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
               <label for="transporte" class="form-label fw-bold">
                 <i class="fa-solid fa-car me-1"></i> Medio de Transporte
               </label>

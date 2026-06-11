@@ -131,11 +131,15 @@ class Reportes extends Controller
     }
 
 
-    public function pdf7()
+
+
+    public function pdf7($id)
     {
+
         // 1. Obtener los datos del modelo
-        $data = $this->model->getSalidasPdf(8);
+        $data = $this->model->getSalidasPdf($id);
         $salida = $data[0];
+        date_default_timezone_set('America/La_Paz');
         $fecha_actual = date('d/m/Y');
 
         // 2. Cargar TCPDF (Composer recomendado)
@@ -214,9 +218,9 @@ class Reportes extends Controller
 
         // Motivo / Actividad principal (Utiliza MultiCell para soportar múltiples párrafos o textos largos)
         $pdf->SetFont('helvetica', 'B', 10);
-        $pdf->Cell(42, 8, 'MOTIVO / ACTIVIDAD:', 0, 0, 'L');
+        $pdf->Cell(42, 8, 'LUGAR DE DESTINO:', 0, 0, 'L');
         $pdf->SetFont('helvetica', '', 10.5);
-        $pdf->MultiCell($txtWidth - 42, 8, $salida['actividad'], 'B', 'L', false, 1);
+        $pdf->MultiCell($txtWidth - 42, 8, $salida['lugar'], 'B', 'L', false, 1);
         $pdf->Ln(6);
 
 
@@ -228,70 +232,70 @@ class Reportes extends Controller
         $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
 
         // Ancho útil de la página
-$anchoUtil = $pdf->getPageWidth()
-    - $pdf->getMargins()['left']
-    - $pdf->getMargins()['right'];
+        $anchoUtil = $pdf->getPageWidth()
+            - $pdf->getMargins()['left']
+            - $pdf->getMargins()['right'];
 
-$w = [
-    $anchoUtil * 0.35, // Movimiento
-    $anchoUtil * 0.35, // Fecha
-    $anchoUtil * 0.30  // Hora
-];
+        $w = [
+            $anchoUtil * 0.35, // Movimiento
+            $anchoUtil * 0.35, // Fecha
+            $anchoUtil * 0.30  // Hora
+        ];
 
-// Encabezado
-$pdf->SetFont('helvetica', 'B', 11);
-$pdf->SetTextColor(50, 50, 50);
+        // Encabezado
+        $pdf->SetFont('helvetica', 'B', 11);
+        $pdf->SetTextColor(50, 50, 50);
 
-$pdf->Cell($w[0], 8, 'MOVIMIENTO', 0, 0, 'L');
-$pdf->Cell($w[1], 8, 'FECHA', 0, 0, 'C');
-$pdf->Cell($w[2], 8, 'HORA', 0, 1, 'R');
+        $pdf->Cell($w[0], 8, 'MOVIMIENTO', 0, 0, 'L');
+        $pdf->Cell($w[1], 8, 'FECHA', 0, 0, 'C');
+        $pdf->Cell($w[2], 8, 'HORA', 0, 1, 'R');
 
-// Línea horizontal elegante
-$pdf->SetDrawColor(180, 180, 180);
-$pdf->Line(
-    $pdf->GetMargins()['left'],
-    $pdf->GetY(),
-    $pdf->getPageWidth() - $pdf->GetMargins()['right'],
-    $pdf->GetY()
-);
+        // Línea horizontal elegante
+        $pdf->SetDrawColor(180, 180, 180);
+        $pdf->Line(
+            $pdf->GetMargins()['left'],
+            $pdf->GetY(),
+            $pdf->getPageWidth() - $pdf->GetMargins()['right'],
+            $pdf->GetY()
+        );
 
-$pdf->Ln(2);
+        $pdf->Ln(2);
 
-// Datos
-$pdf->SetFont('helvetica', '', 10);
-$pdf->SetTextColor(80, 80, 80);
+        // Datos
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetTextColor(80, 80, 80);
 
-// SALIDA
-$pdf->Cell($w[0], 8, 'SALIDA', 0, 0, 'L');
-$pdf->Cell($w[1], 8, $salida['fecha_salida'], 0, 0, 'C');
-$pdf->Cell($w[2], 8, $salida['hora_salida'], 0, 1, 'R');
+        // SALIDA
+        $pdf->Cell($w[0], 8, 'SALIDA', 0, 0, 'L');
+        $pdf->Cell($w[1], 8, $salida['fecha_salida'], 0, 0, 'C');
+        $pdf->Cell($w[2], 8, $salida['hora_salida'], 0, 1, 'R');
 
-// Línea separadora suave
-$pdf->SetDrawColor(230, 230, 230);
-$pdf->Line(
-    $pdf->GetMargins()['left'],
-    $pdf->GetY(),
-    $pdf->getPageWidth() - $pdf->GetMargins()['right'],
-    $pdf->GetY()
-);
+        // Línea separadora suave
+        $pdf->SetDrawColor(230, 230, 230);
+        $pdf->Line(
+            $pdf->GetMargins()['left'],
+            $pdf->GetY(),
+            $pdf->getPageWidth() - $pdf->GetMargins()['right'],
+            $pdf->GetY()
+        );
 
-$pdf->Ln(2);
+        $pdf->Ln(2);
 
-// RETORNO
-$pdf->Cell($w[0], 8, 'RETORNO', 0, 0, 'L');
-$pdf->Cell($w[1], 8, $salida['fecha_llegada'] ?? $salida['fecha_salida'], 0, 0, 'C');
-$pdf->Cell($w[2], 8, $salida['hora_llegada'], 0, 1, 'R');
+        // RETORNO
+        $pdf->Cell($w[0], 8, 'RETORNO', 0, 0, 'L');
+        $pdf->Cell($w[1], 8, $salida['fecha_llegada'] ?? $salida['fecha_salida'], 0, 0, 'C');
+        $pdf->Cell($w[2], 8, $salida['hora_llegada'], 0, 1, 'R');
 
-// Línea final
-$pdf->SetDrawColor(180, 180, 180);
-$pdf->Line(
-    $pdf->GetMargins()['left'],
-    $pdf->GetY(),
-    $pdf->getPageWidth() - $pdf->GetMargins()['right'],
-    $pdf->GetY()
-);
+        // Línea final
+        $pdf->SetDrawColor(180, 180, 180);
+        $pdf->Line(
+            $pdf->GetMargins()['left'],
+            $pdf->GetY(),
+            $pdf->getPageWidth() - $pdf->GetMargins()['right'],
+            $pdf->GetY()
+        );
 
-$pdf->Ln(5);
+        $pdf->Ln(5);
         $pdf->Ln(6);
 
 
@@ -315,28 +319,64 @@ $pdf->Ln(5);
 
         $pdf->SetX(118);
         $pdf->Cell(32, 6, 'Chofer Autorizado:', 0, 0, 'L');
-        $pdf->Cell(46, 6,$salida['nombres'] ?? 'N/A', 'B', 1, 'L');
+        $pdf->Cell(46, 6, $salida['nombre_chofer'] ?? 'N/A', 'B', 1, 'L');
 
         $pdf->SetY($boxY + 18);
         $pdf->Ln(6);
 
 
-        // --- SECCIÓN 4: INFORME RESUMIDO DE LA ACTIVIDAD (OCUPA EL CENTRO DE LA HOJA) ---
-        $pdf->SetFont('helvetica', 'B', 10);
-        $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-        $pdf->Cell($txtWidth, 6, 'INFORME RESUMIDO DE LA ACTIVIDAD REALIZADA', 0, 1, 'L');
-        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        // --- SECCIÓN 4: INFORME RESUMIDO DE LA ACTIVIDAD ---
+        $pdf->Ln(3);
+
+        // Título
+        $pdf->SetFont('helvetica', 'B', 11);
+        $pdf->SetTextColor(41, 128, 185);
+        $pdf->Cell(0, 8, 'INFORME RESUMIDO DE LA ACTIVIDAD REALIZADA', 0, 1, 'L');
+
         $pdf->Ln(2);
 
-        // Renglones limpios con altura extendida para escritura cómoda a mano o reporte físico
-        $pdf->Cell($txtWidth, 7, '', 'B', 1, 'L');
-        $pdf->Cell($txtWidth, 7, '', 'B', 1, 'L');
-        $pdf->Cell($txtWidth, 7, '', 'B', 1, 'L');
-        $pdf->Cell($txtWidth, 7, '', 'B', 1, 'L');
-        $pdf->Cell($txtWidth, 7, '', 'B', 1, 'L');
-        $pdf->Ln(12); // Separación óptima previa al bloque inferior de firmas
+        // Texto
+        $textoActividad = $salida['actividad'] ?? 'Sin información registrada';
 
+        // Posición inicial
+        $x = $pdf->GetX();
+        $y = $pdf->GetY();
 
+        $altoCuadro = 40;
+
+        // Fondo suave
+        $pdf->SetFillColor(248, 249, 250);
+
+        // Borde moderno
+        $pdf->SetDrawColor(220, 220, 220);
+        $pdf->SetLineWidth(0.4);
+
+        // Rectángulo principal
+        $pdf->RoundedRect($x, $y, $txtWidth, $altoCuadro, 2.5, '1111', 'DF');
+
+        // Barra lateral decorativa
+        $pdf->SetFillColor(41, 128, 185);
+        $pdf->Rect($x, $y, 3, $altoCuadro, 'F');
+
+        // Texto interno
+        $pdf->SetXY($x + 6, $y + 4);
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetTextColor(60, 60, 60);
+        $pdf->setCellHeightRatio(1.25);
+
+        $pdf->MultiCell(
+            $txtWidth - 10,
+            5,
+            $textoActividad,
+            0,
+            'L',
+            false,
+            1
+        );
+
+        // Posicionar debajo del cuadro
+        $pdf->SetY($y + $altoCuadro + 30);
+        
         // --- SECCIÓN 5: RECUADRO DE VALIDACIÓN (DESTINO) Y FIRMAS ---
         $yFirmas = $pdf->GetY();
 
@@ -369,6 +409,7 @@ $pdf->Ln(5);
 
         // 4. Salida del archivo PDF directo en el navegador de forma limpia
         $pdf->Output('Hoja_de_Salida_Completa_GAMP.pdf', 'I');
+        
     }
 
 
@@ -780,17 +821,13 @@ $pdf->Ln(5);
         $pdf->Output('Hoja_de_Salida_Completa_GAMP.pdf', 'I');
     }
 
-
-
-
-
-
-
     public function pdf4()
     {
+
         // 1. Obtener los datos del modelo
         $data = $this->model->getSalidasPdf(1);
         $salida = $data[0];
+        date_default_timezone_set('America/La_Paz');
         $fecha_actual = date('d/m/Y');
 
         // 2. Cargar TCPDF

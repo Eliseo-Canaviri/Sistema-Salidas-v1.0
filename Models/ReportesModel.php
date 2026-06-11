@@ -10,15 +10,19 @@ class ReportesModel extends Query
 
     public function getSalidasPdf(int $id)
     {
-        $sql = "SELECT sa.* ,ch.*,CONCAT(us.nombres, ' ', us.apellidos) AS nombre_usuario, ca.nombre AS nombre_cargo
-                FROM salidas as sa 
-                INNER JOIN usuarios as us
-                ON  sa.id_usuario=us.id
-                INNER JOIN choferes as ch
-                ON sa.id_chofer=ch.id_chofer
-                INNER JOIN cargos as ca
-                ON us.id_cargo=ca.id_cargo
-                WHERE id_salida=$id";
+        $sql = "SELECT 
+    sa.*,
+    CONCAT(us.nombres, ' ', us.apellidos) AS nombre_usuario,
+    CONCAT(ch.nombres, ' ', ch.apellidos) AS nombre_chofer,
+    ca.nombre AS nombre_cargo
+FROM salidas AS sa
+INNER JOIN usuarios AS us
+    ON sa.id_usuario = us.id
+INNER JOIN usuarios AS ch
+    ON sa.id_chofer = ch.id
+INNER JOIN cargos AS ca
+    ON us.id_cargo = ca.id_cargo
+WHERE sa.id_salida = $id";
         $data = $this->selectAll($sql);
         return $data;
     }
