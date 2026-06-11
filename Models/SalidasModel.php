@@ -23,7 +23,7 @@ class SalidasModel extends Query
         $data = $this->selectAll($sql);
         return $data;
     }
-    public function getSalidasadmin(int $id, $estado)
+    public function getSalidasadmin( $estado)
     {
         $sql = "SELECT s.id_salida, s.id_usuario, 
                        CONCAT(u.nombres, ' ', u.apellidos) AS nombre_usuario,
@@ -32,8 +32,7 @@ class SalidasModel extends Query
                        s.estado, s.fecha_registro
                 FROM salidas s
                 INNER JOIN usuarios u ON s.id_usuario = u.id
-      
-                WHERE s.estado = $estado and s.id_usuario=$id
+                WHERE s.estado = $estado 
                 ORDER BY s.id_salida DESC";
         $data = $this->selectAll($sql);
         return $data;

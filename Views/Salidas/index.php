@@ -99,24 +99,23 @@
                   </option>
                   <?php foreach ($data['usuarios'] as $row) { ?>
                     <option value="<?php echo $row['id']; ?>">
-                      <?php echo $row['nombres'].' '.$row['apellidos']; ?>
+                      <?php echo $row['nombres'] . ' ' . $row['apellidos']; ?>
 
                     </option>
                   <?php } ?>
                 </select>
               </div>
             </div>
-            <!-- Transporte -->
             <div class="col-md-6 mb-3">
               <label for="transporte" class="form-label fw-bold">
-                <i class="fa-solid fa-car me-1"></i> Medio de Transporte
+                <i class="fa-solid fa-car me-1"></i> MEDIO DE TRANSPORTE
               </label>
               <select class="form-select" id="transporte" name="transporte">
-                <option value="Vehículo de la Alcaldía">🚐 Vehículo de la Alcaldía</option>
-                <option value="Transporte Público">🚌 Transporte Público</option>
-                <option value="Vehículo Propio">🚙 Vehículo Propio</option>
-                <option value="A pie">🚶 A pie</option>
-                <option value="Otro">📌 Otro</option>
+                <option value="VEHÍCULO DE LA ALCALDÍA">🚐 VEHÍCULO DE LA ALCALDÍA</option>
+                <option value="TRANSPORTE PÚBLICO">🚌 TRANSPORTE PÚBLICO</option>
+                <option value="VEHÍCULO PROPIO">🚙 VEHÍCULO PROPIO</option>
+                <option value="A PIE">🚶 A PIE</option>
+                <option value="OTRO">📌 OTRO</option>
               </select>
             </div>
 
