@@ -116,17 +116,13 @@ class Usuarios extends Controller
 
         $id = $_POST['id'];
 
-
         if (empty($ci) || empty($nombres) || empty($apellidos)) {
             $msg = array('msg' => 'Todos los campos son obligatorios ☻', 'icono' => 'warning');
-
-
-        } else {
+       } else {
             if ($id == "") {
-
                 $data = $this->model->registrarCargo($cargo);
                 $data = $this->model->registrarUnidad($unidad);
-
+                $datac = $this->model->getMaxIdCargo();
                 $datac = $this->model->getMaxIdCargo();
                 foreach ($datac as $row) {
                     $id_cargo = $row;
@@ -135,8 +131,6 @@ class Usuarios extends Controller
                 foreach ($datau as $row) {
                     $id_unidad = $row;
                 }
-
-
                 // Generar clave: inicial de nombre + inicial de apellido + CI
                 $inicialNombre = strtoupper(substr(trim($nombres), 0, 1));
                 $inicialApellido = strtoupper(substr(trim($apellidos), 0, 1));
@@ -144,11 +138,17 @@ class Usuarios extends Controller
                 $clave = hash("SHA256", $claveTexto);
                 $data = $this->model->registrarUsuario($ci, $nombres, $apellidos, $celular, $id_cargo, $id_unidad, $clave, $clave);
                 if ($data == "ok") {
+                $dataus = $this->model->getMaxIdUsuario();
+                foreach ($dataus as $row) {
+                    $id_usuario = $row;
+                }
+
+                $datau = $this->model->registrarPermisos($id_usuario,15);
+
+
 
                     $msg = array(
-                        'msg' => '¡Usuario registrado con éxito!<br><br>' .
-                            '<b>Usuario:</b> ' . $ci . '<br>' .
-                            '<b>Contraseña:</b> ' . $claveTexto,
+                        'msg' => '¡Usuario registrado con éxito!<br><br>'.'<b>Usuario:</b> ' . $ci . '<br>' .'<b>Contraseña:</b> ' . $claveTexto,
                         'icono' => 'success'
                     );
                 } else if ($data == "existe") {

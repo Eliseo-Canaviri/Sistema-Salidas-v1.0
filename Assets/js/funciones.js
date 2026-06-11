@@ -993,34 +993,28 @@ function registrarSalida(e) {
       if (this.readyState == 4 && this.status == 200) {
        console.log(this.responseText);
         const res = JSON.parse(this.responseText);
-        console.log("Respuesta del servidor:", res);
-        // Mostrar alerta
+       // console.log("Respuesta del servidor:", res);
         alertas(res.msg, res.icono);
-
-        // Resetear formulario
-
         // Validar si la respuesta fue exitosa
         if ((res.icono = "success")) {
           // Verificar que existe id_salida antes de generar PDF
           if (res.id_salida) {
             console.log("ID de salida generado:", res.id_salida);
-        //    tblsalida.ajax.reload();
-            const ruta =
-              base_url + "Reportes/pdf7/" + res.id_salida;
-            frm.reset();
+            const ruta =base_url + "Reportes/pdf7/" + res.id_salida;
             // Abrir PDF en nueva pestaña
             // Cerrar modal
-            $("#nuevo_salida").modal("hide");
             setTimeout(() => {
               window.open(ruta, "_blank");
             }, 3000); // Pequeño delay para mejor UX
+            $("#modal_salida").modal("hide");
+            tblSalidas.ajax.reload();
+            frm.reset();
           } else {
             console.warn("No se recibió id_salida en la respuesta");
           }
         } else {
           console.warn("La operación no fue exitosa:", res.msg);
         }
-
         // Cerrar modal (solo si fue exitoso)
         if (res.estado === "exito" || res.success) {
           setTimeout(() => {

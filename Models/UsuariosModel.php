@@ -227,6 +227,12 @@ class UsuariosModel extends Query
         $data = $this->select($sql);
         return $data;
     }
+      function getMaxIdUsuario()
+    {
+        $sql = "SELECT MAX(id) AS id_usuario FROM usuarios";
+        $data = $this->select($sql);
+        return $data;
+    }
 
 
 
