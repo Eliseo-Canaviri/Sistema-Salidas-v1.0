@@ -63,18 +63,17 @@ class UsuariosModel extends Query
 
     }
 
-    public function modificarUsuario(string $ci, string $nombres, string $apellidos, int $celular, int $id_cargo, int $id_unidad, int $id)
+    public function modificarUsuario(string $ci, string $nombres, string $apellidos, int $celular, int $id)
     {
         $this->ci = $ci;
         $this->nombres = $nombres;
         $this->apellidos = $apellidos;
         $this->celular = $celular;
-        $this->id_cargo = $id_cargo;
-        $this->id_unidad = $id_unidad;
+
         $this->id = $id;
         //para verificar si existe usuario
-        $sql = "UPDATE  usuarios SET ci=?, nombres=?, apellidos=?, celular=?, id_cargo=?, id_unidad=? WHERE id=?";
-        $datos = array($this->ci, $this->nombres, $this->apellidos, $this->celular, $this->id_cargo, $this->id_unidad, $this->id);///estos valores se lo vamos enviar a un metodo que vamos crear en el archivo Quiery.
+        $sql = "UPDATE  usuarios SET ci=?, nombres=?, apellidos=?, celular=? WHERE id=?";
+        $datos = array($this->ci, $this->nombres, $this->apellidos, $this->celular, $this->id);///estos valores se lo vamos enviar a un metodo que vamos crear en el archivo Quiery.
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "modificado";

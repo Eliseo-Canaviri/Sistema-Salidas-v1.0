@@ -273,7 +273,7 @@ document.addEventListener("DOMContentLoaded", function () {
         render: function (data, type, row) {
           if (data && data.length > 50) {
             return `
-                <span>${data.substring(0, 10)}...</span>
+                <span>${data.substring(0,10)}...</span>
                 <a href="#" class="ver-mas" data-texto="${data.replace(/"/g, "&quot;")}">
                     Ver más
                 </a>
@@ -283,10 +283,10 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       },
       { data: "lugar" },
-      { data: "nombre_chofer" },
       { data: "transporte" },
       { data: "fecha_salida" },
       { data: "hora_salida" },
+      { data: "fecha_llegada" },
       { data: "hora_llegada" },
       { data: "acciones" },
     ],

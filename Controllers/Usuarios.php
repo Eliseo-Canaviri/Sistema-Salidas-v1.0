@@ -410,8 +410,8 @@ class Usuarios extends Controller
         $nombres = ($_POST['nombres']);
         $apellidos = ($_POST['apellidos']);
         $celular = ($_POST['celular']);
-        $id_cargo = ($_POST['perfil_cargo']);
-        $id_unidad = ($_POST['perfil_unidad']);
+       // $id_cargo = ($_POST['perfil_cargo']);
+       // $id_unidad = ($_POST['perfil_unidad']);
 
         $id = $_SESSION['id_usuario'];
 
@@ -420,7 +420,7 @@ class Usuarios extends Controller
             $msg = array('msg' => 'Error al Modificar ☻', 'icono' => 'warning');
 
         }
-        $data = $this->model->modificarUsuario($ci, $nombres, $apellidos, $celular, $id_cargo, $id_unidad, $id);
+        $data = $this->model->modificarUsuario($ci, $nombres, $apellidos, $celular, $id);
         if ($data == "modificado") {
 
             $msg = array('msg' => 'Usuario modificado con exito ☻', 'icono' => 'success');

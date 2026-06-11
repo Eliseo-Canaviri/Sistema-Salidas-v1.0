@@ -26,10 +26,10 @@
               <th scope="col">Funcionario</th>
               <th scope="col">Actividad</th>
               <th scope="col">Lugar</th>
-              <th scope="col">Id Chofer</th>
               <th scope="col">Transporte</th>
               <th scope="col">Fecha Salida</th>
               <th scope="col">Hora Salida</th>
+              <th scope="col">Hora Llegada</th>
               <th scope="col">Hora Llegada</th>
               <th scope="col">Acciones</th>
             </tr>

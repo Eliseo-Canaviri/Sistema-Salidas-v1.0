@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> Admin Template </title>
+  <title> Admin-Salidas </title>
   <link rel="shortcut icon" type="image/png" href="<?php echo base_url; ?>Assets/img/logos/seodashlogo.png" />
   <link rel="stylesheet" href="<?php echo base_url; ?>Assets/css/styles.min.css" />
 
@@ -14,9 +14,12 @@
   <!-- Select2   css-->
   <link href="<?php echo base_url; ?>Assets/css/select2.min.css" rel="stylesheet" />
   <link href="<?php echo base_url; ?>Assets/css/ojo.css" rel="stylesheet" />
+
+
+  <link rel="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" href="">
 </head>
 
-<body>
+<body >
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
@@ -87,32 +90,25 @@
                 </li>
               </ul>
             </li>
-
-         
-
-   
-            <!-- TRANSPORTE -->
-            <li class="nav-small-cap">
-              <i class="ti ti-car nav-small-cap-icon fs-6"></i>
-              <span class="hide-menu">TRANSPORTE</span>
+            <li class="nav-small-cap text-uppercase text-muted opacity-75 fw-bold fs-2 tracking-wider mb-2">
+              <i class="ti ti-car nav-small-cap-icon fs-6 me-2"></i>
+              <span class="hide-menu">Salidas</span>
             </li>
 
-            <li class="sidebar-item">
+            <li class="sidebar-item mb-1">
               <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                <span>
+                <span class="sidebar-icon-wrapper">
                   <iconify-icon icon="solar:bus-bold-duotone" class="fs-6"></iconify-icon>
                 </span>
-                <span class="hide-menu">Control Salida</span>
+                <span class="hide-menu">Registro de Salida</span>
               </a>
-              <ul aria-expanded="false" class="collapse first-level">
+
+              <ul aria-expanded="false" class="collapse first-level ps-3">
                 <li class="sidebar-item">
-                  <a href="<?php echo base_url; ?>Salidas" class="sidebar-link">
+                  <a href="<?php echo base_url; ?>Salidas"
+                    class="sidebar-link sub-link <?php echo (basename($_SERVER['REQUEST_URI']) == 'Salidas') ? 'active-blue' : ''; ?>">
+                    <div class="bullet-dot me-2"></div>
                     <span class="hide-menu">Salidas</span>
-                  </a>
-                </li>
-                <li class="sidebar-item">
-                  <a href="<?php echo base_url; ?>Choferes" class="sidebar-link">
-                    <span class="hide-menu">Choferes</span>
                   </a>
                 </li>
               </ul>
@@ -123,7 +119,7 @@
               <i class="ti ti-chart-bar nav-small-cap-icon fs-6"></i>
               <span class="hide-menu">REPORTES</span>
             </li>
-         <li class="sidebar-item">
+            <li class="sidebar-item">
               <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                 <span>
                   <iconify-icon icon="solar:transfer-horizontal-bold-duotone" class="fs-6"></iconify-icon>
@@ -137,7 +133,7 @@
                     <span>
                       <iconify-icon icon="solar:chart-square-bold-duotone" class="fs-6"></iconify-icon>
                     </span>
-                    <span class="hide-menu">Reportes Por Fecha</span>
+                    <span class="hide-menu">Reportes</span>
                   </a>
                 </li>
 
@@ -213,5 +209,8 @@
       date_default_timezone_set('America/La_Paz');
       ?>
       <!--  Header End -->
-      <div class="container-fluid">
-        <div class="row">
+     
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Todo tu contenido aquí -->
+      

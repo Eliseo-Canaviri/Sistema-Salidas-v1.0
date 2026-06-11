@@ -8,9 +8,9 @@ class AdministracionModel extends Query
     }
 
 
-    public function getDatos(string $table)
+    public function getDatos(string $table,$id)
     {
-        $sql = "SELECT COUNT(*) AS total FROM $table WHERE estado = 1";
+        $sql = "SELECT COUNT(*) AS total FROM $table WHERE estado = 1 and id_usuario=$id  ";
         $data = $this->select($sql);
         return $data;
     }

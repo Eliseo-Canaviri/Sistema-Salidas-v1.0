@@ -11,12 +11,13 @@ class Administracion extends Controller
 
     public function home()
     {
-       
-        $data['usuarios'] = $this->model->getDatos('usuarios');
-        $data['ingresos'] = $this->model->getDatos('ingresos');
-        $data['egresos'] = $this->model->getDatos('egresos');
-        $data['permisos'] = $this->model->getDatosCurso('permisos');
-        $data['anotes'] = $this->model->getDatosCurso('anotes');
+       $id_usuario=$_SESSION['id_usuario'];
+
+        $data['salidas'] = $this->model->getDatos('salidas',$id_usuario);
+   
+   
+        //$data['permisos'] = $this->model->getDatosCurso('permisos');
+  
         $this->views->getView($this, "home", $data);
 
     }

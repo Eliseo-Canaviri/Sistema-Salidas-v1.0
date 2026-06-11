@@ -12,28 +12,28 @@ class SalidasModel extends Query
         $sql = "SELECT s.id_salida, s.id_usuario, 
                        CONCAT(u.nombres, ' ', u.apellidos) AS nombre_usuario,
                        s.actividad, s.lugar, s.transporte,
-                       s.fecha_salida, s.hora_salida, s.hora_llegada,
-                       s.estado, s.fecha_registro,s.id_chofer,c.nombres AS nombre_chofer
+                       s.fecha_salida, s.hora_salida,s.fecha_llegada, s.hora_llegada,
+                       s.estado, s.fecha_registro
                 FROM salidas s
                 INNER JOIN usuarios u ON s.id_usuario = u.id
-                INNER JOIN choferes c ON s.id_chofer = c.id_chofer
+               
 
                 WHERE s.estado = $estado AND s.id_usuario = $id_usuario
                 ORDER BY s.id_salida DESC";
         $data = $this->selectAll($sql);
         return $data;
     }
-    public function getSalidasadmin(int $estado)
+    public function getSalidasadmin(int $id, $estado)
     {
         $sql = "SELECT s.id_salida, s.id_usuario, 
                        CONCAT(u.nombres, ' ', u.apellidos) AS nombre_usuario,
                        s.actividad, s.lugar, s.transporte,
-                       s.fecha_salida, s.hora_salida, s.hora_llegada,
-                       s.estado, s.fecha_registro,s.id_chofer,c.nombres AS nombre_chofer
+                       s.fecha_salida, s.hora_salida,s.fecha_llegada, s.hora_llegada,
+                       s.estado, s.fecha_registro
                 FROM salidas s
                 INNER JOIN usuarios u ON s.id_usuario = u.id
-                INNER JOIN choferes c ON s.id_chofer = c.id_chofer
-                WHERE s.estado = $estado 
+      
+                WHERE s.estado = $estado and s.id_usuario=$id
                 ORDER BY s.id_salida DESC";
         $data = $this->selectAll($sql);
         return $data;

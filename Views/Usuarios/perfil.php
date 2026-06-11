@@ -82,22 +82,20 @@
                             </div>
                         </div>
 
-                        <!-- Cargo -->
-                        <div class="col-md-6 mb-3">
+                <div class="col-md-6 mb-3">
                             <div class="form-floating">
-                                <input id="cargo" class="form-control text-uppercase-input" type="text" name="cargo"
-                                    placeholder="Cargo" value="<?php echo $data['usuarios']['nombre_cargo'] ?>" required>
+                                <input id="cargo" class="form-control text-uppercase-input bg-light" type="text" name="cargo"
+                                    placeholder="Cargo" value="<?php echo $data['usuarios']['nombre_cargo'] ?>" readonly required>
                                 <label for="cargo">
                                     <i class="fas fa-briefcase me-1 text-primary"></i>
                                     Cargo <span class="text-danger">*</span>
                                 </label>
                             </div>
                         </div>
-                        <!-- Unidad -->
                         <div class="col-md-6 mb-3">
                             <div class="form-floating">
-                                <input id="unidad" class="form-control text-uppercase-input" type="text" name="unidad"
-                                    placeholder="Unidad" value="<?php echo $data['usuarios']['nombre_unidad'] ?>" required>
+                                <input id="unidad" class="form-control text-uppercase-input bg-light" type="text" name="unidad"
+                                    placeholder="Unidad" value="<?php echo $data['usuarios']['nombre_unidad'] ?>" readonly required>
                                 <label for="unidad">
                                     <i class="fas fa-building me-1 text-success"></i>
                                     Unidad / Dependencia <span class="text-danger">*</span>

@@ -30,7 +30,7 @@ class Salidas extends Controller
 
         // Administradores (ID 1 y 2)
         if ($id_user == 1 || $id_user == 2) {
-            $data = $this->model->getSalidasadmin($id_user); // Todas las salidas
+            $data = $this->model->getSalidasadmin($id_user,1); // Todas las salidas
 
         } else {
             $data = $this->model->getSalidas($id_user, 1); // Solo sus salidas
@@ -129,6 +129,7 @@ class Salidas extends Controller
     }
     function inactivoVista()
     {
+        
         $this->views->getView($this, "inactivos");
     }
     // Vista de salidas inactivas
@@ -138,7 +139,7 @@ class Salidas extends Controller
 
         // Administradores (ID 1 y 2)
         if ($id_user == 1 || $id_user == 2) {
-            $data = $this->model->getSalidasadmin(0); // Todas las salidas
+            $data = $this->model->getSalidasadmin($id_user,0); // Todas las salidas
 
         } else {
             $data = $this->model->getSalidas($id_user, 0); // Solo sus salidas

@@ -330,7 +330,7 @@ class Reportes extends Controller
 
         // Título
         $pdf->SetFont('helvetica', 'B', 11);
-        $pdf->SetTextColor(41, 128, 185);
+        $pdf->SetTextColor(0, 0, 0);
         $pdf->Cell(0, 8, 'INFORME RESUMIDO DE LA ACTIVIDAD REALIZADA', 0, 1, 'L');
 
         $pdf->Ln(2);
