@@ -122,16 +122,21 @@ class Unidades extends Controller
     echo json_encode($msg, JSON_UNESCAPED_UNICODE);
     die();
   }
-  public function buscarCargo()
-  {
-    if (isset ($_GET['est'])) {
-      $valor = $_GET['est'];
-      $data = $this->model->buscarUnidad($valor);
-      echo json_encode($data, JSON_UNESCAPED_UNICODE);
-      die();    
+    public function buscarUnidades()
+    {
+        if (isset($_GET['pro'])) {
+            $data = $this->model->buscarUnidad($_GET['pro']);
+            $datos = array();
+            foreach ($data as $row) {
+                $data['id_unidad'] = $row['id_unidad'];
+                $data['label'] = $row['nombre'];
+                $data['value'] = $row['nombre'];
+                array_push($datos, $data);
+            }
+            echo json_encode($datos, JSON_UNESCAPED_UNICODE);
+            die();
+        }
     }
-  }
-
 
 
 

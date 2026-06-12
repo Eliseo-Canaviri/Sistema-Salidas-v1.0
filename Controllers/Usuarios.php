@@ -19,6 +19,7 @@ class Usuarios extends Controller
         if (!empty($verificar) || $id_user == 1) {
             $data['unidades'] = $this->model->getUnidades(1);
             $data['cargos'] = $this->model->getCargos(1);
+
             $this->views->getView($this, "index", $data);
         } else {
             header('Location:' . base_url . 'Errors/permisos');
@@ -105,32 +106,38 @@ class Usuarios extends Controller
     }
     public function registroPrincipal()
     {
-        //  print_r($_POST);
-        //  die();
+        // print_r($_POST);
+        //die();
         $ci = $_POST['ci'];
         $nombres = $_POST['nombres'];
         $apellidos = $_POST['apellidos'];
         $celular = $_POST['celular'];
-        $cargo = $_POST['cargo'];
-        $unidad = $_POST['unidad'];
+        $id_cargo = $_POST['id_cargo'];
+        $id_unidad = $_POST['id_unidad'];
+        $select_cargo = $_POST['select_cargo'];
+        $select_unidad = $_POST['select_unidad'];
 
         $id = $_POST['id'];
 
         if (empty($ci) || empty($nombres) || empty($apellidos)) {
             $msg = array('msg' => 'Todos los campos son obligatorios ☻', 'icono' => 'warning');
-       } else {
+        } else {
             if ($id == "") {
-                $data = $this->model->registrarCargo($cargo);
-                $data = $this->model->registrarUnidad($unidad);
-                $datac = $this->model->getMaxIdCargo();
-                $datac = $this->model->getMaxIdCargo();
-                foreach ($datac as $row) {
-                    $id_cargo = $row;
+
+                // El código solo entra si AMBOS están vacíos
+                if (empty($id_cargo) && empty($id_unidad)) {
+                    // Guardamos los resultados en variables diferentes para no perder información
+                    $resCargo = $this->model->registrarCargo($select_cargo);
+                    $resUnidad = $this->model->registrarUnidad($select_unidad);
+                   
+                } else {
+                    // Opcional: por si intentan enviar datos cuando deberían estar vacíos
+                    $data = "Error: Los campos no están vacíos.";
                 }
-                $datau = $this->model->getMaxIdUnidad();
-                foreach ($datau as $row) {
-                    $id_unidad = $row;
-                }
+               // $datac = $this->model->getMaxIdCargo();
+              //  $datac = $this->model->getMaxIdCargo();
+               
+               
                 // Generar clave: inicial de nombre + inicial de apellido + CI
                 $inicialNombre = strtoupper(substr(trim($nombres), 0, 1));
                 $inicialApellido = strtoupper(substr(trim($apellidos), 0, 1));
@@ -138,17 +145,17 @@ class Usuarios extends Controller
                 $clave = hash("SHA256", $claveTexto);
                 $data = $this->model->registrarUsuario($ci, $nombres, $apellidos, $celular, $id_cargo, $id_unidad, $clave, $clave);
                 if ($data == "ok") {
-                $dataus = $this->model->getMaxIdUsuario();
-                foreach ($dataus as $row) {
-                    $id_usuario = $row;
-                }
+                    $dataus = $this->model->getMaxIdUsuario();
+                    foreach ($dataus as $row) {
+                        $id_usuario = $row;
+                    }
 
-                $datau = $this->model->registrarPermisos($id_usuario,15);
+                    $datau = $this->model->registrarPermisos($id_usuario, 15);
 
 
 
                     $msg = array(
-                        'msg' => '¡Usuario registrado con éxito!<br><br>'.'<b>Usuario:</b> ' . $ci . '<br>' .'<b>Contraseña:</b> ' . $claveTexto,
+                        'msg' => '¡Usuario registrado con éxito!<br><br>' . '<b>Usuario:</b> ' . $ci . '<br>' . '<b>Contraseña:</b> ' . $claveTexto,
                         'icono' => 'success'
                     );
                 } else if ($data == "existe") {
@@ -392,8 +399,8 @@ class Usuarios extends Controller
     {
         // $this->views->getView($this, "perfil");
         $id_user = $_SESSION['id_usuario'];
-       /// $data['unidades'] = $this->model->getUnidades(1);
-      //  $data['cargos'] = $this->model->getCargos(1);
+        /// $data['unidades'] = $this->model->getUnidades(1);
+        //  $data['cargos'] = $this->model->getCargos(1);
         $data['usuarios'] = $this->model->editarUserPerfil($id_user);
         $this->views->getView($this, "perfil", $data);
     }
@@ -410,8 +417,8 @@ class Usuarios extends Controller
         $nombres = ($_POST['nombres']);
         $apellidos = ($_POST['apellidos']);
         $celular = ($_POST['celular']);
-       // $id_cargo = ($_POST['perfil_cargo']);
-       // $id_unidad = ($_POST['perfil_unidad']);
+        // $id_cargo = ($_POST['perfil_cargo']);
+        // $id_unidad = ($_POST['perfil_unidad']);
 
         $id = $_SESSION['id_usuario'];
 

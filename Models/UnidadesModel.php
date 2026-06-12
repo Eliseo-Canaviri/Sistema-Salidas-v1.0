@@ -75,7 +75,7 @@ class UnidadesModel extends Query
 
     public function buscarUnidad($valor)
     {
-        $sql = "SELECT id_unidad, nombre as text FROM unidades WHERE nombre LIKE '%" . $valor . "%' AND estado = 1 LIMIT 10";
+        $sql = "SELECT id_unidad, nombre  FROM unidades WHERE nombre LIKE '%" . $valor . "%' AND estado = 1 LIMIT 10";
         $data = $this->selectAll($sql);
         return $data;
     }

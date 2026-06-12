@@ -73,7 +73,7 @@ class CargosModel extends Query
 
     public function buscarCargo($valor)
     {
-        $sql = "SELECT id_cargo, nombre as text FROM cargos WHERE nombre LIKE '%" . $valor . "%' AND estado = 1 LIMIT 10";
+        $sql = "SELECT id_cargo, nombre FROM cargos WHERE nombre LIKE '%" . $valor . "%' AND estado = 1 LIMIT 10";
         $data = $this->selectAll($sql);
         return $data;
     }

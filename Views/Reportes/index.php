@@ -30,7 +30,7 @@
 
                     <!-- funcionarios -->
                     <div class="mb-3">
-                        <input type="text" id="id_usuario" name="id_usuario">
+                        <input type="hidden" id="id_usuario" name="id_usuario">
 
                         <div class="form-floating">
                             <input class="form-control"

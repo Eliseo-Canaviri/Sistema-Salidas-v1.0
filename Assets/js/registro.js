@@ -34,6 +34,61 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     },
   });
+
+
+  //Buscar cargo
+  $("#select_cargo").autocomplete({
+    minLength: 2,
+    source: function (request, response) {
+      $.ajax({
+        url: base_url + "Cargos/buscarcargos/",
+        dataType: "json",
+        data: {
+          pro: request.term,
+        },
+        success: function (data) {
+          response(data);
+        },
+      });
+    },
+    select: function (event, ui) {
+      document.getElementById("id_cargo").value = ui.item.id_cargo;
+      document.getElementById("select_cargo").value = ui.item.nombre;
+    },
+  });
+
+  //Buscar unidad
+  $("#select_unidad").autocomplete({
+    minLength: 2,
+    source: function (request, response) {
+      $.ajax({
+        url: base_url + "Unidades/buscarUnidades/",
+        dataType: "json",
+        data: {
+          pro: request.term,
+        },
+        success: function (data) {
+          response(data);
+        },
+      });
+    },
+    select: function (event, ui) {
+      document.getElementById("id_unidad").value = ui.item.id_unidad;
+      document.getElementById("select_unidad").value = ui.item.nombre;
+    },
+  });
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 function registrarUserPrinciapal(e) {
@@ -42,15 +97,15 @@ function registrarUserPrinciapal(e) {
   const nombres = document.getElementById("nombres");
   const apellidos = document.getElementById("apellidos");
   const celular = document.getElementById("celular");
-  const cargo = document.getElementById("cargo");
-  const unidad = document.getElementById("unidad");
+  const select_cargo = document.getElementById("select_cargo");
+  const select_unidad = document.getElementById("select_unidad");
 
   if (
     nombres.value == "" ||
     apellidos.value == "" ||
     celular.value == "" ||
-    cargo.value == "" ||
-    unidad.value == ""
+    select_cargo.value == "" ||
+    select_unidad.value == ""
   ) {
     alertas("Todos los campos son obligatorio ☺", "warning");
   } else {

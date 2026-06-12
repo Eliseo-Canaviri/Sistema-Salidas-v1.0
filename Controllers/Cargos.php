@@ -130,6 +130,21 @@ class Cargos extends Controller
     }
   }
 
+   public function buscarcargos()
+    {
+        if (isset($_GET['pro'])) {
+            $data = $this->model->buscarCargo($_GET['pro']);
+            $datos = array();
+            foreach ($data as $row) {
+                $data['id_cargo'] = $row['id_cargo'];
+                $data['label'] = $row['nombre'];
+                $data['value'] = $row['nombre'];
+                array_push($datos, $data);
+            }
+            echo json_encode($datos, JSON_UNESCAPED_UNICODE);
+            die();
+        }
+    }
 
 
 

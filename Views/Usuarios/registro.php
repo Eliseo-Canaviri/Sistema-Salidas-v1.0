@@ -13,6 +13,8 @@
 
     <!-- Asegúrate de tener cargado FontAwesome para los iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" />
 
 </head>
 
@@ -74,29 +76,25 @@
                                     </div>
                                 </div>
 
-
-
                                 <!-- Cargo -->
                                 <div class="col-md-6 mb-3">
+                                    <input type="text" id="id_cargo" name="id_cargo">
                                     <div class="form-floating">
-                                        <input id="cargo" class="form-control text-uppercase-input" type="text"
-                                            name="cargo" placeholder="Cargo" required>
-                                        <label for="cargo">
-                                            <i class="fas fa-briefcase me-1 text-primary"></i>
-                                            Cargo <span class="text-danger">*</span>
-                                        </label>
+                                        <input class="form-control text-uppercase-input" id="select_cargo" name="select_cargo" type="text"
+                                            placeholder="Buscar ...">
+                                        <label><i class="fas fa-briefcase me-1 text-primary"></i>Buscar Cargo <span
+                                                class="text-danger">*</span></label>
                                     </div>
                                 </div>
 
                                 <!-- Unidad -->
                                 <div class="col-md-6 mb-3">
-                                    <div class="form-floating">
-                                        <input id="unidad" class="form-control text-uppercase-input" type="text"
-                                            name="unidad" placeholder="Unidad" required>
-                                        <label for="unidad">
-                                            <i class="fas fa-building me-1 text-success"></i>
-                                            Unidad / Dependencia <span class="text-danger">*</span>
-                                        </label>
+                                    <input type="text" id="id_unidad" name="id_unidad">
+                                    <div class="form-floating ">
+                                        <input class="form-control text-uppercase-input" id="select_unidad" name="select_unidad" type="text"
+                                            placeholder="Buscar ...">
+                                        <label> <i class="fas fa-building me-1 text-success"></i>Buscar Unidad <span
+                                                class="text-danger">*</span> </label>
                                     </div>
                                 </div>
 
@@ -125,9 +123,13 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+
+    <script src="ruta_de_tu_archivo_script.js"></script>
     <!-- Scripts -->
-    <script src="<?php echo base_url; ?>Assets/libs/jquery/dist/jquery.min.js"></script>
+
     <script src="<?php echo base_url; ?>Assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const base_url = "<?php echo base_url; ?>";
