@@ -97,9 +97,32 @@ WHERE sa.id_salida = $id";
         return $data;
     }
 
+   public function buscarFuncionario(string $valor)
+    {
+        $sql = "SELECT id,ci,nombres FROM usuarios WHERE ci LIKE '%" . $valor . "%' or nombres LIKE'%" . $valor . "%' AND estado = 1";
+        $data = $this->selectAll($sql);
+        return $data;
+    }
 
-
-
+ public function getReporteSalidasTC($id_usuario,$fecha_inicio,$fecha_fin)
+    {
+        $sql = "  SELECT sa.id_salida,sa.actividad,sa.lugar,sa.transporte,
+        sa.fecha_salida,sa.hora_salida,sa.fecha_llegada,sa.hora_llegada,
+        sa.id_chofer,sa.id_usuario,us.nombres,us.apellidos,ca.nombre as nombre_cargo
+                FROM salidas AS sa
+                INNER JOIN usuarios AS us
+                ON sa.id_usuario=us.id
+                INNER JOIN cargos as ca 
+                ON us.id_cargo=ca.id_cargo
+                WHERE sa.fecha_llegada>= '$fecha_inicio'  -- Fecha inicial
+                AND sa.fecha_salida <= '$fecha_fin'  -- Fecha final
+                AND sa.id_usuario =$id_usuario
+                AND sa.estado=1
+                AND us.estado=1
+                           ";
+        $data = $this->selectAll($sql);
+        return $data;
+    }
 
 
 

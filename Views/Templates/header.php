@@ -15,11 +15,14 @@
   <link href="<?php echo base_url; ?>Assets/css/select2.min.css" rel="stylesheet" />
   <link href="<?php echo base_url; ?>Assets/css/ojo.css" rel="stylesheet" />
 
-
   <link rel="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" href="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" />
 </head>
 
 <body >
+    <?php
+                    date_default_timezone_set('America/La_Paz');
+                    ?>
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">

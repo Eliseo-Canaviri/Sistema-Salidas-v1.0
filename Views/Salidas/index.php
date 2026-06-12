@@ -1,5 +1,9 @@
 <?php include "Views/Templates/header.php"; ?>
-
+<style>
+    .mayusculas {
+        text-transform: uppercase;
+    }
+</style>
 <div class="app-title mx-2">
   <div>
     <h2><i class="fa-solid fa-person-walking-arrow-right"></i> Salidas de Funcionarios</h2>
@@ -84,10 +88,10 @@
               <label for="actividad" class="form-label fw-bold">
                 <i class="fa-solid fa-briefcase me-1"></i> Actividad / Motivo <span class="text-danger">*</span>
               </label>
-              <textarea class="form-control" id="actividad" name="actividad" rows="2"
-                placeholder="Ej: Realizar la inspección técnica del proyecto." required></textarea>
+              <textarea class="form-control mayusculas" id="actividad" name="actividad" rows="2"
+                placeholder="Ej: Realizar la inspección técnica del proyecto."  required></textarea>
             </div>
-            <!-- Cargo -->
+            <!-- Chofer -->
             <div class="col-md-6">
               <div class="form-group">
                 <label for="id_chofer" class="form-label fw-bold">
@@ -108,7 +112,7 @@
             </div>
             <div class="col-md-6 mb-3">
               <label for="transporte" class="form-label fw-bold">
-                <i class="fa-solid fa-car me-1"></i> MEDIO DE TRANSPORTE
+                <i class="fa-solid fa-car me-1"></i> Medio de Transporte
               </label>
               <select class="form-select" id="transporte" name="transporte">
                 <option value="VEHÍCULO DE LA ALCALDÍA">🚐 VEHÍCULO DE LA ALCALDÍA</option>
@@ -150,7 +154,7 @@
               <label for="hora_llegada" class="form-label fw-bold">
                 <i class="fa-solid fa-clock me-1"></i> Hora de Llegada
               </label>
-              <input type="time" class="form-control" id="hora_llegada" name="hora_llegada" required>
+              <input type="time" class="form-control" id="hora_llegada" name="hora_llegada" value="18:05" required>
             </div>
 
           </div>

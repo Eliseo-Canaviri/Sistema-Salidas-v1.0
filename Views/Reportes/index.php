@@ -1,75 +1,104 @@
 <?php include "Views/Templates/header.php"; ?>
-<div class="app-title mx-4">
+<div class="app-title">
     <div>
-        <h2><i class="fa fa-dashboard"></i> Reportes</h2>
+        <h1 class="fw-bold "><i class="fa fa-dashboard "></i> Reportes Por Salidas </h1>
     </div>
 </div>
-<div>
 
-<button class="btn btn-primary mb-1 mx-4" type="button" onclick="frmCargos();">Nuevo <i
-            class="fa fa-user-plus"></i></button>
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+          
+        </h5>
+    </div>
 
-</div>
-
-<!--  Header End -->
-<div class="container-fluid">
     <div class="card-body">
-        <div class="card">
-            <div class="card-body p-4">
-                <table class="table  table-hover" id="tblcargoss">
-                    <thead class="table-dark ">
+        <div class="row">
 
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Estado</th>
-                            <th scope="col">Acciones</th>
+            <!-- ===== FORMULARIO ENTRADAS ===== -->
+            <div class="col-md-6">
+                <form id="frmEntradas"
+                    action="<?= base_url ?>Reportes/FechaFuncionarioPdf"
+                    method="POST"
+                    target="_blank">
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-
-
-<!--  fin tabla-->
-
-
-
-
-<!-- Modal -->
-<div class="modal fade" id="nuevo_cargo" data-bs-backdrop="static" data-bs-keyboard="false"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title text-white" id="title">Título del modal</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" id="frmCargos">
-                    <div class="form-group">
-                        <input type="hidden" id="id" name="id">
-                        <label class="fw-bold" for="nombre">Nombre del Cargo</label>
-                        <input id="nombre" class="form-control" type="text" name="nombre" placeholder="Nombres">
+                    <div class="text-center mb-4">
+                        <h6 class="text-danger fw-bold">
+                            <i class="bi bi-box-arrow-in-down"></i> Reporte por Fechas 
+                        </h6>
                     </div>
+
+                    <!-- funcionarios -->
+                    <div class="mb-3">
+                        <input type="text" id="id_usuario" name="id_usuario">
+
+                        <div class="form-floating">
+                            <input class="form-control"
+                                id="select_funcioanariopdf"
+                                type="text"
+                                placeholder="Buscar Funcionario">
+                            <label>Buscar Funcionario </label>
+                        </div>
+                    </div>
+                  
+
+                    <!-- FECHAS EN UNA FILA -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input class="form-control"
+                                    type="date"
+                                    id="fecha_inicio_ingreso"
+                                    name="fecha_inicio"
+                                    value="<?= date('Y-m-d') ?>"
+                                    required>
+                                <label>Fecha Inicio</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input class="form-control"
+                                    type="date"
+                                    id="fecha_fin_ingreso"
+                                    name="fecha_fin"
+                                    value="<?= date('Y-m-d') ?>"
+                                    required>
+                                <label>Fecha Fin</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTÓN -->
+                    <button type="submit" class="btn btn-danger w-100">
+                        <i class="bi bi-file-earmark-pdf"></i> Ver Reporte
+                    </button>
                 </form>
             </div>
-            <div class="modal-body ">
-                <button type="button" class="btn btn-primary" onclick="registrarCargos(event);"
-                    id="btnAccion">Registrar></button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-            </div>
+            <!-- ===== FORMULARIO SALIDAS ===== -->
+         
+
         </div>
     </div>
 </div>
-<!-- fin de Modal -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <?php include "Views/Templates/footer.php"; ?>

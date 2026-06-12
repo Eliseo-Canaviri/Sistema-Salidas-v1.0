@@ -48,11 +48,11 @@ class SalidasModel extends Query
     // Obtener una salida por id
     public function getSalidaEditar(int $id_salida)
     {
-        $sql = "SELECT sa.* ,ch.nombres,ch.id_chofer
+        $sql = "SELECT sa.* ,us.nombres,us.id
 
             FROM salidas as sa 
-            INNER JOIN choferes as ch 
-            ON  sa.id_chofer=ch.id_chofer
+            INNER JOIN usuarios as us
+            ON  sa.id_usuario=us.id
 
             WHERE sa.id_salida =  $id_salida";
         $data = $this->select($sql);

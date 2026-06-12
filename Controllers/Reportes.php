@@ -411,192 +411,154 @@ class Reportes extends Controller
         $pdf->Output('Hoja_de_Salida_Completa_GAMP.pdf', 'I');
         
     }
-
-
-
-
-    public function pdfHojadeRuta()
+    public function buscarFuncionarios()
     {
-        // 1. Obtener los datos del modelo
-        $data = $this->model->getSalidasPdf(1);
-
-        // Extraer variables de forma segura con valores por defecto si vienen vacíos
-        $actividad = !empty($data['actividad']) ? $data['actividad'] : '';
-        $lugar = !empty($data['lugar']) ? $data['lugar'] : '';
-        $transporte = !empty($data['transporte']) ? strtolower($data['transporte']) : '';
-        $fecha_salida = !empty($data['fecha_salida']) ? $data['fecha_salida'] : '';
-        $hora_salida = !empty($data['hora_salida']) ? $data['hora_salida'] : '';
-        $hora_llegada = !empty($data['hora_llegada']) ? $data['hora_llegada'] : '';
-        $usuario = !empty($data['id_usuario']) ? $data['id_usuario'] : ''; // Puedes cambiar por el nombre si lo tienes
-        $cargo = !empty($data['cargo']) ? $data['cargo'] : ''; // Si tu consulta trae el cargo
-
-        // 2. Cargar TCPDF de forma segura (subiendo de nivel desde Controllers/)
-        require_once dirname(__DIR__) . '/vendor/autoload.php';
-
-        // 3. Crear instancia en Tamaño CARTA (LETTER)
-        $pdf = new TCPDF('P', 'mm', 'LETTER', true, 'UTF-8', false);
-
-        // Metadata opcional
-        $pdf->SetCreator('Sistema Administrativo');
-        $pdf->SetAuthor('GAM Pocoata');
-        $pdf->SetTitle('Hoja de Salida - ' . $usuario);
-
-        // Limpiar cabeceras por defecto
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
-
-        // Márgenes profesionales (Izquierdo: 15, Superior: 15, Derecho: 15)
-        $pdf->SetMargins(15, 15, 15);
-        $pdf->SetAutoPageBreak(TRUE, 15);
-
-        // Añadir página
-        $pdf->AddPage();
-
-        // --- TITULARES ---
-        $pdf->SetFont('helvetica', 'B', 15);
-        $pdf->Cell(0, 7, 'GOBIERNO AUTÓNOMO MUNICIPAL DE POCOATA', 0, 1, 'C');
-
-        $pdf->SetFont('helvetica', 'B', 12);
-        // Línea inferior del título para emular el estilo del diseño
-        $pdf->Cell(0, 7, 'HOJA DE SALIDA DEL PERSONAL DEL G.A.M.P — GESTIÓN 2026', 'B', 1, 'C');
-        $pdf->Ln(8);
-
-        // --- DATOS DEL PERSONAL ---
-        $pdf->SetFont('helvetica', '', 11);
-
-        // Fila: Nombre
-        $pdf->SetFont('helvetica', 'B', 11);
-        $pdf->Cell(40, 7, 'Nombre y apellidos:', 0, 0, 'L');
-        $pdf->SetFont('helvetica', '', 11);
-        $pdf->Cell(0, 7, $usuario, 'B', 1, 'L'); // Cambiar por el nombre completo si tu $data lo tiene
-        $pdf->Ln(2);
-
-        // Fila: Cargo
-        $pdf->SetFont('helvetica', 'B', 11);
-        $pdf->Cell(40, 7, 'Cargo:', 0, 0, 'L');
-        $pdf->SetFont('helvetica', '', 11);
-        $pdf->Cell(0, 7, $cargo, 'B', 1, 'L');
-        $pdf->Ln(2);
-
-        // Fila: Motivo
-        $pdf->SetFont('helvetica', 'B', 11);
-        $pdf->Cell(40, 7, 'Motivo / Actividad:', 0, 0, 'L');
-        $pdf->SetFont('helvetica', '', 11);
-        $pdf->Cell(0, 7, $actividad, 'B', 1, 'L');
-        $pdf->Ln(5);
-
-        // --- BLOQUE DE FECHAS Y HORAS ---
-        // Procesar fechas básicas (puedes separar el string si necesitas mapear día por separado)
-        $pdf->SetFont('helvetica', 'B', 11);
-        $pdf->Cell(45, 7, 'Fecha y hora Salida:', 0, 0, 'L');
-        $pdf->SetFont('helvetica', '', 11);
-        $pdf->Cell(60, 7, 'Día: ' . $fecha_salida, 'B', 0, 'L');
-        $pdf->Cell(40, 7, 'Hrs: ' . $hora_salida, 'B', 0, 'L');
-        $pdf->Cell(0, 7, 'Año: 2026', 'B', 1, 'L');
-        $pdf->Ln(2);
-
-        $pdf->SetFont('helvetica', 'B', 11);
-        $pdf->Cell(45, 7, 'Fecha y hora Llegada:', 0, 0, 'L');
-        $pdf->SetFont('helvetica', '', 11);
-        $pdf->Cell(60, 7, 'Día: ' . $fecha_salida, 'B', 0, 'L'); // Ajustar si tienes fecha_llegada independiente
-        $pdf->Cell(40, 7, 'Hrs: ' . $hora_llegada, 'B', 0, 'L');
-        $pdf->Cell(0, 7, 'Año: 2026', 'B', 1, 'L');
-        $pdf->Ln(8);
-
-        // --- SECCIÓN VEHÍCULO (RECUADRO ESTILIZADO) ---
-        // Dibujamos un fondo gris muy tenue para la tarjeta de vehículo
-        $pdf->SetFillColor(250, 250, 250);
-        $pdf->SetDrawColor(200, 200, 200);
-        // Caja contenedora (Ancho, Alto, X, Y, tipo borde, etc.)
-        $pdf->Cell(0, 28, '', 1, 1, 'L', true);
-
-        // Volvemos a posicionar el cursor arriba de la caja armada para escribir los textos internos
-        $pdf->SetY($pdf->GetY() - 26);
-        $pdf->SetFont('helvetica', 'B', 10);
-        $pdf->SetTextColor(11, 44, 82); // Azul institucional
-        $pdf->Cell(0, 5, 'CUANDO UTILICE VEHÍCULO INSTITUCIONAL', 0, 1, 'L');
-        $pdf->Ln(2);
-
-        // Casillas de verificación
-        $pdf->SetTextColor(0, 0, 0);
-        $pdf->SetFont('helvetica', '', 10);
-
-        // Checkboxes lógicos basados en el campo $transporte de tu base de datos
-        $chk_vagoneta = ($transporte == 'vagoneta') ? '[ X ]' : '[   ]';
-        $chk_camioneta = ($transporte == 'camioneta') ? '[ X ]' : '[   ]';
-        $chk_motocicleta = ($transporte == 'motocicleta' || $transporte == 'moto') ? '[ X ]' : '[   ]';
-
-        $pdf->Cell(60, 5, $chk_vagoneta . ' Vagoneta', 0, 0, 'L');
-        $pdf->Cell(60, 5, $chk_camioneta . ' Camioneta', 0, 0, 'L');
-        $pdf->Cell(0, 5, $chk_motocicleta . ' Motocicleta', 0, 1, 'L');
-        $pdf->Ln(3);
-
-        // Chofer Autorizado dentro del recuadro
-        $pdf->SetFont('helvetica', 'B', 10);
-        $pdf->Cell(35, 5, 'Chofer Autorizado:', 0, 0, 'L');
-        $pdf->SetFont('helvetica', '', 10);
-        $pdf->Cell(0, 5, '', 'B', 1, 'L'); // Espacio en blanco o variable si la tienes
-
-        $pdf->Ln(12); // Separación para salir del recuadro de vehículo
-
-        // --- FIRMAS DE AUTORIZACIÓN ---
-        $pdf->SetDrawColor(119, 119, 119); // Líneas de firma gris medio
-        $pdf->SetFont('helvetica', 'B', 10);
-        $pdf->SetTextColor(68, 68, 68);
-
-        // Guardamos posición Y para alinear ambas firmas a la misma altura
-        $y_firmas = $pdf->GetY();
-
-        // Columna Izquierda: Servidor
-        $pdf->SetXY(25, $y_firmas + 15);
-        $pdf->Cell(65, 0, '', 'T', 1, 'C'); // Línea horizontal superior
-        $pdf->SetX(25);
-        $pdf->Cell(65, 5, 'FIRMA DEL SERVIDOR', 0, 0, 'C');
-
-        // Columna Derecha: RRHH
-        $pdf->SetXY(125, $y_firmas + 15);
-        $pdf->Cell(65, 0, '', 'T', 1, 'C'); // Línea horizontal superior
-        $pdf->SetX(125);
-        $pdf->Cell(65, 5, 'AUTORIZADO POR: RR.HH.', 0, 0, 'C');
-
-        $pdf->SetTextColor(0, 0, 0);
-        $pdf->SetXY(15, $y_firmas + 28);
-
-        // --- INFORME RESUMIDO ---
-        $pdf->SetFont('helvetica', 'B', 11);
-        $pdf->SetTextColor(11, 44, 82);
-        $pdf->Cell(0, 6, 'INFORME RESUMIDO DE LA ACTIVIDAD REALIZADA', 0, 1, 'L');
-        $pdf->SetTextColor(0, 0, 0);
-        $pdf->Ln(2);
-
-        // Líneas de informe (Simulación de renglones para escritura manual si se requiere)
-        $pdf->Cell(0, 6, '', 'B', 1, 'L');
-        $pdf->Cell(0, 6, '', 'B', 1, 'L');
-        $pdf->Cell(0, 6, '', 'B', 1, 'L');
-        $pdf->Cell(0, 6, '', 'B', 1, 'L');
-        $pdf->Ln(8);
-
-        // --- RECUADRO DE VALIDACIÓN EXTERNA (FIRMA Y SELLO DE DESTINO) ---
-        $pdf->SetDrawColor(136, 136, 136);
-        // Definir estilo de línea discontinua (puntos/guiones) para el sello de destino
-        $style_dashed = array('width' => 0.4, 'cap' => 'butt', 'join' => 'miter', 'dash' => '3,3', 'color' => array(136, 136, 136));
-
-        $current_x = $pdf->GetX();
-        $current_y = $pdf->GetY();
-
-        // Dibujamos el rectángulo exterior con líneas discontinuas
-        $pdf->Rect($current_x, $current_y, 186, 30, 'D', array('all' => $style_dashed));
-
-        // Texto inferior derecho interno en el recuadro
-        $pdf->SetXY($current_x, $current_y + 16);
-        $pdf->SetFont('helvetica', 'B', 8.5);
-        $pdf->SetTextColor(85, 85, 85);
-        $pdf->Cell(0, 4, 'FIRMA Y SELLO', 0, 1, 'R');
-        $pdf->Cell(0, 4, 'LUGAR DONDE REALIZÓ LA ACTIVIDAD  ', 0, 1, 'R');
-
-        // 4. Salida del archivo PDF en el navegador
-        $pdf->Output('Hoja_de_Salida_GAMP.pdf', 'I');
+        if (isset($_GET['pro'])) {
+            $data = $this->model->buscarFuncionario($_GET['pro']);
+            $datos = array();
+            foreach ($data as $row) {
+                $data['id'] = $row['id'];
+                $data['label'] = $row['ci'] . '-' . $row['nombres'];
+                $data['value'] = $row['ci'] . '-' . $row['nombres'];
+                array_push($datos, $data);
+            }
+            echo json_encode($datos, JSON_UNESCAPED_UNICODE);
+            die();
+        }
     }
+
+
+
+public function FechaFuncionarioPdf()
+{
+    $id_usuario  = $_POST['id_usuario'] ?? '';
+    $fecha_inicio = $_POST['fecha_inicio'] ?? '';
+    $fecha_fin    = $_POST['fecha_fin'] ?? '';
+
+    if (empty($id_usuario) || empty($fecha_inicio) || empty($fecha_fin)) {
+        echo "Parámetros incompletos.";
+        return;
+    }
+
+                    date_default_timezone_set('America/La_Paz');
+                  
+    $data = $this->model->getReporteSalidasTC($id_usuario, $fecha_inicio, $fecha_fin);
+
+    $salida=$data[0];
+    if (empty($data)) {
+        echo "No se encontraron datos para los criterios seleccionados.";
+        return;
+    }
+    
+    require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+    // 1. Instanciar TCPDF en Tamaño CARTA
+    $pdf = new TCPDF('P', 'mm', 'LETTER', true, 'UTF-8', false);
+
+    // 2. Configuración del documento
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetAuthor('GAMP');
+    $pdf->SetTitle('Reporte de Salidas de Personal');
+    
+    // Quitar cabecera y pie de página por defecto para hacer uno personalizado y moderno
+    $pdf->setPrintHeader(false);
+    $pdf->setPrintFooter(true); // Dejar activo para el número de página abajo
+    
+    // Margen: Izquierda(15), Arriba(15), Derecha(15)
+    $pdf->SetMargins(15, 15, 15);
+    $pdf->SetAutoPageBreak(TRUE, 20); // Margen inferior
+
+    // Añadir la primera página
+    $pdf->AddPage();
+    
+    // Clonar tipografía limpia (Helvetica/Arial)
+    $pdf->SetFont('helvetica', '', 10);
+
+    // Intentar obtener el nombre del usuario si tu consulta trae datos de la tabla usuarios
+    // Si tu consulta SELECT actual no tiene el campo del nombre, te sugiero agregarlo en el modelo (ej: us.nombre)
+    $nombre_usuario = $data[0]['nombres'].' '.$salida['apellidos'] ?? 'Funcionario ID: ' . $id_usuario; 
+
+    // 3. Estructura HTML con estilo moderno (CSS)
+    $html = '
+    <table cellpadding="5" cellspacing="0" style="width:100%; border-bottom: 2px solid #2B6CB0; padding-bottom: 10px;">
+        <tr>
+            <td style="width: 60%;">
+                <span style="font-size: 18px; font-weight: bold; color: #1A365D;">REPORTE DE SALIDAS</span><br>
+                <span style="font-size: 11px; color: #4A5568;">Gobierno Autónomo Municipal (GAMP)</span>
+            </td>
+            <td style="width: 40%; text-align: right; font-size: 10px; color: #4A5568;">
+                <strong>Fecha Emisión:</strong> ' . date('d/m/Y') . '<br>
+                <strong>Período:</strong> ' . date('d/m/Y', strtotime($fecha_inicio)) . ' al ' . date('d/m/Y', strtotime($fecha_fin)) . '
+            </td>
+        </tr>
+    </table>
+
+    <br><br>
+
+    <div style="background-color: #F7FAFC; padding: 12px; border-left: 4px solid #4299E1; margin-bottom: 20px;">
+        <table cellpadding="3" cellspacing="0" style="width:100%;">
+            <tr>
+                <td style="font-size: 11px; color: #2D3748;">
+                    <strong>Funcionario:</strong> ' . htmlspecialchars($nombre_usuario) . ' <br>
+                    <strong>Cargo:</strong> ' . htmlspecialchars($salida['nombre_cargo']) . '
+                </td>
+                <td style="font-size: 11px; color: #2D3748; text-align: right;">
+                    <strong>Total Registros:</strong> ' . count($data) . ' salidas
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <br><br>
+
+    <table cellpadding="8" cellspacing="0" style="width:100%; font-size: 9px; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #1A365D; color: #FFFFFF; font-weight: bold; text-align: center;">
+                <th style="width: 8%; border: 1px solid #1A365D;">ID</th>
+                <th style="width: 25%; border: 1px solid #1A365D; text-align: left;">Actividad</th>
+                <th style="width: 22%; border: 1px solid #1A365D; text-align: left;">Lugar de Destino</th>
+                <th style="width: 15%; border: 1px solid #1A365D;">Medio Transp.</th>
+                <th style="width: 15%; border: 1px solid #1A365D;">Salida (Fecha/Hora)</th>
+                <th style="width: 15%; border: 1px solid #1A365D;">Retorno (Fecha/Hora)</th>
+            </tr>
+        </thead>
+        <tbody>';
+        $i=1;       
+        // Ciclo para rellenar las filas dinámicamente
+        $background_color = '#FFFFFF';
+        foreach ($data as $row) {
+            // Alternar colores de filas para mejorar legibilidad
+            $background_color = ($background_color == '#FFFFFF') ? '#F7FAFC' : '#FFFFFF';
+            
+            // Formatear fechas de YYYY-MM-DD a DD/MM/YYYY
+            $f_salida = date('d/m/Y', strtotime($row['fecha_salida']));
+            $f_llegada = date('d/m/Y', strtotime($row['fecha_llegada']));
+            
+            // Recortar horas por si tienen segundos (00:00:00 -> 00:00)
+            $h_salida = substr($row['hora_salida'], 0, 5);
+            $h_llegada = substr($row['hora_llegada'], 0, 5);
+
+            $html .= '
+            <tr style="background-color: ' . $background_color . '; color: #2D3748;">
+                <td style="border: 1px solid #E2E8F0; text-align: center; font-weight: bold;">' . $i++ . '</td>
+                <td style="border: 1px solid #E2E8F0;">' . htmlspecialchars($row['actividad']) . '</td>
+                <td style="border: 1px solid #E2E8F0;">' . htmlspecialchars($row['lugar']) . '</td>
+                <td style="border: 1px solid #E2E8F0; text-align: center;">' . htmlspecialchars($row['transporte']) . '</td>
+                <td style="border: 1px solid #E2E8F0; text-align: center;">' . $f_salida . '<br><span style="color:#718096;">' . $h_salida . '</span></td>
+                <td style="border: 1px solid #E2E8F0; text-align: center;">' . $f_llegada . '<br><span style="color:#718096;">' . $h_llegada . '</span></td>
+            </tr>';
+        }
+
+    $html .= '
+        </tbody>
+    </table>';
+
+    // 4. Renderizar el HTML en el PDF
+    $pdf->writeHTML($html, true, false, true, false, '');
+
+    // 5. Salida del archivo PDF en el navegador
+    $pdf->Output('Reporte_Salidas_' . $id_usuario . '.pdf', 'I');
+}
 
 
 

@@ -392,6 +392,30 @@ document.addEventListener("DOMContentLoaded", function () {
       "<'row'<'col-sm-12'tr>>" +
       "<'row'<'col-sm-5'i><'col-sm-7'p>>",
   });
+
+  //Buscar funcionario
+  $("#select_funcioanariopdf").autocomplete({
+    minLength: 1,
+    source: function (request, response) {
+      $.ajax({
+        url: base_url + "Reportes/buscarFuncionarios/",
+        dataType: "json",
+        data: {
+          pro: request.term,
+        },
+        success: function (data) {
+          response(data);
+        },
+      });
+    },
+    select: function (event, ui) {
+      document.getElementById("id_usuario").value = ui.item.id;
+      document.getElementById("select_funcioanariopdf").value = ui.item.nombres;
+    },
+  });
+
+
+
 });
 
 function editarPerfil() {
@@ -961,8 +985,8 @@ function frmSalida() {
     '<i class="fa-solid fa-person-walking-arrow-right me-2"></i> Nueva Salida';
   document.getElementById("btnAccionSalida").innerHTML =
     '<i class="fas fa-save"></i> Registrar';
-  document.getElementById("frmSalida").reset();
-  document.getElementById("id_salida").value = "";
+    document.getElementById("id_salida").value = "";
+    document.getElementById("frmSalida").reset();
 
   $("#modal_salida").modal("show");
 }
@@ -975,12 +999,14 @@ function registrarSalida(e) {
   const fecha_salida = document.getElementById("fecha_salida").value;
   const hora_salida = document.getElementById("hora_salida").value;
   const hora_llegada = document.getElementById("hora_llegada").value;
+  const id_chofer = document.getElementById("id_chofer").value;
 
   if (
     actividad == "" ||
     lugar == "" ||
     fecha_salida == "" ||
-    hora_salida == ""
+    hora_salida == ""||
+    id_chofer==""
   ) {
     alertas("Todos los campos obligatorios deben llenarse ☺", "warning");
   } else {
@@ -995,6 +1021,10 @@ function registrarSalida(e) {
         const res = JSON.parse(this.responseText);
        // console.log("Respuesta del servidor:", res);
         alertas(res.msg, res.icono);
+            setTimeout(() => {
+             $("#modal_salida").modal("hide");
+            }, 3000);
+        
         // Validar si la respuesta fue exitosa
         if ((res.icono = "success")) {
           // Verificar que existe id_salida antes de generar PDF
@@ -1005,10 +1035,12 @@ function registrarSalida(e) {
             // Cerrar modal
             setTimeout(() => {
               window.open(ruta, "_blank");
+              tblSalidas.ajax.reload();
             }, 3000); // Pequeño delay para mejor UX
             $("#modal_salida").modal("hide");
-            tblSalidas.ajax.reload();
             frm.reset();
+          document.getElementById("frmSalida").reset();
+
           } else {
             console.warn("No se recibió id_salida en la respuesta");
           }
