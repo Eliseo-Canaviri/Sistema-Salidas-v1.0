@@ -52,7 +52,7 @@
                                     <div class="form-floating">
                                         <input id="celular" class="form-control " type="number" name="celular"
                                             placeholder="Celular">
-                                        <label for="celular"><i class="fas fa-phone icon-addon"></i> Celular</label>
+                                        <label for="celular"><i class="fas fa-phone icon-addon"></i> Celular <span class="text-danger">*</span></label>
                                     </div>
                                 </div>
 

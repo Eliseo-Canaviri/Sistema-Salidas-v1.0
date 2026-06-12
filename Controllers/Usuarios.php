@@ -136,8 +136,7 @@ class Usuarios extends Controller
                 }
                // $datac = $this->model->getMaxIdCargo();
               //  $datac = $this->model->getMaxIdCargo();
-               
-               
+              
                 // Generar clave: inicial de nombre + inicial de apellido + CI
                 $inicialNombre = strtoupper(substr(trim($nombres), 0, 1));
                 $inicialApellido = strtoupper(substr(trim($apellidos), 0, 1));
