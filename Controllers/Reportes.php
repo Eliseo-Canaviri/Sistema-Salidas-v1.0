@@ -697,7 +697,6 @@ public function pdf8($id)
     $pdf->Output('Hoja_de_Salida_Completa_GAMP.pdf', 'I');
 }
 
-
     public function buscarFuncionarios()
     {
         if (isset($_GET['pro'])) {

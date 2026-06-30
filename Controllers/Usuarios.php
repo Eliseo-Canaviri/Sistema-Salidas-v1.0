@@ -104,7 +104,7 @@ class Usuarios extends Controller
 
         // code...
     }
-    public function registroPrincipal()
+  public function registroPrincipal()
     {
         // print_r($_POST);
         //die();
@@ -124,24 +124,37 @@ class Usuarios extends Controller
         } else {
             if ($id == "") {
 
-                // El código solo entra si AMBOS están vacíos
-                if (empty($id_cargo) && empty($id_unidad)) {
-                    // Guardamos los resultados en variables diferentes para no perder información
+
+                if (empty($id_cargo)) {
+
                     $resCargo = $this->model->registrarCargo($select_cargo);
-                    $resUnidad = $this->model->registrarUnidad($select_unidad);
-                   
+
+
+                    $id_cargo = $this->model->getMaxIdCargo();
+
+
                 } else {
-                    // Opcional: por si intentan enviar datos cuando deberían estar vacíos
-                    $data = "Error: Los campos no están vacíos.";
+
+                    $data = "Error: campos no están vacíos.";
                 }
-               // $datac = $this->model->getMaxIdCargo();
-              //  $datac = $this->model->getMaxIdCargo();
-              
+                if (empty($id_unidad)) {
+                    $resUnidad = $this->model->registrarUnidad($select_unidad);
+                    $id_unidad = $this->model->getMaxIdUnidad();
+                } else {
+
+                    $data = "Error:  campos no están vacíos.";
+                }
+
+
+
+
                 // Generar clave: inicial de nombre + inicial de apellido + CI
                 $inicialNombre = strtoupper(substr(trim($nombres), 0, 1));
                 $inicialApellido = strtoupper(substr(trim($apellidos), 0, 1));
                 $claveTexto = $inicialNombre . $inicialApellido . $ci;
                 $clave = hash("SHA256", $claveTexto);
+
+
                 $data = $this->model->registrarUsuario($ci, $nombres, $apellidos, $celular, $id_cargo, $id_unidad, $clave, $clave);
                 if ($data == "ok") {
                     $dataus = $this->model->getMaxIdUsuario();
@@ -150,8 +163,6 @@ class Usuarios extends Controller
                     }
 
                     $datau = $this->model->registrarPermisos($id_usuario, 15);
-
-
 
                     $msg = array(
                         'msg' => '¡Usuario registrado con éxito!<br><br>' . '<b>Usuario:</b> ' . $ci . '<br>' . '<b>Contraseña:</b> ' . $claveTexto,
@@ -165,24 +176,13 @@ class Usuarios extends Controller
                     $msg = array('msg' => 'Error al registrar al usuario ☻', 'icono' => 'error');
                 }
             }
-            #code ..
-            else {
-                $data = $this->model->modificarUsuario($ci, $nombres, $apellidos, $celular, $id);
-                if ($data == "modificado") {
-
-                    $msg = array('msg' => 'Usuario modificado con exito ☻', 'icono' => 'success');
-                } else {
-
-                    $msg = array('msg' => 'Error al modificar al usuario ☻', 'icono' => 'error');
-                }
-            }
 
 
             echo json_encode($msg, JSON_UNESCAPED_UNICODE); //enviando ala archivo funcion js
             die();
 
         }
-    }
+    }  
 
     public function registrar()
     {

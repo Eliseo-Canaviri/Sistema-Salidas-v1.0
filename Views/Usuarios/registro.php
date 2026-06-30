@@ -52,7 +52,8 @@
                                     <div class="form-floating">
                                         <input id="celular" class="form-control " type="number" name="celular"
                                             placeholder="Celular">
-                                        <label for="celular"><i class="fas fa-phone icon-addon"></i> Celular <span class="text-danger">*</span></label>
+                                        <label for="celular"><i class="fas fa-phone icon-addon"></i> Celular <span
+                                                class="text-danger">*</span></label>
                                     </div>
                                 </div>
 
@@ -76,25 +77,34 @@
                                     </div>
                                 </div>
 
-                                <!-- Cargo -->
                                 <div class="col-md-6 mb-3">
-                                    <input type="text" id="id_cargo" name="id_cargo">
+                                    <input type="hidden" id="id_cargo" name="id_cargo">
                                     <div class="form-floating">
-                                        <input class="form-control text-uppercase-input" id="select_cargo" name="select_cargo" type="text"
-                                            placeholder="Buscar ...">
-                                        <label><i class="fas fa-briefcase me-1 text-primary"></i>Buscar Cargo <span
-                                                class="text-danger">*</span></label>
+                                        <input class="form-control text-uppercase-input" id="select_cargo"
+                                            name="select_cargo" type="text" placeholder="Buscar ...">
+                                        <label>
+                                            <i class="fas fa-briefcase me-1 text-primary"></i>Buscar Cargo <span
+                                                class="text-danger">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-text text-muted ms-1" style="font-size: 0.85rem;">
+                                        <i class="fas fa-info-circle me-1 text-secondary"></i>Si no existe su cargo,
+                                        ingrese el cargo correspondiente.
                                     </div>
                                 </div>
-
-                                <!-- Unidad -->
                                 <div class="col-md-6 mb-3">
-                                    <input type="text" id="id_unidad" name="id_unidad">
-                                    <div class="form-floating ">
-                                        <input class="form-control text-uppercase-input" id="select_unidad" name="select_unidad" type="text"
-                                            placeholder="Buscar ...">
-                                        <label> <i class="fas fa-building me-1 text-success"></i>Buscar Unidad <span
-                                                class="text-danger">*</span> </label>
+                                    <input type="hidden" id="id_unidad" name="id_unidad">
+                                    <div class="form-floating">
+                                        <input class="form-control text-uppercase-input" id="select_unidad"
+                                            name="select_unidad" type="text" placeholder="Buscar ...">
+                                        <label>
+                                            <i class="fas fa-building me-1 text-success"></i>Buscar Unidad <span
+                                                class="text-danger">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-text text-muted ms-1" style="font-size: 0.85rem;">
+                                        <i class="fas fa-info-circle me-1 text-secondary"></i>Si no existe su unidad,
+                                        ingrese la unidad correspondiente.
                                     </div>
                                 </div>
 
@@ -123,6 +133,35 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Función reutilizable para limpiar el ID cuando el buscador se vacía
+            function vincularLimpiezaInput(idBuscador, idOculto, nombreCampo) {
+                const buscador = document.getElementById(idBuscador);
+                const oculto = document.getElementById(idOculto);
+
+                if (buscador && oculto) {
+                    buscador.addEventListener('input', function () {
+                        if (this.value.trim() === "") {
+                            oculto.value = "";
+                            console.log(`ID de ${nombreCampo} limpiado con éxito.`); // Control en consola
+                        }
+                    });
+                }
+            }
+
+            // Aplicar la lógica a Cargo
+            vincularLimpiezaInput('select_cargo', 'id_cargo', 'Cargo');
+
+            // Aplicar la lógica a Unidad
+            vincularLimpiezaInput('select_unidad', 'id_unidad', 'Unidad');
+
+        });
+    </script>
+
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
