@@ -70,7 +70,8 @@ class Usuarios extends Controller
 
     public function validar()
     {
-
+        //print_r($_POST);
+        //   die();
 
         if (empty($_POST['usuario']) || empty($_POST['clave'])) {
             $msg = "Los Campos estan Vaciones";
@@ -104,7 +105,7 @@ class Usuarios extends Controller
 
         // code...
     }
-  public function registroPrincipal()
+    public function registroPrincipal()
     {
         // print_r($_POST);
         //die();
@@ -125,37 +126,40 @@ class Usuarios extends Controller
             if ($id == "") {
 
 
+
+                $dataci = $this->model->ExisteCI($ci);
+                if ($dataci == "existe") {
+                } else {
+
+
+
+
+                }
                 if (empty($id_cargo)) {
 
                     $resCargo = $this->model->registrarCargo($select_cargo);
 
-
-                    $id_cargo = $this->model->getMaxIdCargo();
-
-
+                    $id_cargor = $this->model->getMaxIdCargo();
+                    $id_cargo = (int) $id_cargor['id_cargo'];
                 } else {
 
                     $data = "Error: campos no están vacíos.";
                 }
                 if (empty($id_unidad)) {
                     $resUnidad = $this->model->registrarUnidad($select_unidad);
-                    $id_unidad = $this->model->getMaxIdUnidad();
+                    $id_unidadr = $this->model->getMaxIdUnidad();
+                    $id_unidad = (int) $id_unidadr['id_unidad'];
                 } else {
 
                     $data = "Error:  campos no están vacíos.";
                 }
-
-
-
-
                 // Generar clave: inicial de nombre + inicial de apellido + CI
                 $inicialNombre = strtoupper(substr(trim($nombres), 0, 1));
                 $inicialApellido = strtoupper(substr(trim($apellidos), 0, 1));
                 $claveTexto = $inicialNombre . $inicialApellido . $ci;
                 $clave = hash("SHA256", $claveTexto);
 
-
-                $data = $this->model->registrarUsuario($ci, $nombres, $apellidos, $celular, $id_cargo, $id_unidad, $clave, $clave);
+                $data = $this->model->registrarUsuario($ci, $nombres, $apellidos, $celular, $id_cargo, $id_unidad, $clave);
                 if ($data == "ok") {
                     $dataus = $this->model->getMaxIdUsuario();
                     foreach ($dataus as $row) {
@@ -182,7 +186,7 @@ class Usuarios extends Controller
             die();
 
         }
-    }  
+    }
 
     public function registrar()
     {

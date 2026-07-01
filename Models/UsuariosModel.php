@@ -31,7 +31,12 @@ class UsuariosModel extends Query
         $data = $this->selectAll($sql);
         return $data;
     }
-
+   public function ExisteCI($ci)
+    {
+        $verificar = "SELECT * FROM usuarios WHERE ci= $ci";
+        $existe = $this->select($verificar);
+        return $existe;
+    }
     public function registrarUsuario(string $ci, string $nombres, string $apellidos, int $celular, int $id_cargo, int $id_unidad, string $clave)
     {
         $this->ci = $ci;

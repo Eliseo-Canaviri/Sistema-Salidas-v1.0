@@ -64,6 +64,9 @@
       font-size: 1.1rem;
       color: #7c8fac;
     }
+    .text-uppercase-input {
+    text-transform: uppercase;
+}
   </style>
 </head>
 
@@ -100,7 +103,7 @@
 
               <!-- Contraseña -->
               <div class="form-floating mb-4 position-relative">
-                <input type="password" class="form-control" id="clave" name="clave" placeholder="Contraseña" required>
+                <input type="password" class="form-control text-uppercase-input" id="clave" name="clave" placeholder="Contraseña" required>
 
                 <label for="clave">
                   <iconify-icon icon="solar:lock-password-bold"></iconify-icon>

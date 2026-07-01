@@ -78,7 +78,7 @@
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <input type="hidden" id="id_cargo" name="id_cargo">
+                                    <input type="text" id="id_cargo" name="id_cargo">
                                     <div class="form-floating">
                                         <input class="form-control text-uppercase-input" id="select_cargo"
                                             name="select_cargo" type="text" placeholder="Buscar ...">
@@ -93,7 +93,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <input type="hidden" id="id_unidad" name="id_unidad">
+                                    <input type="text" id="id_unidad" name="id_unidad">
                                     <div class="form-floating">
                                         <input class="form-control text-uppercase-input" id="select_unidad"
                                             name="select_unidad" type="text" placeholder="Buscar ...">
