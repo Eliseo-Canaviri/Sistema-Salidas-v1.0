@@ -125,16 +125,11 @@ class Usuarios extends Controller
         } else {
             if ($id == "") {
 
-
-
-                $dataci = $this->model->ExisteCI($ci);
-                if ($dataci == "existe") {
-                } else {
-
-
-
-
-                }
+             //    $dataci = $this->model->ExisteCI($ci);
+            //     if ($dataci == "existe") {
+           //     } else {
+          //   }
+          
                 if (empty($id_cargo)) {
 
                     $resCargo = $this->model->registrarCargo($select_cargo);
@@ -142,7 +137,6 @@ class Usuarios extends Controller
                     $id_cargor = $this->model->getMaxIdCargo();
                     $id_cargo = (int) $id_cargor['id_cargo'];
                 } else {
-
                     $data = "Error: campos no están vacíos.";
                 }
                 if (empty($id_unidad)) {
@@ -150,7 +144,6 @@ class Usuarios extends Controller
                     $id_unidadr = $this->model->getMaxIdUnidad();
                     $id_unidad = (int) $id_unidadr['id_unidad'];
                 } else {
-
                     $data = "Error:  campos no están vacíos.";
                 }
                 // Generar clave: inicial de nombre + inicial de apellido + CI
