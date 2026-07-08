@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-06-2026 a las 05:54:58
+-- Tiempo de generación: 08-07-2026 a las 21:26:29
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -38,9 +38,7 @@ CREATE TABLE `cargos` (
 --
 
 INSERT INTO `cargos` (`id_cargo`, `nombre`, `estado`) VALUES
-(1, 'ENCARGADO DE SISTEMAS Y ASISTENTE DE ACTVIOS FIJOS', 1),
-(2, 'ASISTENTE DE TECNICA III', 1),
-(3, 'SISTEMAS', 1);
+(1, 'SISTEMAS', 1);
 
 -- --------------------------------------------------------
 
@@ -59,9 +57,7 @@ CREATE TABLE `detalle_permisos` (
 --
 
 INSERT INTO `detalle_permisos` (`id`, `id_usuario`, `id_permiso`) VALUES
-(1, 1, 15),
-(2, 2, 15),
-(3, 3, 15);
+(1, 1, 15);
 
 -- --------------------------------------------------------
 
@@ -104,7 +100,8 @@ INSERT INTO `permisos` (`id_permiso`, `permiso`, `estado`) VALUES
 (10, 'Usuarios', 1),
 (15, 'Salidas', 1),
 (16, 'Cargos', 1),
-(17, 'Unidades', 1);
+(17, 'Unidades', 1),
+(18, 'Vacaciones', 1);
 
 -- --------------------------------------------------------
 
@@ -127,23 +124,6 @@ CREATE TABLE `salidas` (
   `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `salidas`
---
-
-INSERT INTO `salidas` (`id_salida`, `actividad`, `lugar`, `transporte`, `fecha_salida`, `hora_salida`, `fecha_llegada`, `hora_llegada`, `id_chofer`, `id_usuario`, `estado`, `fecha_registro`) VALUES
-(1, '¡Hola! Qué gusto saludarte. Soy tu asistente personal listo para ayudarte con lo que necesites, ya sea buscar información local, organizar un viaje, o resolver cualquier duda.', 'JILAWI', 'Vehículo de la Alcaldía', '2026-06-11', '17:38:00', '2026-06-11', '18:40:00', 2, 1, 1, '2026-06-11 21:39:14'),
-(2, 'JJJJJJ', 'TTTTT', 'Vehículo de la Alcaldía', '2026-06-11', '17:38:00', '2026-06-11', '00:00:00', 2, 1, 1, '2026-06-11 21:41:07'),
-(3, 'ERERERER', 'TTTTT', 'Otro', '2026-06-11', '17:44:00', '2026-06-11', '00:00:00', 2, 1, 1, '2026-06-11 21:44:20'),
-(4, 'ERTRETER', 'RETERTER', 'Transporte Público', '2026-06-11', '17:49:00', '2026-06-11', '00:00:00', 1, 2, 1, '2026-06-11 21:49:33'),
-(5, 'ffff f f ffffff kkk mmmmmmm bbbb bbb', 'hhhhh ', 'Vehículo de la Alcaldía', '2026-06-11', '17:55:00', '2026-06-11', '00:00:00', 1, 2, 1, '2026-06-11 21:56:06'),
-(6, 'DFSDFSDFS ', 'NNNNN', 'Vehículo de la Alcaldía', '2026-06-11', '17:56:00', '2026-06-11', '00:00:00', 2, 1, 0, '2026-06-11 21:56:55'),
-(7, 'UUUUUUUUU', 'HHHH', 'VEHÍCULO PROPIO', '2026-06-11', '21:31:00', '2026-06-11', '21:32:00', 2, 2, 0, '2026-06-12 01:34:03'),
-(8, 'oooo', 'llll', 'TRANSPORTE PÚBLICO', '2026-06-11', '21:35:00', '2026-06-11', '23:37:00', 1, 2, 1, '2026-06-12 01:36:41'),
-(9, 'BBBBBBBBBBBBBB', 'MMMMMMMMMM', 'A PIE', '2026-06-11', '21:35:00', '2026-06-11', '01:00:00', 2, 2, 1, '2026-06-12 01:37:17'),
-(10, 'cccccc', 'LLLLLLLL', 'VEHÍCULO DE LA ALCALDÍA', '2026-06-11', '21:59:00', '2026-06-11', '19:05:00', 1, 3, 1, '2026-06-12 02:00:15'),
-(11, 'FFFFFFFFFFFFF', 'YYYYYYYYYYYY', 'TRANSPORTE PÚBLICO', '2026-06-11', '22:07:00', '2026-06-11', '18:05:00', 2, 3, 0, '2026-06-12 02:09:31');
-
 -- --------------------------------------------------------
 
 --
@@ -161,9 +141,7 @@ CREATE TABLE `unidades` (
 --
 
 INSERT INTO `unidades` (`id_unidad`, `nombre`, `estado`) VALUES
-(1, 'ACTIVOS FIJOS', 1),
-(2, 'TECNICA', 1),
-(3, 'TECNICA', 1);
+(1, 'ADMINISTRACION', 1);
 
 -- --------------------------------------------------------
 
@@ -179,7 +157,7 @@ CREATE TABLE `usuarios` (
   `celular` int(11) NOT NULL,
   `id_cargo` int(100) NOT NULL,
   `id_unidad` int(11) NOT NULL,
-  `clave` varchar(100) NOT NULL,
+  `clave` varchar(250) NOT NULL,
   `estado` int(11) NOT NULL DEFAULT 1,
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -189,9 +167,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `ci`, `nombres`, `apellidos`, `celular`, `id_cargo`, `id_unidad`, `clave`, `estado`, `fecha_creacion`) VALUES
-(1, '123', 'ELISEO ', 'CANAVIRI JACHACATA', 2147483647, 1, 1, '2a4c907c8bcc582969efe847d52e9ff6364704f6b1fc1bdf5fb381e9ae8fee6d', 1, '2026-06-11 21:35:15'),
-(2, '8581', 'ANA', 'LOPEZ MAMANI', 345435, 2, 2, '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1, '2026-06-11 21:36:44'),
-(3, '6565', 'EVA', 'CONDORI', 5465464, 3, 3, '5432b2a28e629ecd941e86848e437bee4543a9c7cfb6887c7a8a290a7c8469f0', 1, '2026-06-12 01:59:06');
+(1, '123', 'ELISEO', 'CANAVIRI', 43343, 1, 1, '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1, '2026-07-08 16:11:35');
 
 --
 -- Índices para tablas volcadas
@@ -251,13 +227,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `cargos`
 --
 ALTER TABLE `cargos`
-  MODIFY `id_cargo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_cargo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_permisos`
 --
 ALTER TABLE `detalle_permisos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `empresa`
@@ -269,25 +245,25 @@ ALTER TABLE `empresa`
 -- AUTO_INCREMENT de la tabla `permisos`
 --
 ALTER TABLE `permisos`
-  MODIFY `id_permiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_permiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `salidas`
 --
 ALTER TABLE `salidas`
-  MODIFY `id_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_salida` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `unidades`
 --
 ALTER TABLE `unidades`
-  MODIFY `id_unidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_unidad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas

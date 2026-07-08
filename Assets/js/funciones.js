@@ -1017,9 +1017,12 @@ function registrarSalida(e) {
     http.send(new FormData(frm));
     http.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-       console.log(this.responseText);
+      
+              tblSalidas.ajax.reload();
+      
+        console.log(this.responseText);
         const res = JSON.parse(this.responseText);
-       // console.log("Respuesta del servidor:", res);
+       console.log("Respuesta del servidor:", res);
         alertas(res.msg, res.icono);
             setTimeout(() => {
              $("#modal_salida").modal("hide");
@@ -1031,6 +1034,8 @@ function registrarSalida(e) {
           if (res.id_salida) {
             console.log("ID de salida generado:", res.id_salida);
             const ruta =base_url + "Reportes/pdf7/" + res.id_salida;
+              tblSalidas.ajax.reload();
+
             // Abrir PDF en nueva pestaña
             // Cerrar modal
             setTimeout(() => {

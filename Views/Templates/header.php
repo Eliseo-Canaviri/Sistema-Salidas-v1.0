@@ -16,13 +16,13 @@
   <link href="<?php echo base_url; ?>Assets/css/ojo.css" rel="stylesheet" />
 
   <link rel="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" href="">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" />
 </head>
 
-<body >
-    <?php
-                    date_default_timezone_set('America/La_Paz');
-                    ?>
+<body>
+  <?php
+  date_default_timezone_set('America/La_Paz');
+  ?>
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
@@ -93,10 +93,7 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-small-cap text-uppercase text-muted opacity-75 fw-bold fs-2 tracking-wider mb-2">
-              <i class="ti ti-car nav-small-cap-icon fs-6 me-2"></i>
-              <span class="hide-menu">Salidas</span>
-            </li>
+
 
             <li class="sidebar-item mb-1">
               <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
@@ -107,13 +104,19 @@
               </a>
 
               <ul aria-expanded="false" class="collapse first-level ps-3">
+
                 <li class="sidebar-item">
-                  <a href="<?php echo base_url; ?>Salidas"
-                    class="sidebar-link sub-link <?php echo (basename($_SERVER['REQUEST_URI']) == 'Salidas') ? 'active-blue' : ''; ?>">
-                    <div class="bullet-dot me-2"></div>
+                  <a href="<?php echo base_url; ?>Salidas" class="sidebar-link sub-link">
                     <span class="hide-menu">Salidas</span>
                   </a>
                 </li>
+
+                <li class="sidebar-item">
+                  <a href="<?php echo base_url; ?>Vacaciones" class="sidebar-link sub-link ">
+                    <span class="hide-menu">Vacaciones</span>
+                  </a>
+                </li>
+
               </ul>
             </li>
 
@@ -212,8 +215,7 @@
       date_default_timezone_set('America/La_Paz');
       ?>
       <!--  Header End -->
-     
-        <div class="container-fluid">
-            <div class="row">
-                <!-- Todo tu contenido aquí -->
-      
+
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Todo tu contenido aquí -->
