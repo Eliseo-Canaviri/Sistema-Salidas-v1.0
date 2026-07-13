@@ -273,7 +273,7 @@ document.addEventListener("DOMContentLoaded", function () {
         render: function (data, type, row) {
           if (data && data.length > 50) {
             return `
-                <span>${data.substring(0,10)}...</span>
+                <span>${data.substring(0, 10)}...</span>
                 <a href="#" class="ver-mas" data-texto="${data.replace(/"/g, "&quot;")}">
                     Ver más
                 </a>
@@ -393,7 +393,68 @@ document.addEventListener("DOMContentLoaded", function () {
       "<'row'<'col-sm-5'i><'col-sm-7'p>>",
   });
 
-  //Buscar funcionario
+  //Vacaciones
+  //fin de unidad
+  tblvacacion = $("#tblvacacion").DataTable({
+    ajax: {
+      url: base_url + "Vacaciones/listar",
+      dataSrc: "",
+    },
+    columns: [
+      { data: "id_vacacion" },
+      { data: "id_usuario" },
+      { data: "fecha_inicio" },
+      { data: "fecha_fin" },
+      { data: "dias" },
+      { data: "descripcion" },
+      { data: "estado" },
+      { data: "acciones" },
+    ],
+    responsive: true,
+    bDestroy: true,
+    iDisplayLength: 10,
+    order: [[0, "desc"]],
+    language,
+    buttons,
+    dom:
+      "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
+      "<'row'<'col-sm-12'tr>>" +
+      "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+  });
+
+  //Buscar vacaciones
+
+   tblAprobadosVista = $("#tblAprobadosVista").DataTable({
+    ajax: {
+      url: base_url + "Vacaciones/aprobados",
+      dataSrc: "",
+    },
+    columns: [
+      { data: "id_vacacion" },
+      { data: "id_usuario" },
+      { data: "fecha_inicio" },
+      { data: "fecha_fin" },
+      { data: "dias" },
+      { data: "descripcion" },
+      { data: "estado" },
+      { data: "acciones" },
+    ],
+    responsive: true,
+    bDestroy: true,
+    iDisplayLength: 10,
+    order: [[0, "desc"]],
+    language,
+    buttons,
+    dom:
+      "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
+      "<'row'<'col-sm-12'tr>>" +
+      "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+  });
+
+
+
+
+
   $("#select_funcioanariopdf").autocomplete({
     minLength: 1,
     source: function (request, response) {
@@ -413,9 +474,6 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("select_funcioanariopdf").value = ui.item.nombres;
     },
   });
-
-
-
 });
 
 function editarPerfil() {
@@ -985,8 +1043,8 @@ function frmSalida() {
     '<i class="fa-solid fa-person-walking-arrow-right me-2"></i> Nueva Salida';
   document.getElementById("btnAccionSalida").innerHTML =
     '<i class="fas fa-save"></i> Registrar';
-    document.getElementById("id_salida").value = "";
-    document.getElementById("frmSalida").reset();
+  document.getElementById("id_salida").value = "";
+  document.getElementById("frmSalida").reset();
 
   $("#modal_salida").modal("show");
 }
@@ -1005,8 +1063,8 @@ function registrarSalida(e) {
     actividad == "" ||
     lugar == "" ||
     fecha_salida == "" ||
-    hora_salida == ""||
-    id_chofer==""
+    hora_salida == "" ||
+    id_chofer == ""
   ) {
     alertas("Todos los campos obligatorios deben llenarse ☺", "warning");
   } else {
@@ -1017,24 +1075,23 @@ function registrarSalida(e) {
     http.send(new FormData(frm));
     http.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-      
-              tblSalidas.ajax.reload();
-      
+        tblSalidas.ajax.reload();
+
         console.log(this.responseText);
         const res = JSON.parse(this.responseText);
-       console.log("Respuesta del servidor:", res);
+        console.log("Respuesta del servidor:", res);
         alertas(res.msg, res.icono);
-            setTimeout(() => {
-             $("#modal_salida").modal("hide");
-            }, 3000);
-        
+        setTimeout(() => {
+          $("#modal_salida").modal("hide");
+        }, 3000);
+
         // Validar si la respuesta fue exitosa
         if ((res.icono = "success")) {
           // Verificar que existe id_salida antes de generar PDF
           if (res.id_salida) {
             console.log("ID de salida generado:", res.id_salida);
-            const ruta =base_url + "Reportes/pdf7/" + res.id_salida;
-              tblSalidas.ajax.reload();
+            const ruta = base_url + "Reportes/pdf7/" + res.id_salida;
+            tblSalidas.ajax.reload();
 
             // Abrir PDF en nueva pestaña
             // Cerrar modal
@@ -1044,8 +1101,7 @@ function registrarSalida(e) {
             }, 3000); // Pequeño delay para mejor UX
             $("#modal_salida").modal("hide");
             frm.reset();
-          document.getElementById("frmSalida").reset();
-
+            document.getElementById("frmSalida").reset();
           } else {
             console.warn("No se recibió id_salida en la respuesta");
           }
@@ -1058,7 +1114,6 @@ function registrarSalida(e) {
             $("#nuevo_salida").modal("hide");
           }, 300);
         }
-      
       }
     };
   }
@@ -1435,7 +1490,6 @@ function btnEditarChoferes(id) {
     }
   };
 }
-
 function btnEliminarChoferes(id) {
   Swal.fire({
     title: "Estas Seguro de Eliminar?",
@@ -1462,7 +1516,6 @@ function btnEliminarChoferes(id) {
     }
   });
 }
-
 function btnReingresarChoferes(id) {
   Swal.fire({
     title: "Estas Seguro de Reingresar?",
@@ -1493,6 +1546,172 @@ function btnReingresarChoferes(id) {
     }
   });
 }
+
+//Inico de Cargos
+function frmVacaciones() {
+  document.getElementById("title").innerHTML = "Nueva Vacacion";
+  document.getElementById("btnAccion").innerHTML = "registrar";
+  document.getElementById("frmVacaciones").reset();
+
+  $("#nuevo_vacacion").modal("show"); //esta mostrando modal de usuario
+  document.getElementById("id").value = "";
+   calcularDiasSolicitados(); // Inicializar el cálculo de días solicitados
+}
+
+function calcularDiasSolicitados() {
+  const fechaInicioVal = document.getElementById("fecha_inicio").value;
+  const fechaFinVal = document.getElementById("fecha_fin").value;
+
+  if (!fechaInicioVal || !fechaFinVal) {
+    document.getElementById("dias").value = "";
+    return;
+  }
+
+  // Usar "T00:00:00" evita que JavaScript desfase las fechas por la zona horaria
+  const fechaInicio = new Date(fechaInicioVal + "T00:00:00");
+  const fechaFin = new Date(fechaFinVal + "T00:00:00");
+
+  if (isNaN(fechaInicio.getTime()) || isNaN(fechaFin.getTime())) {
+    document.getElementById("dias").value = "";
+    return;
+  }
+
+  if (fechaInicio > fechaFin) {
+    document.getElementById("dias").value = "0";
+    return;
+  }
+
+  let diasHabiles = 0;
+  let fechaActual = new Date(fechaInicio.getTime());
+
+  while (fechaActual <= fechaFin) {
+    const diaSemana = fechaActual.getDay();
+    
+    // 0 = Domingo, 6 = Sábado
+    if (diaSemana !== 0 && diaSemana !== 6) {
+      diasHabiles++;
+    }
+    
+    fechaActual.setDate(fechaActual.getDate() + 1);
+  }
+
+  document.getElementById("dias").value = diasHabiles;
+  console.log("Días hábiles calculados:", diasHabiles);
+}
+// Llamar a la función cuando cambie alguna fecha para actualizar automáticamente
+fecha_inicio.addEventListener("change", calcularDiasSolicitados);
+fecha_fin.addEventListener("change", calcularDiasSolicitados);
+
+function registrarVacaciones(e) {
+  e.preventDefault();
+
+  const fecha_inicio = document.getElementById("fecha_inicio");
+  const fecha_fin = document.getElementById("fecha_fin");
+  const dias = document.getElementById("dias");
+
+  if (fecha_inicio.value == "" || fecha_fin.value == "") {
+    alertas("Todos los Campos son obligatorios ☺", "warning");
+  } else {
+    const url = base_url + "Vacaciones/registrar"; //estamos enviando ala controlador
+    const frm = document.getElementById("frmVacaciones");
+    const http = new XMLHttpRequest();
+    http.open("POST", url, true);
+    http.send(new FormData(frm));
+    http.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log(this.responseText);
+        const res = JSON.parse(this.responseText);
+        $("#nuevo_vacacion").modal("hide"); //para que se oculte el domal de usuario
+        alertas(res.msg, res.icono);
+        frm.reset();
+
+        tblvacacion.ajax.reload(); //para recargar la pagina
+      }
+    };
+  }
+}
+function btnEditarVacaciones(id) {
+  document.getElementById("title").innerHTML = "Actualizar Vacacion";
+  document.getElementById("btnAccion").innerHTML = "Modificar";
+  const url = base_url + "Vacaciones/editar/" + id; //estamos enviando ala controlador
+  const http = new XMLHttpRequest();
+  http.open("GET", url, true);
+  http.send();
+  http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(this.responseText);
+      const res = JSON.parse(this.responseText);
+
+      document.getElementById("id").value = res.id_vacacion;
+      document.getElementById("fecha_inicio").value = res.fecha_inicio;
+      document.getElementById("fecha_fin").value = res.fecha_fin;
+      document.getElementById("dias").value = res.dias;
+      document.getElementById("descripcion").value = res.descripcion;
+
+      //document.getElementById("claves").classList.add("d-none"); //esto es para esconder campos de claves
+      $("#nuevo_vacacion").modal("show");
+    }
+  };
+}
+
+function btnEliminarVacaciones(id) {
+  Swal.fire({
+    title: "Estas Seguro de Eliminar?",
+    text: "El usuario nose eliminara de forma permanente,solo cambiara a estado inactivo!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si!",
+    cancelButtonText: "No",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = base_url + "Vacaciones/eliminar/" + id; //estamos enviando ala controlador
+      const http = new XMLHttpRequest();
+      http.open("GET", url, true);
+      http.send();
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const res = JSON.parse(this.responseText);
+          tblvacacion.ajax.reload(); //recargar tabla
+          alertas(res.msg, res.icono);
+        }
+      };
+    }
+  });
+}
+
+function btnReingresarVacaciones(id) {
+  Swal.fire({
+    title: "Estas Seguro de Reingresar?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si!",
+    cancelButtonText: "No",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = base_url + "Vacaciones/reingresar/" + id; //estamos enviando ala controlador
+      const http = new XMLHttpRequest();
+      http.open("GET", url, true);
+      http.send();
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText);
+          const res = JSON.parse(this.responseText);
+          if (res == "ok") {
+            Swal.fire("Mensaje!", "Cargo Reingresado con exito.", "success");
+            tblvacacion.ajax.reload(); //recargar pagina de usuario
+          } else {
+            Swal.fire("Mensaje!", "res", "error");
+          }
+        }
+      };
+    }
+  });
+}
+///fin cargos
 
 function alertas(mensaje, icono) {
   Swal.fire({

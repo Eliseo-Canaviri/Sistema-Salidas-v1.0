@@ -7,33 +7,19 @@ class VacacionesModel extends Query
     }
 
     // Obtener todas las salidas activas o inactivas
-    public function getSalidas(int $id_usuario, int $estado)
+    public function getVacaciones(int $id_usuario, int $estado)
     {
-        $sql = "SELECT s.id_salida, s.id_usuario, 
-                       CONCAT(u.nombres, ' ', u.apellidos) AS nombre_usuario,
-                       s.actividad, s.lugar, s.transporte,
-                       s.fecha_salida, s.hora_salida,s.fecha_llegada, s.hora_llegada,
-                       s.estado, s.fecha_registro
-                FROM salidas s
-                INNER JOIN usuarios u ON s.id_usuario = u.id
-               
-
-                WHERE s.estado = $estado AND s.id_usuario = $id_usuario
-                ORDER BY s.id_salida DESC";
+        $sql = "SELECT *
+                FROM vacaciones
+                WHERE estado = $estado AND id_usuario =$id_usuario";
         $data = $this->selectAll($sql);
         return $data;
     }
-    public function getSalidasadmin( $estado)
+    public function getVacaionesadmin($estado)
     {
-        $sql = "SELECT s.id_salida, s.id_usuario, 
-                       CONCAT(u.nombres, ' ', u.apellidos) AS nombre_usuario,
-                       s.actividad, s.lugar, s.transporte,
-                       s.fecha_salida, s.hora_salida,s.fecha_llegada, s.hora_llegada,
-                       s.estado, s.fecha_registro
-                FROM salidas s
-                INNER JOIN usuarios u ON s.id_usuario = u.id
-                WHERE s.estado = $estado 
-                ORDER BY s.id_salida DESC";
+        $sql = "SELECT*
+                FROM vacaciones
+                WHERE estado = $estado  ";
         $data = $this->selectAll($sql);
         return $data;
     }
@@ -46,25 +32,21 @@ class VacacionesModel extends Query
         return $data;
     }
     // Obtener una salida por id
-    public function getSalidaEditar(int $id_salida)
+    public function getEditar(int $id_salida)
     {
-        $sql = "SELECT sa.* ,us.nombres,us.id
+        $sql = "SELECT *
 
-            FROM salidas as sa 
-            INNER JOIN usuarios as us
-            ON  sa.id_usuario=us.id
-
-            WHERE sa.id_salida =  $id_salida";
+            FROM vacaciones 
+            WHERE id_vacacion =  $id_salida";
         $data = $this->select($sql);
         return $data;
     }
 
     // Registrar nueva salida
-    public function registrarSalida(string $actividad, string $lugar, string $transporte, string $fecha_salida, string $hora_salida, string $fecha_llegada, string $hora_llegada, int $id_chofer, int $id_usuario)
+    public function registrar(int $id_usuario, string $fecha_inicio, string $fecha_fin, string $dias, string $descripcion)
     {
-        $sql = "INSERT INTO salidas ( actividad, lugar, transporte, fecha_salida, hora_salida,fecha_llegada, hora_llegada,id_chofer, id_usuario) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
-        $datos = array($actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $fecha_llegada, $hora_llegada, $id_chofer, $id_usuario);
+        $sql = "INSERT INTO vacaciones ( id_usuario,fecha_inicio, fecha_fin, dias, descripcion)     VALUES (?, ?, ?, ?,?)";
+        $datos = array($id_usuario, $fecha_inicio, $fecha_fin, $dias, $descripcion);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             return "ok";
@@ -74,10 +56,12 @@ class VacacionesModel extends Query
     }
 
     // Modificar una salida existente
-    public function modificarSalida(string $actividad, string $lugar, string $transporte, string $fecha_salida, string $hora_salida, string $fecha_llegada, string $hora_llegada, int $id_chofer, int $id_usuario, int $id_salida)
+    public function modificar(int $id_usuario ,string $fecha_inicio, string $fecha_fin, string $dias, string $descripcion, int $id_vacacion)
     {
-        $sql = "UPDATE salidas SET  actividad=?, lugar=?, transporte=?, fecha_salida=?, hora_salida=?, fecha_llegada=?, hora_llegada=?,id_chofer=?, id_usuario=? WHERE id_salida=?";
-        $datos = array($actividad, $lugar, $transporte, $fecha_salida, $hora_salida, $fecha_llegada, $hora_llegada, $id_chofer, $id_usuario, $id_salida);
+
+
+        $sql = "UPDATE vacaciones SET id_usuario=?, fecha_inicio=?, fecha_fin=?, dias=?, descripcion=? WHERE id_vacacion=?";
+        $datos = array($id_usuario, $fecha_inicio, $fecha_fin, $dias, $descripcion, $id_vacacion);
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             return "modificado";
@@ -87,9 +71,9 @@ class VacacionesModel extends Query
     }
 
     // Cambiar estado (activar/desactivar)
-    public function accionSalida(int $estado, int $id_salida)
+    public function accionVacaciones(int $estado, int $id_salida)
     {
-        $sql = "UPDATE salidas SET estado=? WHERE id_salida=?";
+        $sql = "UPDATE vacaciones SET estado=? WHERE id_vacacion=?";
         $datos = array($estado, $id_salida);
         $data = $this->save($sql, $datos);
         return $data;
@@ -103,9 +87,9 @@ class VacacionesModel extends Query
         return $data;
     }
 
-    function MaxIdSalida()
+    function MaxIdVacacion()
     {
-        $sql = "SELECT MAX(id_salida) AS id_salida FROM salidas";
+        $sql = "SELECT MAX(id_vacacion) AS id_vacacion FROM vacaciones";
         $data = $this->select($sql);
         return $data;
     }
