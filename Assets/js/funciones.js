@@ -153,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
       { data: "celular" },
       { data: "id_cargo" },
       { data: "id_unidad" },
+
       { data: "estado" },
       { data: "acciones" },
     ],
@@ -424,7 +425,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   //Buscar vacaciones
 
-   tblAprobadosVista = $("#tblAprobadosVista").DataTable({
+  tblAprobadosVista = $("#tblAprobadosVista").DataTable({
     ajax: {
       url: base_url + "Vacaciones/aprobados",
       dataSrc: "",
@@ -451,9 +452,32 @@ document.addEventListener("DOMContentLoaded", function () {
       "<'row'<'col-sm-5'i><'col-sm-7'p>>",
   });
 
-
-
-
+  tblInactivosVista = $("#tblInactivosVista").DataTable({
+    ajax: {
+      url: base_url + "Vacaciones/inactivos",
+      dataSrc: "",
+    },
+    columns: [
+      { data: "id_vacacion" },
+      { data: "id_usuario" },
+      { data: "fecha_inicio" },
+      { data: "fecha_fin" },
+      { data: "dias" },
+      { data: "descripcion" },
+      { data: "estado" },
+      { data: "acciones" },
+    ],
+    responsive: true,
+    bDestroy: true,
+    iDisplayLength: 10,
+    order: [[0, "desc"]],
+    language,
+    buttons,
+    dom:
+      "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
+      "<'row'<'col-sm-12'tr>>" +
+      "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+  });
 
   $("#select_funcioanariopdf").autocomplete({
     minLength: 1,
@@ -1555,7 +1579,7 @@ function frmVacaciones() {
 
   $("#nuevo_vacacion").modal("show"); //esta mostrando modal de usuario
   document.getElementById("id").value = "";
-   calcularDiasSolicitados(); // Inicializar el cálculo de días solicitados
+  calcularDiasSolicitados(); // Inicializar el cálculo de días solicitados
 }
 
 function calcularDiasSolicitados() {
@@ -1586,12 +1610,12 @@ function calcularDiasSolicitados() {
 
   while (fechaActual <= fechaFin) {
     const diaSemana = fechaActual.getDay();
-    
+
     // 0 = Domingo, 6 = Sábado
     if (diaSemana !== 0 && diaSemana !== 6) {
       diasHabiles++;
     }
-    
+
     fechaActual.setDate(fechaActual.getDate() + 1);
   }
 
@@ -1712,6 +1736,25 @@ function btnReingresarVacaciones(id) {
   });
 }
 ///fin cargos
+
+function aprobar(id) {
+  console.log(id);
+  const url = base_url + "Vacaciones/aprobar/" + id; //estamos enviando ala controlador
+  const http = new XMLHttpRequest();
+  http.open("GET", url, true);
+  http.send();
+  http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(this.responseText);
+      const res = JSON.parse(this.responseText);
+       alertas(res.msg, res.icono);
+      if (res.icono == "success") {
+        
+        tblvacacion.ajax.reload(); //recargar pagina de usuario
+      }
+    }
+  };
+}
 
 function alertas(mensaje, icono) {
   Swal.fire({

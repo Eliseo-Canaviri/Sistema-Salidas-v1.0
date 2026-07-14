@@ -10,7 +10,7 @@
             class="fa fa-user-plus"></i></button>
     <a class="btn btn-info mb-1   " href="<?php echo base_url; ?>Vacaciones/aprobadosVista"> Aprobado <i
             class="fa-solid fa-user-slash"></i></a>
-    <a class="btn btn-warning mb-1   " href="<?php echo base_url; ?>Vacaciones/inactivos"> Inactivos <i
+    <a class="btn btn-warning mb-1   " href="<?php echo base_url; ?>Vacaciones/inactivosVista"> Inactivos <i
             class="fa-solid fa-user-slash"></i></a>
 </div>
 

@@ -124,7 +124,13 @@ WHERE sa.id_salida = $id";
         return $data;
     }
 
+   public function getRRHH(int $id_usuario)
+    {//este metodo vamos llamar de controlador
+        $sql = "SELECT * FROM usuarios WHERE id= $id_usuario ";
+        $data = $this->select($sql);
 
+        return $data;
+    }
 
 
 }

@@ -31,6 +31,7 @@
               <th scope="col">Celular</th>
               <th scope="col">id_cargo</th>
               <th scope="col">id_unidad</th>
+              
               <th scope="col">Estado</th>
               <th scope="col">Acciones</th>
             </tr>

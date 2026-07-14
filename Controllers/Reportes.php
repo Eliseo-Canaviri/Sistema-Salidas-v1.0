@@ -133,8 +133,9 @@ class Reportes extends Controller
 
 
 
-    public function pdf7($id)
+ public function pdf7($id)
     {
+
 
         // 1. Obtener los datos del modelo
         $data = $this->model->getSalidasPdf($id);
@@ -158,8 +159,8 @@ class Reportes extends Controller
         $pdf->setPrintFooter(false);
 
         // Márgenes generosos para llenar la página completa de forma elegante
-        // Izquierdo: 20, Superior: 20, Derecho: 20
-        $pdf->SetMargins(20, 20,10);
+        // Izquierdo: 20, Superior: 20, Derecho: 10
+        $pdf->SetMargins(20, 20, 10);
         $pdf->SetAutoPageBreak(TRUE, 20);
 
         // Añadir página única
@@ -171,14 +172,22 @@ class Reportes extends Controller
         $lineColor = [180, 180, 180];    // Gris de división suave
         $bgColor = [245, 247, 250];      // Fondo tenue para celdas de control
 
-        // Ancho útil disponible (Carta = 215.9mm - 40mm de márgenes = 175.9mm, aproximado a 176mm)
+        // Ancho útil disponible
         $txtWidth = 185;
 
         // --- ENCABEZADO PRINCIPAL (LLENADO COMPLETO) ---
-        // Logo institucional (X=20mm, Y=18mm, Ancho=26mm)
+        // Logo institucional (X=20mm, Y=12mm, Ancho=26mm)
         if (file_exists('Assets/img/logo.jpg')) {
             $pdf->Image('Assets/img/logo.jpg', 20, 12, 26, 31);
         }
+        
+        // Ruta de la firma del empleado (Removiendo la barra inclinada inicial para evitar problemas de ruta local en file_exists)
+        $firma_ruta_cruda =  'Assets/img/firmas/fir.png'; 
+        $firma_servidor_publico = ltrim($firma_ruta_cruda, '/'); 
+
+
+  
+
 
         $pdf->SetX(50);
         $pdf->SetFont('helvetica', 'B', 14);
@@ -216,7 +225,7 @@ class Reportes extends Controller
         $pdf->Cell($txtWidth - 42, 8, $salida['nombre_cargo'], 'B', 1, 'L');
         $pdf->Ln(2);
 
-        // Motivo / Actividad principal (Utiliza MultiCell para soportar múltiples párrafos o textos largos)
+        // Motivo / Actividad principal
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->Cell(42, 8, 'LUGAR DE DESTINO:', 0, 0, 'L');
         $pdf->SetFont('helvetica', '', 10.5);
@@ -225,8 +234,6 @@ class Reportes extends Controller
 
 
         // --- SECCIÓN 2: CONTROL DE TIEMPOS Y HORARIOS (TABLA MAXIMIZADA) ---
-        $w = [36, 45, 45, 50]; // Distribución exacta para sumar 176mm
-
         $pdf->SetFont('helvetica', 'B', 9);
         $pdf->SetFillColor($bgColor[0], $bgColor[1], $bgColor[2]);
         $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
@@ -303,7 +310,7 @@ class Reportes extends Controller
         $boxY = $pdf->GetY();
         $pdf->SetFillColor($bgColor[0], $bgColor[1], $bgColor[2]);
         $pdf->SetDrawColor(210, 215, 223);
-        $pdf->Rect(20, $boxY, $txtWidth, 18, 'DF'); // Altura ajustada a 18mm para presencia visual
+        $pdf->Rect(20, $boxY, $txtWidth, 18, 'DF'); // Altura ajustada a 18mm
 
         $pdf->SetY($boxY + 2);
         $pdf->SetFont('helvetica', 'B', 9.5);
@@ -376,7 +383,8 @@ class Reportes extends Controller
 
         // Posicionar debajo del cuadro
         $pdf->SetY($y + $altoCuadro + 30);
-        
+
+
         // --- SECCIÓN 5: RECUADRO DE VALIDACIÓN (DESTINO) Y FIRMAS ---
         $yFirmas = $pdf->GetY();
 
@@ -391,311 +399,324 @@ class Reportes extends Controller
         $pdf->SetFont('helvetica', '', 7);
         $pdf->Cell(60, 3, '(Lugar donde realizó la actividad)', 0, 0, 'C');
 
-        // 5.2 Firma del Servidor Público (Centro-Derecha)
+
+  
+
         $pdf->SetXY(92, $yFirmas + 20);
         $pdf->SetDrawColor(120, 120, 120);
-        $pdf->Cell(48, 0, '', 'T', 1, 'C');
+        $pdf->Cell(48, 0, '', 'T', 1, 'C'); // Línea horizontal
         $pdf->SetX(92);
         $pdf->SetFont('helvetica', 'B', 8.5);
         $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
         $pdf->Cell(48, 4, 'FIRMA DEL SERVIDOR', 0, 0, 'C');
 
+   
+      // 5.2 Firma del Servidor Público (Centro-Derecha)
+        // Posicionamiento de la imagen de firma
+        if (!empty($firma_servidor_publico) && file_exists($firma_servidor_publico)) {
+            // Se calcula el X centrado en relación a la línea de firma (Ancho: 48mm, Iniciando en X=92)
+            // X_imagen = Centro_firma - (Ancho_firma / 2) -> 116 - (30 / 2) = 101mm
+            // Y_imagen = Colocamos la firma unos 14mm por encima de la línea de firma ($yFirmas + 20)
+            $pdf->Image($firma_servidor_publico, 156, $yFirmas + 6, 30, 13, '', '', '', false, 300, '', false, false, 0, false, false, false);
+        }
+
+
         // 5.3 Firma de Autorización RR.HH. (Derecha Extrema)
         $pdf->SetXY(148, $yFirmas + 20);
-        $pdf->Cell(48, 0, '', 'T', 1, 'C');
+        $pdf->Cell(48, 0, '', 'T', 1, 'C'); // Línea horizontal
         $pdf->SetX(148);
         $pdf->SetFont('helvetica', 'B', 8.5);
         $pdf->Cell(48, 4, 'AUTORIZADO POR: RR.HH.', 0, 0, 'C');
 
         // 4. Salida del archivo PDF directo en el navegador de forma limpia
         $pdf->Output('Hoja_de_Salida_Completa_GAMP.pdf', 'I');
-        
+
     }
 
-public function pdf8($id)
-{
-    // 1. Obtener los datos del modelo
-    $data = $this->model->getSalidasPdf($id);
-    $salida = $data[0];
-    date_default_timezone_set('America/La_Paz');
-    $fecha_actual = date('d/m/Y');
+    public function pdf8($id)
+    {
+        // 1. Obtener los datos del modelo
+        $data = $this->model->getSalidasPdf($id);
+        $salida = $data[0];
+        date_default_timezone_set('America/La_Paz');
+        $fecha_actual = date('d/m/Y');
 
-    // 2. Cargar TCPDF (Composer)
-    require_once 'vendor/autoload.php';
+        // 2. Cargar TCPDF (Composer)
+        require_once 'vendor/autoload.php';
 
-    // 3. Crear instancia en Tamaño CARTA (LETTER)
-    $pdf = new TCPDF('P', 'mm', 'LETTER', true, 'UTF-8', false);
+        // 3. Crear instancia en Tamaño CARTA (LETTER)
+        $pdf = new TCPDF('P', 'mm', 'LETTER', true, 'UTF-8', false);
 
-    // Metadata
-    $pdf->SetCreator('Sistema Administrativo');
-    $pdf->SetAuthor('GAM Pocoata');
-    $pdf->SetTitle('Hoja de Salida - ' . $fecha_actual);
+        // Metadata
+        $pdf->SetCreator('Sistema Administrativo');
+        $pdf->SetAuthor('GAM Pocoata');
+        $pdf->SetTitle('Hoja de Salida - ' . $fecha_actual);
 
-    // Limpiar cabeceras y pies por defecto
-    $pdf->setPrintHeader(false);
-    $pdf->setPrintFooter(false);
+        // Limpiar cabeceras y pies por defecto
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
 
-    // Márgenes simétricos exactos: 20mm izq, 20mm der = 175.9mm (utilizaremos 176mm exactos)
-    $pdf->SetMargins(20, 20, 20);
-    $pdf->SetAutoPageBreak(TRUE, 20);
+        // Márgenes simétricos exactos: 20mm izq, 20mm der = 175.9mm (utilizaremos 176mm exactos)
+        $pdf->SetMargins(20, 20, 20);
+        $pdf->SetAutoPageBreak(TRUE, 20);
 
-    // Añadir página única
-    $pdf->AddPage();
+        // Añadir página única
+        $pdf->AddPage();
 
-    // Paleta de Colores Institucionales Modernos
-    $primaryColor   = [15, 34, 64];     // Azul Marino Profundo (Predominante)
-    $secondaryColor = [41, 128, 185];   // Azul Eléctrico (Acentos)
-    $textColor      = [45, 55, 72];     // Gris Grafito (Texto ultra legible)
-    $lightTextColor = [113, 128, 150];  // Gris Secundario
-    $bgColor        = [247, 250, 252];  // Fondo Gris Claro/Plata
+        // Paleta de Colores Institucionales Modernos
+        $primaryColor = [15, 34, 64];     // Azul Marino Profundo (Predominante)
+        $secondaryColor = [41, 128, 185];   // Azul Eléctrico (Acentos)
+        $textColor = [45, 55, 72];     // Gris Grafito (Texto ultra legible)
+        $lightTextColor = [113, 128, 150];  // Gris Secundario
+        $bgColor = [247, 250, 252];  // Fondo Gris Claro/Plata
 
-    // Ancho útil exacto de la página (215.9mm - 40mm)
-    $txtWidth = 176;
+        // Ancho útil exacto de la página (215.9mm - 40mm)
+        $txtWidth = 176;
 
-    // --- ENCABEZADO PRINCIPAL (MODERNO ASIMÉTRICO) ---
-    if (file_exists('Assets/img/logo.jpg')) {
-        $pdf->Image('Assets/img/logo.jpg', 20, 18, 24, 24);
+        // --- ENCABEZADO PRINCIPAL (MODERNO ASIMÉTRICO) ---
+        if (file_exists('Assets/img/logo.jpg')) {
+            $pdf->Image('Assets/img/logo.jpg', 20, 18, 24, 24);
+        }
+
+        // Barra vertical decorativa junto al logo
+        $pdf->SetFillColor($secondaryColor[0], $secondaryColor[1], $secondaryColor[2]);
+        $pdf->Rect(48, 18, 1.5, 24, 'F');
+
+        // Textos del encabezado
+        $pdf->SetXY(53, 18);
+        $pdf->SetFont('helvetica', 'B', 13);
+        $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
+        $pdf->Cell(0, 6, 'GOBIERNO AUTÓNOMO MUNICIPAL DE POCOATA', 0, 1, 'L');
+
+        $pdf->SetX(53);
+        $pdf->SetFont('helvetica', 'M', 9);
+        $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
+        $pdf->Cell(0, 5, 'SISTEMA DE CONTROL DE PERSONAL — GESTIÓN 2026', 0, 1, 'L');
+
+        // --- CORRECCIÓN Y CENTRADO DE TÍTULO ---
+        $pdf->SetY($pdf->GetY() + 6); // Espacio óptimo abajo del membrete
+        $pdf->SetX(20); // Restablecer al margen izquierdo para que el centrado sea exacto
+        $pdf->SetFont('helvetica', 'B', 16);
+        $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
+        // Centrado usando el ancho total útil ($txtWidth) y el parámetro 'C'
+        $pdf->Cell($txtWidth, 8, 'HOJA DE SALIDA DE PERSONAL', 0, 1, 'C');
+
+        // Línea fina divisoria premium
+        $pdf->Ln(4);
+        $pdf->SetDrawColor(226, 232, 240);
+        $pdf->SetLineWidth(0.5);
+        $pdf->Line(20, $pdf->GetY(), 20 + $txtWidth, $pdf->GetY());
+        $pdf->Ln(6);
+
+
+        // --- SECCIÓN 1: DATOS GENERALES DEL PERSONAL ---
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+
+        // Fila 1: Servidor Público
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
+        $pdf->Cell(40, 7, 'SERVIDOR PÚBLICO', 0, 0, 'L');
+        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        $pdf->Cell($txtWidth - 40, 7, mb_strtoupper($salida['nombre_usuario'], 'UTF-8'), 0, 1, 'L');
+
+        // Fila 2: Cargo
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
+        $pdf->Cell(40, 7, 'CARGO INSTITUCIONAL', 0, 0, 'L');
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        $pdf->Cell($txtWidth - 40, 7, $salida['nombre_cargo'], 0, 1, 'L');
+
+        // Fila 3: Destino
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
+        $pdf->Cell(40, 7, 'LUGAR DE DESTINO', 0, 0, 'L');
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        $pdf->MultiCell($txtWidth - 40, 7, $salida['lugar'], 0, 'L', false, 1);
+
+        $pdf->Ln(4);
+
+
+        // --- SECCIÓN 2: CONTROL DE TIEMPOS Y HORARIOS ---
+        // Subtítulo Sección
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFillColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->Cell(45, 5, ' CONTROL DE HORARIOS', 0, 1, 'L', true);
+        $pdf->Ln(3);
+
+        // Configuración de columnas
+        $w = [
+            $txtWidth * 0.40, // Movimiento
+            $txtWidth * 0.30, // Fecha
+            $txtWidth * 0.30  // Hora
+        ];
+
+        // Encabezado Tabla Minimalista
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
+        $pdf->Cell($w[0], 6, 'MOVIMIENTO', 0, 0, 'L');
+        $pdf->Cell($w[1], 6, 'FECHA', 0, 0, 'C');
+        $pdf->Cell($w[2], 6, 'HORA REGISTRADA', 0, 1, 'R');
+
+        // Línea divisoria de tabla
+        $pdf->SetDrawColor(203, 213, 224);
+        $pdf->Line(20, $pdf->GetY(), 20 + $txtWidth, $pdf->GetY());
+        $pdf->Ln(1.5);
+
+        // Registro: SALIDA
+        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        $pdf->Cell($w[0], 8, 'SALIDA', 0, 0, 'L');
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell($w[1], 8, $salida['fecha_salida'], 0, 0, 'C');
+        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetTextColor($secondaryColor[0], $secondaryColor[1], $secondaryColor[2]);
+        $pdf->Cell($w[2], 8, $salida['hora_salida'], 0, 1, 'R');
+
+        // Línea divisoria sutil intermedia
+        $pdf->SetDrawColor(240, 244, 248);
+        $pdf->Line(20, $pdf->GetY(), 20 + $txtWidth, $pdf->GetY());
+        $pdf->Ln(1.5);
+
+        // Registro: RETORNO
+        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        $pdf->Cell($w[0], 8, 'RETORNO', 0, 0, 'L');
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell($w[1], 8, $salida['fecha_llegada'] ?? $salida['fecha_salida'], 0, 0, 'C');
+        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetTextColor($secondaryColor[0], $secondaryColor[1], $secondaryColor[2]);
+        $pdf->Cell($w[2], 8, $salida['hora_llegada'] ? $salida['hora_llegada'] : '--:--', 0, 1, 'R');
+
+        // Línea de cierre de tabla
+        $pdf->SetDrawColor(203, 213, 224);
+        $pdf->Line(20, $pdf->GetY(), 20 + $txtWidth, $pdf->GetY());
+
+        $pdf->Ln(6);
+
+
+        // --- SECCIÓN 3: VEHÍCULO INSTITUCIONAL ---
+        $boxY = $pdf->GetY();
+        $pdf->SetFillColor($bgColor[0], $bgColor[1], $bgColor[2]);
+        $pdf->SetDrawColor(226, 232, 240);
+        // Caja contenedora estilizada
+        $pdf->RoundedRect(20, $boxY, $txtWidth, 20, 2, '1111', 'DF');
+
+        $pdf->SetY($boxY + 2);
+        $pdf->SetFont('helvetica', 'B', 8.5);
+        $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
+        $pdf->SetX(24);
+        $pdf->Cell(0, 4, 'USO DE VEHÍCULO INSTITUCIONAL (SI CORRESPONDE)', 0, 1, 'L');
+
+        $pdf->SetFont('helvetica', '', 9);
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        $pdf->SetX(24);
+        $pdf->Cell(32, 7, 'VEHÍCULO / MÓVIL:', 0, 0, 'L');
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->Cell(50, 7, $salida['transporte'] ? $salida['transporte'] : 'N/A', 0, 0, 'L');
+
+        $pdf->SetFont('helvetica', '', 9);
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        $pdf->Cell(38, 7, 'CHOFER AUTORIZADO:', 0, 0, 'L');
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->Cell(45, 7, $salida['nombre_chofer'] ? $salida['nombre_chofer'] : 'N/A', 0, 1, 'L');
+
+        $pdf->SetY($boxY + 20);
+        $pdf->Ln(6);
+
+
+        // --- SECCIÓN 4: INFORME RESUMIDO DE LA ACTIVIDAD ---
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFillColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->Cell(60, 5, ' INFORME RESUMIDO DE ACTIVIDAD', 0, 1, 'L', true);
+        $pdf->Ln(3);
+
+        $textoActividad = $salida['actividad'] ? $salida['actividad'] : 'Sin información o descripción de actividad registrada.';
+
+        $x = $pdf->GetX();
+        $y = $pdf->GetY();
+        $altoCuadro = 35;
+
+        // Cuadro contenedor del informe
+        $pdf->SetFillColor(250, 251, 252);
+        $pdf->SetDrawColor(226, 232, 240);
+        $pdf->SetLineWidth(0.4);
+        $pdf->RoundedRect($x, $y, $txtWidth, $altoCuadro, 2, '1111', 'DF');
+
+        // Indicador estético lateral izquierdo
+        $pdf->SetFillColor($secondaryColor[0], $secondaryColor[1], $secondaryColor[2]);
+        $pdf->Rect($x, $y, 3, $altoCuadro, 'F');
+
+        // Renderizado del texto interno
+        $pdf->SetXY($x + 6, $y + 3);
+        $pdf->SetFont('helvetica', '', 9.5);
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        $pdf->setCellHeightRatio(1.3);
+        $pdf->MultiCell($txtWidth - 10, $altoCuadro - 6, $textoActividad, 0, 'L', false, 1);
+
+
+        // --- SECCIÓN 5: RECUADRO DE VALIDACIÓN Y FIRMAS ---
+        // Forzamos el bloque de firmas de forma segura abajo en la página
+        $pdf->SetY($y + $altoCuadro + 25);
+        $yFirmas = $pdf->GetY();
+
+        // 5.1 Sello del Lugar de Destino (Recuadro punteado moderno)
+        $style_dashed = [
+            'width' => 0.4,
+            'cap' => 'round',
+            'join' => 'miter',
+            'dash' => '2,3',
+            'color' => [$lightTextColor[0], $lightTextColor[1], $lightTextColor[2]]
+        ];
+        $pdf->Rect(20, $yFirmas, 52, 26, 'D', ['all' => $style_dashed]);
+
+        $pdf->SetXY(20, $yFirmas + 16);
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
+        $pdf->Cell(52, 4, 'SELLO DE DESTINO', 0, 1, 'C');
+        $pdf->SetFont('helvetica', '', 7);
+        $pdf->Cell(52, 3, '(Validación de la Actividad)', 0, 0, 'C');
+
+        // Cálculo proporcional de espacio de firmas restantes
+        $anchoFirmas = ($txtWidth - 52 - 12) / 2; // Repartición del espacio sobrante equitativamente
+
+        // 5.2 Firma del Servidor Público (Centro)
+        $xFirmaServidor = 20 + 52 + 6;
+        $pdf->SetXY($xFirmaServidor, $yFirmas + 18);
+        $pdf->SetDrawColor(203, 213, 224);
+        $pdf->SetLineWidth(0.4);
+        $pdf->Cell($anchoFirmas, 0, '', 'T', 1, 'C');
+
+        $pdf->SetX($xFirmaServidor);
+        $pdf->SetFont('helvetica', 'B', 8.5);
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        $pdf->Cell($anchoFirmas, 4, 'FIRMA DEL SERVIDOR', 0, 1, 'C');
+        $pdf->SetX($xFirmaServidor);
+        $pdf->SetFont('helvetica', '', 7.5);
+        $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
+        $pdf->Cell($anchoFirmas, 3, 'Funcionario Solicitante', 0, 0, 'C');
+
+        // 5.3 Firma de Autorización RR.HH. (Derecha)
+        $xFirmaRrhh = $xFirmaServidor + $anchoFirmas + 6;
+        $pdf->SetXY($xFirmaRrhh, $yFirmas + 18);
+        $pdf->Cell($anchoFirmas, 0, '', 'T', 1, 'C');
+
+        $pdf->SetX($xFirmaRrhh);
+        $pdf->SetFont('helvetica', 'B', 8.5);
+        $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        $pdf->Cell($anchoFirmas, 4, 'AUTORIZADO POR', 0, 1, 'C');
+        $pdf->SetX($xFirmaRrhh);
+        $pdf->SetFont('helvetica', '', 7.5);
+        $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
+        $pdf->Cell($anchoFirmas, 3, 'Dpto. de Recursos Humanos', 0, 0, 'C');
+
+        // 6. Salida limpia al navegador
+        $pdf->Output('Hoja_de_Salida_Completa_GAMP.pdf', 'I');
     }
-
-    // Barra vertical decorativa junto al logo
-    $pdf->SetFillColor($secondaryColor[0], $secondaryColor[1], $secondaryColor[2]);
-    $pdf->Rect(48, 18, 1.5, 24, 'F');
-
-    // Textos del encabezado
-    $pdf->SetXY(53, 18);
-    $pdf->SetFont('helvetica', 'B', 13);
-    $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-    $pdf->Cell(0, 6, 'GOBIERNO AUTÓNOMO MUNICIPAL DE POCOATA', 0, 1, 'L');
-
-    $pdf->SetX(53);
-    $pdf->SetFont('helvetica', 'M', 9);
-    $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
-    $pdf->Cell(0, 5, 'SISTEMA DE CONTROL DE PERSONAL — GESTIÓN 2026', 0, 1, 'L');
-  
-    // --- CORRECCIÓN Y CENTRADO DE TÍTULO ---
-    $pdf->SetY($pdf->GetY() + 6); // Espacio óptimo abajo del membrete
-    $pdf->SetX(20); // Restablecer al margen izquierdo para que el centrado sea exacto
-    $pdf->SetFont('helvetica', 'B', 16);
-    $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-    // Centrado usando el ancho total útil ($txtWidth) y el parámetro 'C'
-    $pdf->Cell($txtWidth, 8, 'HOJA DE SALIDA DE PERSONAL', 0, 1, 'C');
-    
-    // Línea fina divisoria premium
-    $pdf->Ln(4);
-    $pdf->SetDrawColor(226, 232, 240);
-    $pdf->SetLineWidth(0.5);
-    $pdf->Line(20, $pdf->GetY(), 20 + $txtWidth, $pdf->GetY());
-    $pdf->Ln(6);
-
-
-    // --- SECCIÓN 1: DATOS GENERALES DEL PERSONAL ---
-    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-
-    // Fila 1: Servidor Público
-    $pdf->SetFont('helvetica', 'B', 9);
-    $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
-    $pdf->Cell(40, 7, 'SERVIDOR PÚBLICO', 0, 0, 'L');
-    $pdf->SetFont('helvetica', 'B', 10);
-    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-    $pdf->Cell($txtWidth - 40, 7, mb_strtoupper($salida['nombre_usuario'], 'UTF-8'), 0, 1, 'L');
-    
-    // Fila 2: Cargo
-    $pdf->SetFont('helvetica', 'B', 9);
-    $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
-    $pdf->Cell(40, 7, 'CARGO INSTITUCIONAL', 0, 0, 'L');
-    $pdf->SetFont('helvetica', '', 10);
-    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-    $pdf->Cell($txtWidth - 40, 7, $salida['nombre_cargo'], 0, 1, 'L');
-
-    // Fila 3: Destino
-    $pdf->SetFont('helvetica', 'B', 9);
-    $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
-    $pdf->Cell(40, 7, 'LUGAR DE DESTINO', 0, 0, 'L');
-    $pdf->SetFont('helvetica', '', 10);
-    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-    $pdf->MultiCell($txtWidth - 40, 7, $salida['lugar'], 0, 'L', false, 1);
-    
-    $pdf->Ln(4);
-
-
-    // --- SECCIÓN 2: CONTROL DE TIEMPOS Y HORARIOS ---
-    // Subtítulo Sección
-    $pdf->SetFont('helvetica', 'B', 9);
-    $pdf->SetFillColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-    $pdf->SetTextColor(255, 255, 255);
-    $pdf->Cell(45, 5, ' CONTROL DE HORARIOS', 0, 1, 'L', true);
-    $pdf->Ln(3);
-
-    // Configuración de columnas
-    $w = [
-        $txtWidth * 0.40, // Movimiento
-        $txtWidth * 0.30, // Fecha
-        $txtWidth * 0.30  // Hora
-    ];
-
-    // Encabezado Tabla Minimalista
-    $pdf->SetFont('helvetica', 'B', 9);
-    $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
-    $pdf->Cell($w[0], 6, 'MOVIMIENTO', 0, 0, 'L');
-    $pdf->Cell($w[1], 6, 'FECHA', 0, 0, 'C');
-    $pdf->Cell($w[2], 6, 'HORA REGISTRADA', 0, 1, 'R');
-
-    // Línea divisoria de tabla
-    $pdf->SetDrawColor(203, 213, 224);
-    $pdf->Line(20, $pdf->GetY(), 20 + $txtWidth, $pdf->GetY());
-    $pdf->Ln(1.5);
-
-    // Registro: SALIDA
-    $pdf->SetFont('helvetica', 'B', 10);
-    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-    $pdf->Cell($w[0], 8, 'SALIDA', 0, 0, 'L');
-    $pdf->SetFont('helvetica', '', 10);
-    $pdf->Cell($w[1], 8, $salida['fecha_salida'], 0, 0, 'C');
-    $pdf->SetFont('helvetica', 'B', 10);
-    $pdf->SetTextColor($secondaryColor[0], $secondaryColor[1], $secondaryColor[2]);
-    $pdf->Cell($w[2], 8, $salida['hora_salida'], 0, 1, 'R');
-
-    // Línea divisoria sutil intermedia
-    $pdf->SetDrawColor(240, 244, 248);
-    $pdf->Line(20, $pdf->GetY(), 20 + $txtWidth, $pdf->GetY());
-    $pdf->Ln(1.5);
-
-    // Registro: RETORNO
-    $pdf->SetFont('helvetica', 'B', 10);
-    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-    $pdf->Cell($w[0], 8, 'RETORNO', 0, 0, 'L');
-    $pdf->SetFont('helvetica', '', 10);
-    $pdf->Cell($w[1], 8, $salida['fecha_llegada'] ?? $salida['fecha_salida'], 0, 0, 'C');
-    $pdf->SetFont('helvetica', 'B', 10);
-    $pdf->SetTextColor($secondaryColor[0], $secondaryColor[1], $secondaryColor[2]);
-    $pdf->Cell($w[2], 8, $salida['hora_llegada'] ? $salida['hora_llegada'] : '--:--', 0, 1, 'R');
-
-    // Línea de cierre de tabla
-    $pdf->SetDrawColor(203, 213, 224);
-    $pdf->Line(20, $pdf->GetY(), 20 + $txtWidth, $pdf->GetY());
-    
-    $pdf->Ln(6);
-
-
-    // --- SECCIÓN 3: VEHÍCULO INSTITUCIONAL ---
-    $boxY = $pdf->GetY();
-    $pdf->SetFillColor($bgColor[0], $bgColor[1], $bgColor[2]);
-    $pdf->SetDrawColor(226, 232, 240);
-    // Caja contenedora estilizada
-    $pdf->RoundedRect(20, $boxY, $txtWidth, 20, 2, '1111', 'DF');
-
-    $pdf->SetY($boxY + 2);
-    $pdf->SetFont('helvetica', 'B', 8.5);
-    $pdf->SetTextColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-    $pdf->SetX(24);
-    $pdf->Cell(0, 4, 'USO DE VEHÍCULO INSTITUCIONAL (SI CORRESPONDE)', 0, 1, 'L');
-
-    $pdf->SetFont('helvetica', '', 9);
-    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-    $pdf->SetX(24);
-    $pdf->Cell(32, 7, 'VEHÍCULO / MÓVIL:', 0, 0, 'L');
-    $pdf->SetFont('helvetica', 'B', 9);
-    $pdf->Cell(50, 7, $salida['transporte'] ? $salida['transporte'] : 'N/A', 0, 0, 'L');
-
-    $pdf->SetFont('helvetica', '', 9);
-    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-    $pdf->Cell(38, 7, 'CHOFER AUTORIZADO:', 0, 0, 'L');
-    $pdf->SetFont('helvetica', 'B', 9);
-    $pdf->Cell(45, 7, $salida['nombre_chofer'] ? $salida['nombre_chofer'] : 'N/A', 0, 1, 'L');
-
-    $pdf->SetY($boxY + 20);
-    $pdf->Ln(6);
-
-
-    // --- SECCIÓN 4: INFORME RESUMIDO DE LA ACTIVIDAD ---
-    $pdf->SetFont('helvetica', 'B', 9);
-    $pdf->SetFillColor($primaryColor[0], $primaryColor[1], $primaryColor[2]);
-    $pdf->SetTextColor(255, 255, 255);
-    $pdf->Cell(60, 5, ' INFORME RESUMIDO DE ACTIVIDAD', 0, 1, 'L', true);
-    $pdf->Ln(3);
-
-    $textoActividad = $salida['actividad'] ? $salida['actividad'] : 'Sin información o descripción de actividad registrada.';
-
-    $x = $pdf->GetX();
-    $y = $pdf->GetY();
-    $altoCuadro = 35;
-
-    // Cuadro contenedor del informe
-    $pdf->SetFillColor(250, 251, 252);
-    $pdf->SetDrawColor(226, 232, 240);
-    $pdf->SetLineWidth(0.4);
-    $pdf->RoundedRect($x, $y, $txtWidth, $altoCuadro, 2, '1111', 'DF');
-
-    // Indicador estético lateral izquierdo
-    $pdf->SetFillColor($secondaryColor[0], $secondaryColor[1], $secondaryColor[2]);
-    $pdf->Rect($x, $y, 3, $altoCuadro, 'F');
-
-    // Renderizado del texto interno
-    $pdf->SetXY($x + 6, $y + 3);
-    $pdf->SetFont('helvetica', '', 9.5);
-    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-    $pdf->setCellHeightRatio(1.3);
-    $pdf->MultiCell($txtWidth - 10, $altoCuadro - 6, $textoActividad, 0, 'L', false, 1);
-
-
-    // --- SECCIÓN 5: RECUADRO DE VALIDACIÓN Y FIRMAS ---
-    // Forzamos el bloque de firmas de forma segura abajo en la página
-    $pdf->SetY($y + $altoCuadro + 25);
-    $yFirmas = $pdf->GetY();
-
-    // 5.1 Sello del Lugar de Destino (Recuadro punteado moderno)
-    $style_dashed = [
-        'width' => 0.4, 
-        'cap' => 'round', 
-        'join' => 'miter', 
-        'dash' => '2,3', 
-        'color' => [$lightTextColor[0], $lightTextColor[1], $lightTextColor[2]]
-    ];
-    $pdf->Rect(20, $yFirmas, 52, 26, 'D', ['all' => $style_dashed]);
-
-    $pdf->SetXY(20, $yFirmas + 16);
-    $pdf->SetFont('helvetica', 'B', 8);
-    $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
-    $pdf->Cell(52, 4, 'SELLO DE DESTINO', 0, 1, 'C');
-    $pdf->SetFont('helvetica', '', 7);
-    $pdf->Cell(52, 3, '(Validación de la Actividad)', 0, 0, 'C');
-
-    // Cálculo proporcional de espacio de firmas restantes
-    $anchoFirmas = ($txtWidth - 52 - 12) / 2; // Repartición del espacio sobrante equitativamente
-
-    // 5.2 Firma del Servidor Público (Centro)
-    $xFirmaServidor = 20 + 52 + 6;
-    $pdf->SetXY($xFirmaServidor, $yFirmas + 18);
-    $pdf->SetDrawColor(203, 213, 224);
-    $pdf->SetLineWidth(0.4);
-    $pdf->Cell($anchoFirmas, 0, '', 'T', 1, 'C');
-    
-    $pdf->SetX($xFirmaServidor);
-    $pdf->SetFont('helvetica', 'B', 8.5);
-    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-    $pdf->Cell($anchoFirmas, 4, 'FIRMA DEL SERVIDOR', 0, 1, 'C');
-    $pdf->SetX($xFirmaServidor);
-    $pdf->SetFont('helvetica', '', 7.5);
-    $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
-    $pdf->Cell($anchoFirmas, 3, 'Funcionario Solicitante', 0, 0, 'C');
-
-    // 5.3 Firma de Autorización RR.HH. (Derecha)
-    $xFirmaRrhh = $xFirmaServidor + $anchoFirmas + 6;
-    $pdf->SetXY($xFirmaRrhh, $yFirmas + 18);
-    $pdf->Cell($anchoFirmas, 0, '', 'T', 1, 'C');
-    
-    $pdf->SetX($xFirmaRrhh);
-    $pdf->SetFont('helvetica', 'B', 8.5);
-    $pdf->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
-    $pdf->Cell($anchoFirmas, 4, 'AUTORIZADO POR', 0, 1, 'C');
-    $pdf->SetX($xFirmaRrhh);
-    $pdf->SetFont('helvetica', '', 7.5);
-    $pdf->SetTextColor($lightTextColor[0], $lightTextColor[1], $lightTextColor[2]);
-    $pdf->Cell($anchoFirmas, 3, 'Dpto. de Recursos Humanos', 0, 0, 'C');
-
-    // 6. Salida limpia al navegador
-    $pdf->Output('Hoja_de_Salida_Completa_GAMP.pdf', 'I');
-}
 
     public function buscarFuncionarios()
     {
@@ -715,57 +736,57 @@ public function pdf8($id)
 
 
 
-public function FechaFuncionarioPdf()
-{
-    $id_usuario  = $_POST['id_usuario'] ?? '';
-    $fecha_inicio = $_POST['fecha_inicio'] ?? '';
-    $fecha_fin    = $_POST['fecha_fin'] ?? '';
+    public function FechaFuncionarioPdf()
+    {
+        $id_usuario = $_POST['id_usuario'] ?? '';
+        $fecha_inicio = $_POST['fecha_inicio'] ?? '';
+        $fecha_fin = $_POST['fecha_fin'] ?? '';
 
-    if (empty($id_usuario) || empty($fecha_inicio) || empty($fecha_fin)) {
-        echo "Parámetros incompletos.";
-        return;
-    }
+        if (empty($id_usuario) || empty($fecha_inicio) || empty($fecha_fin)) {
+            echo "Parámetros incompletos.";
+            return;
+        }
 
-                    date_default_timezone_set('America/La_Paz');
-                  
-    $data = $this->model->getReporteSalidasTC($id_usuario, $fecha_inicio, $fecha_fin);
+        date_default_timezone_set('America/La_Paz');
 
-    $salida=$data[0];
-    if (empty($data)) {
-        echo "No se encontraron datos para los criterios seleccionados.";
-        return;
-    }
-    
-    require_once dirname(__DIR__) . '/vendor/autoload.php';
+        $data = $this->model->getReporteSalidasTC($id_usuario, $fecha_inicio, $fecha_fin);
 
-    // 1. Instanciar TCPDF en Tamaño CARTA
-    $pdf = new TCPDF('P', 'mm', 'LETTER', true, 'UTF-8', false);
+        $salida = $data[0];
+        if (empty($data)) {
+            echo "No se encontraron datos para los criterios seleccionados.";
+            return;
+        }
 
-    // 2. Configuración del documento
-    $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetAuthor('GAMP');
-    $pdf->SetTitle('Reporte de Salidas de Personal');
-    
-    // Quitar cabecera y pie de página por defecto para hacer uno personalizado y moderno
-    $pdf->setPrintHeader(false);
-    $pdf->setPrintFooter(true); // Dejar activo para el número de página abajo
-    
-    // Margen: Izquierda(15), Arriba(15), Derecha(15)
-    $pdf->SetMargins(15, 15, 15);
-    $pdf->SetAutoPageBreak(TRUE, 20); // Margen inferior
+        require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-    // Añadir la primera página
-    $pdf->AddPage();
-    
-    // Clonar tipografía limpia (Helvetica/Arial)
-    $pdf->SetFont('helvetica', '', 10);
+        // 1. Instanciar TCPDF en Tamaño CARTA
+        $pdf = new TCPDF('P', 'mm', 'LETTER', true, 'UTF-8', false);
 
-    // Intentar obtener el nombre del usuario si tu consulta trae datos de la tabla usuarios
-    // Si tu consulta SELECT actual no tiene el campo del nombre, te sugiero agregarlo en el modelo (ej: us.nombre)
-    $nombre_usuario = $data[0]['nombres'].' '.$salida['apellidos'] ?? 'Funcionario ID: ' . $id_usuario; 
+        // 2. Configuración del documento
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('GAMP');
+        $pdf->SetTitle('Reporte de Salidas de Personal');
 
-    // 3. Estructura HTML con estilo moderno (CSS)
-    $html = '
+        // Quitar cabecera y pie de página por defecto para hacer uno personalizado y moderno
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(true); // Dejar activo para el número de página abajo
+
+        // Margen: Izquierda(15), Arriba(15), Derecha(15)
+        $pdf->SetMargins(15, 15, 15);
+        $pdf->SetAutoPageBreak(TRUE, 20); // Margen inferior
+
+        // Añadir la primera página
+        $pdf->AddPage();
+
+        // Clonar tipografía limpia (Helvetica/Arial)
+        $pdf->SetFont('helvetica', '', 10);
+
+        // Intentar obtener el nombre del usuario si tu consulta trae datos de la tabla usuarios
+        // Si tu consulta SELECT actual no tiene el campo del nombre, te sugiero agregarlo en el modelo (ej: us.nombre)
+        $nombre_usuario = $data[0]['nombres'] . ' ' . $salida['apellidos'] ?? 'Funcionario ID: ' . $id_usuario;
+
+        // 3. Estructura HTML con estilo moderno (CSS)
+        $html = '
     <table cellpadding="5" cellspacing="0" style="width:100%; border-bottom: 2px solid #2B6CB0; padding-bottom: 10px;">
         <tr>
             <td style="width: 60%;">
@@ -809,17 +830,17 @@ public function FechaFuncionarioPdf()
             </tr>
         </thead>
         <tbody>';
-        $i=1;       
+        $i = 1;
         // Ciclo para rellenar las filas dinámicamente
         $background_color = '#FFFFFF';
         foreach ($data as $row) {
             // Alternar colores de filas para mejorar legibilidad
             $background_color = ($background_color == '#FFFFFF') ? '#F7FAFC' : '#FFFFFF';
-            
+
             // Formatear fechas de YYYY-MM-DD a DD/MM/YYYY
             $f_salida = date('d/m/Y', strtotime($row['fecha_salida']));
             $f_llegada = date('d/m/Y', strtotime($row['fecha_llegada']));
-            
+
             // Recortar horas por si tienen segundos (00:00:00 -> 00:00)
             $h_salida = substr($row['hora_salida'], 0, 5);
             $h_llegada = substr($row['hora_llegada'], 0, 5);
@@ -835,16 +856,16 @@ public function FechaFuncionarioPdf()
             </tr>';
         }
 
-    $html .= '
+        $html .= '
         </tbody>
     </table>';
 
-    // 4. Renderizar el HTML en el PDF
-    $pdf->writeHTML($html, true, false, true, false, '');
+        // 4. Renderizar el HTML en el PDF
+        $pdf->writeHTML($html, true, false, true, false, '');
 
-    // 5. Salida del archivo PDF en el navegador
-    $pdf->Output('Reporte_Salidas_' . $id_usuario . '.pdf', 'I');
-}
+        // 5. Salida del archivo PDF en el navegador
+        $pdf->Output('Reporte_Salidas_' . $id_usuario . '.pdf', 'I');
+    }
 
 
 

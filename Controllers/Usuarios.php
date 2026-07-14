@@ -125,11 +125,11 @@ class Usuarios extends Controller
         } else {
             if ($id == "") {
 
-             //    $dataci = $this->model->ExisteCI($ci);
-            //     if ($dataci == "existe") {
-           //     } else {
-          //   }
-          
+                //    $dataci = $this->model->ExisteCI($ci);
+                //     if ($dataci == "existe") {
+                //     } else {
+                //   }
+
                 if (empty($id_cargo)) {
 
                     $resCargo = $this->model->registrarCargo($select_cargo);
@@ -158,8 +158,14 @@ class Usuarios extends Controller
                     foreach ($dataus as $row) {
                         $id_usuario = $row;
                     }
+                    // 1. Corregimos la definición del array
+                    $permisos = [15, 18];
 
-                    $datau = $this->model->registrarPermisos($id_usuario, 15);
+                    // 2. Recorremos el array para registrar cada ID de permiso de forma individual
+                    foreach ($permisos as $permiso) {
+                        $datau = $this->model->registrarPermisos($id_usuario, $permiso);
+                    }
+
 
                     $msg = array(
                         'msg' => '¡Usuario registrado con éxito!<br><br>' . '<b>Usuario:</b> ' . $ci . '<br>' . '<b>Contraseña:</b> ' . $claveTexto,

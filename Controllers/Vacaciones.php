@@ -37,8 +37,9 @@ class Vacaciones extends Controller
             
              <button class="btn btn-sm btn-primary px-3 py-2" type="button" onclick="btnEditarVacaciones(' . $data[$i]['id_vacacion'] . '); " title="Editar"> <i class="fa-solid fa-pen-to-square fa-lg"></i> 
              </button> <button class="btn btn-sm btn-danger px-3 py-2" type="button" onclick="btnEliminarVacaciones(' . $data[$i]['id_vacacion'] . ');" title="Eliminar"> <i class="fa-solid fa-trash fa-lg"></i> </button>
-              <a class="btn btn-sm btn-info px-3 py-2"href="' . base_url . 'Vacaciones/aprobar/' . $data[$i]['id_vacacion'] . '"
-              target="_blank">     Aprobar   <i class="fa-solid fa-file-pdf"></i>    </a>
+ </button> <button  class="btn btn-sm btn-danger px-3 py-2" type="button" onclick="aprobar(' . $data[$i]['id_vacacion'] . ');" title="Eliminar">Aprobar <i class="fa-solid fa-trash fa-lg"></i> </button>
+
+             
               <a class="btn btn-sm btn-warning px-3 py-2"href="' . base_url . 'Reportes/pdf7/' . $data[$i]['id_vacacion'] . '"
               target="_blank">        <i class="fa-solid fa-file-pdf"></i>    </a>
              </div>';
@@ -51,7 +52,7 @@ class Vacaciones extends Controller
             
              <button class="btn btn-sm btn-primary px-3 py-2" type="button" onclick="btnEditarVacaciones(' . $data[$i]['id_vacacion'] . '); " title="Editar"> <i class="fa-solid fa-pen-to-square fa-lg"></i> 
              </button> <button class="btn btn-sm btn-danger px-3 py-2" type="button" onclick="btnEliminarVacaciones(' . $data[$i]['id_vacacion'] . ');" title="Eliminar"> <i class="fa-solid fa-trash fa-lg"></i> </button>
-              <a class="btn btn-sm btn-warning px-3 py-2"href="' . base_url . 'Reportes/pdf7/' . $data[$i]['id_vacacion'] . '"
+              <a class="btn btn-sm btn-warning px-3 py-2"href="' . base_url . 'Vacaciones/pdfVacacion/' . $data[$i]['id_vacacion'] . '"
               target="_blank">        <i class="fa-solid fa-file-pdf"></i>    </a>
              </div>';
             }
@@ -142,7 +143,11 @@ class Vacaciones extends Controller
 
         $this->views->getView($this, "aprobadosVista");
     }
+    function inactivosVista()
+    {
 
+        $this->views->getView($this, "inactivosVista");
+    }
     public function aprobados()
     {
         $id_user = $_SESSION['id_usuario'];
@@ -163,8 +168,10 @@ class Vacaciones extends Controller
 
     }
 
-  public function aprobar(int $id)
+    public function aprobar(int $id)
     {
+        //print_r($id);
+     //   die();
         $data = $this->model->accionVacaciones(2, $id);
         if ($data == 1) {
             $msg = array('msg' => 'Aprobado  con éxito ☻', 'icono' => 'success');
