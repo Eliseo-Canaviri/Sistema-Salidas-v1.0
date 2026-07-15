@@ -478,7 +478,29 @@ document.addEventListener("DOMContentLoaded", function () {
       "<'row'<'col-sm-12'tr>>" +
       "<'row'<'col-sm-5'i><'col-sm-7'p>>",
   });
-
+  tblcontrato = $("#tblcontrato").DataTable({
+    ajax: {
+      url: base_url + "Contratos/listar",
+      dataSrc: "",
+    },
+    columns: [
+      { data: "id_contrato" },
+      { data: "sigla" },
+      { data: "nombre" },
+      { data: "estado" },
+      { data: "acciones" },
+    ],
+    responsive: true,
+    bDestroy: true,
+    iDisplayLength: 10,
+    order: [[0, "desc"]],
+    language,
+    buttons,
+    dom:
+      "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
+      "<'row'<'col-sm-12'tr>>" +
+      "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+  });
   $("#select_funcioanariopdf").autocomplete({
     minLength: 1,
     source: function (request, response) {
@@ -1341,6 +1363,128 @@ function btnReingresarCargos(id) {
   });
 }
 ///fin cargos
+
+//Inico de contrato
+function frmContratos() {
+  document.getElementById("title").innerHTML = "Nuevo Tipo Contrato";
+  document.getElementById("btnAccion").innerHTML = "registrar";
+  document.getElementById("frmContratos").reset();
+
+  $("#nuevo_contrato").modal("show"); //esta mostrando modal de usuario
+  document.getElementById("id").value = "";
+}
+function registrarContratos(e) {
+  e.preventDefault();
+
+  const sigla = document.getElementById("sigla");
+  const nombre = document.getElementById("nombre");
+
+  if (nombre.value == ""||sigla.value=="") {
+    alertas("Todos los Campos son obligatorios ☺", "warning");
+  } else {
+    const url = base_url + "Contratos/registrar"; //estamos enviando ala controlador
+    const frm = document.getElementById("frmContratos");
+    const http = new XMLHttpRequest();
+    http.open("POST", url, true);
+    http.send(new FormData(frm));
+    http.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log(this.responseText);
+        const res = JSON.parse(this.responseText);
+        $("#nuevo_contrato").modal("hide"); //para que se oculte el domal de usuario
+        alertas(res.msg, res.icono);
+        frm.reset();
+
+        tblcontrato.ajax.reload(); //para recargar la pagina
+      }
+    };
+  }
+}
+function btnEditarContratos(id) {
+  document.getElementById("title").innerHTML = "Actulizar Contrato";
+  document.getElementById("btnAccion").innerHTML = "Modificar";
+  const url = base_url + "Contratos/editar/" + id; //estamos enviando ala controlador
+  const http = new XMLHttpRequest();
+  http.open("GET", url, true);
+  http.send();
+  http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(this.responseText);
+      const res = JSON.parse(this.responseText);
+
+      document.getElementById("id").value = res.id_contrato;
+      document.getElementById("sigla").value = res.sigla;
+      document.getElementById("nombre").value = res.nombre;
+
+      //document.getElementById("claves").classList.add("d-none"); //esto es para esconder campos de claves
+      $("#nuevo_contrato").modal("show");
+    }
+  };
+}
+
+function btnEliminarContratos(id) {
+  Swal.fire({
+    title: "Estas Seguro de Eliminar?",
+    text: "El usuario nose eliminara de forma permanente,solo cambiara a estado inactivo!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si!",
+    cancelButtonText: "No",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = base_url + "Contratos/eliminar/" + id; //estamos enviando ala controlador
+      const http = new XMLHttpRequest();
+      http.open("GET", url, true);
+      http.send();
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const res = JSON.parse(this.responseText);
+          tblcontrato.ajax.reload(); //recargar tabla
+          alertas(res.msg, res.icono);
+        }
+      };
+    }
+  });
+}
+
+function btnReingresarContratos(id) {
+  Swal.fire({
+    title: "Estas Seguro de Reingresar?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si!",
+    cancelButtonText: "No",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = base_url + "Contratos/reingresar/" + id; //estamos enviando ala controlador
+      const http = new XMLHttpRequest();
+      http.open("GET", url, true);
+      http.send();
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText);
+          const res = JSON.parse(this.responseText);
+          if (res == "ok") {
+            Swal.fire("Mensaje!", "Contrato Reingresado con exito.", "success");
+            tblcontrato.ajax.reload(); //recargar pagina de usuario
+          } else {
+            Swal.fire("Mensaje!", "res", "error");
+          }
+        }
+      };
+    }
+  });
+}
+///fin contrato
+
+
+
+
+
 
 function frmUnidades() {
   document.getElementById("title").innerHTML = "Nuevo Unidad";

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-07-2026 a las 00:07:07
+-- Tiempo de generación: 15-07-2026 a las 23:58:51
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -42,6 +42,26 @@ INSERT INTO `cargos` (`id_cargo`, `nombre`, `estado`) VALUES
 (2, 'ANAANANAN', 1),
 (3, 'BBBBBSKDASJDAKJ', 1),
 (4, 'LLLL', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `contratos`
+--
+
+CREATE TABLE `contratos` (
+  `id_contrato` int(11) NOT NULL,
+  `sigla` varchar(100) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `estado` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `contratos`
+--
+
+INSERT INTO `contratos` (`id_contrato`, `sigla`, `nombre`, `estado`) VALUES
+(1, 'ITEM-', 'PERSONAL CON ITEM', 1);
 
 -- --------------------------------------------------------
 
@@ -217,7 +237,7 @@ CREATE TABLE `vacaciones` (
 --
 
 INSERT INTO `vacaciones` (`id_vacacion`, `id_usuario`, `fecha_inicio`, `fecha_fin`, `dias`, `descripcion`, `fecha_actual`, `estado`) VALUES
-(1, 1, '2026-07-09', '2026-07-08', '2', 'sds', '2026-07-13', 1),
+(1, 1, '2026-07-09', '2026-07-08', '2', 'sds', '2026-07-13', 2),
 (2, 4, '2026-07-13', '2026-07-24', '10', 'sdfsfsdfsdfs', '2026-07-13', 1),
 (3, 4, '2026-07-13', '2026-07-17', '5', 'sadasdasd', '2026-07-13', 1),
 (4, 4, '2026-07-13', '2026-07-20', '6', 'sadsada', '2026-07-13', 0),
@@ -233,6 +253,12 @@ INSERT INTO `vacaciones` (`id_vacacion`, `id_usuario`, `fecha_inicio`, `fecha_fi
 --
 ALTER TABLE `cargos`
   ADD PRIMARY KEY (`id_cargo`);
+
+--
+-- Indices de la tabla `contratos`
+--
+ALTER TABLE `contratos`
+  ADD PRIMARY KEY (`id_contrato`);
 
 --
 -- Indices de la tabla `detalle_permisos`
@@ -289,6 +315,12 @@ ALTER TABLE `vacaciones`
 --
 ALTER TABLE `cargos`
   MODIFY `id_cargo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `contratos`
+--
+ALTER TABLE `contratos`
+  MODIFY `id_contrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_permisos`

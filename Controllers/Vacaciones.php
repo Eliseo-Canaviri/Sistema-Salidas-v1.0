@@ -174,7 +174,7 @@ class Vacaciones extends Controller
      //   die();
         $data = $this->model->accionVacaciones(2, $id);
         if ($data == 1) {
-            $msg = array('msg' => 'Aprobado  con éxito ☻', 'icono' => 'success');
+            $msg = array('msg' => 'Aprobado con éxito ☻', 'icono' => 'success');
         } else {
             $msg = array('msg' => 'Error al eliminar ☻', 'icono' => 'error');
         }
@@ -189,11 +189,9 @@ class Vacaciones extends Controller
         // Administradores (ID 1 y 2)
         if ($id_user == 1 || $id_user == 2) {
             $data = $this->model->getVacaionesadmin(0); // Todas las salidas
-
         } else {
             $data = $this->model->getVacaciones($id_user, 0); // Solo sus salidas
         }
-
         for ($i = 0; $i < count($data); $i++) {
             $data[$i]['acciones'] = '<div class="d-flex gap-1">  </button> <button class="btn btn-sm btn-warning px-3 py-2" type="button" onclick="btnReactivarSalida(' . $data[$i]['id_vacacion'] . ');" title="Eliminar"> <i class="fa-solid fa-trash-arrow-up fa-lg"></i> </button> </div>';
         }

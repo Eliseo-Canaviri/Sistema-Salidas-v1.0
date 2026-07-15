@@ -91,6 +91,11 @@
                     <span class="hide-menu">Unidades</span>
                   </a>
                 </li>
+                  <li class="sidebar-item">
+                  <a href="<?php echo base_url; ?>Contratos" class="sidebar-link">
+                    <span class="hide-menu">Contratos</span>
+                  </a>
+                </li>
               </ul>
             </li>
 
