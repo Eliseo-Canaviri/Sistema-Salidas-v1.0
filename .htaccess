@@ -1,5 +1,10 @@
 Options All -Indexes
 RewriteEngine on
+
+# Bloquear el acceso a Usuarios/listar (F = Forbidden, NC = Case-insensitive)
+RewriteRule ^Usuarios/listar/?$ - [NC,F,L]
+
+# Regla general de redirección a index.php
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
